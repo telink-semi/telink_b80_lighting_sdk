@@ -1,7 +1,6 @@
 #include "light_interrupt.h"
 #include "driver.h"
 #include "frame.h"
-#include "rf_set.h"
 #include "app_config.h"
 
 
@@ -38,31 +37,37 @@ _attribute_ram_code_sec_ unsigned char check_pkt_info(rf_packet_led_remote_t *pk
 	control_info[info_index].pid = pkt->pid;
 	return 1;
 }
+
+int					blt_rx_wptr = 0;
 _attribute_ram_code_sec_ void light_irq_handler(void)
 {
-	unsigned short src=rf_irq_src_get();
 	unsigned char index;
-	if(src&FLD_RF_IRQ_RX&reg_rf_irq_mask){                //Ω” ’÷–∂œ£¨√øΩ”µΩ ˝æ›∏√±Í÷æ∂º÷√1£¨≤ªπ‹ ˝æ›’˝»∑”Î∑Ò
+	if(rf_irq_src_get() & FLD_RF_IRQ_RX){               //Êé•Êî∂‰∏≠Êñ≠ÔºåÊØèÊé•Âà∞Êï∞ÊçÆËØ•Ê†áÂøóÈÉΩÁΩÆ1Ôºå‰∏çÁÆ°Êï∞ÊçÆÊ≠£Á°Æ‰∏éÂê¶
 		irq_rx++;
-		//printf("irq_handler rf_rx\n");
+		
+		unsigned char * raw_pkt = (unsigned char *) (g_rx_packet + blt_rx_wptr * RX_PACKGET_SIZE);
+		blt_rx_wptr = (blt_rx_wptr + 1) & 3;
+		unsigned short next_pkt_addr;
+		next_pkt_addr = (unsigned short)(unsigned long) (g_rx_packet + blt_rx_wptr * RX_PACKGET_SIZE); //set next buffer
+		rf_rx_buffer_reconfig(next_pkt_addr);
 		rf_irq_clr_src(FLD_RF_IRQ_RX);
-		index=rf_rx_buffer_get()&1;                       //∂¡»°ª∫¥ÊµƒŒª÷√
-		unsigned char *p=g_rx_packet+index*RX_PACKGET_SIZE;            //Ω” ’ª∫¥Êµƒ÷∏’Îµÿ÷∑
-		//printhex(p,RX_PACKGET_SIZE);
+		
+		//printf("irq_handler rf_rx\n");
 
-		if(RF_NRF_SB_PACKET_CRC_OK(p)){                          //–£—ÈΩ” ’∞¸
+		unsigned char *p=raw_pkt;            //Ω” ’ª∫¥Êµƒ÷∏’Îµÿ÷∑
+		printhex(p,RX_PACKGET_SIZE);
+
+		if(RF_NRF_SB_PACKET_CRC_OK(p)){                         //Ê†°È™åÊé•Êî∂ÂåÖ
 			//printf("rf check success\n");
 			rf_packet_led_remote_t *pkt=(rf_packet_led_remote_t *)(p);
-			if(pkt->vid==REMOTE_VID){//∆•≈‰≤˙∆∑ID
-//				if(last_seq!=pkt->rf_seq_no||last_key_cmd!=pkt->control_key){//–Ú¡–∫≈”Î√¸¡Ó÷µ «∑Ò“ª—˘£¨”–∆‰÷–“ª∏ˆ≤ª“ª—˘‘ÚŒ™≤ªÕ¨√¸¡Ó
+			if(pkt->vid==REMOTE_VID){//ÂåπÈÖç‰∫ßÂìÅID
 				if(check_pkt_info(pkt)){
 					unsigned char *ptr=(unsigned char *)&g_relay_pkt.pid;
-					for(index=0;index<11;index++)
-						ptr[index]=p[index+16];
+					for(index=0;index<14;index++)
+						ptr[index]=p[index+8];
 					g_packget_new=1;
 					g_packget_pid=pkt->pid;
-//					last_seq=pkt->rf_seq_no;
-//					last_key_cmd=pkt->control_key;
+
 					g_packget_cmd=pkt->control_key>>4;
 					g_packget_grp=pkt->control_key&0x0f;
 					g_packget_lumi=pkt->control_key_value[0];
@@ -74,4 +79,10 @@ _attribute_ram_code_sec_ void light_irq_handler(void)
 			printf("rf check failed\n");
 		}
 	}
+
+	if(rf_irq_src_get() & FLD_RF_IRQ_TX)
+	{
+		rf_irq_clr_src(FLD_RF_IRQ_TX);
+	}
 }
+

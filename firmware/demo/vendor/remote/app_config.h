@@ -67,12 +67,7 @@ extern "C" {
 #define LED3     		        GPIO_PD4
 #define LED4     		        GPIO_PD5
 #elif (MCU_CORE_B80)
-#define LED1     		        GPIO_PB3
-#define LED2     		        GPIO_PB4
-#define LED3     		        GPIO_PB5
-#define LED4     		        GPIO_PB6
-#define LED5     		        GPIO_PD4
-#define LED6     		        GPIO_PD5
+#define LED1     		        GPIO_PA7
 #endif
 
 #if (MCU_CORE_B85)
@@ -113,7 +108,9 @@ extern "C" {
 #define PID_ADDR                0x3fe0
 #define REMOTE_VID              0x5453
 
-
+#define TTL_MAX  			    5
+#define NUM_SENDING_CMD_CTR     10
+#define NUM_SENDING_CMD_NONE    5
 
 /* Define system clock */
 #define CLOCK_SYS_CLOCK_HZ  	16000000

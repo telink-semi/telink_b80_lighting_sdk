@@ -4,13 +4,14 @@
 #include "led.h"
 #include "light_ctr_store.h"
 #include "app_config.h"
+#include "cmd_def.h"
 
 unsigned short led_lumina_cur;
 unsigned short led_lumina_target;
 unsigned short led_chroma_cur;
 unsigned short led_chroma_target;
-unsigned char led_state_change_flag;
-unsigned int led_change_tick;
+unsigned char  led_state_change_flag;
+unsigned int   led_change_tick;
 
 unsigned char led_flash_cnt;
 unsigned int  led_flash_tick;
@@ -18,26 +19,26 @@ unsigned int  led_flash_tick;
 const unsigned short led_luminance_value[MAX_LUMINANCE_INDEX+1]={40,67,102,144,193,250,313,384,462,547,640,740,846,1000};
 const unsigned char  led_chroma_value[MAX_CHROME_INDEX+1]={0,10,20,30,40,50,60,70,80,90,100};
 
+void pwm_gpio_init(unsigned int pwm_io,unsigned int pwm_x,unsigned int pwm_id,unsigned int pwm_mode)
+{
+	gpio_set_func(pwm_io, pwm_x);
+	pwm_set_mode(pwm_id, pwm_mode);
+	pwm_set_phase(pwm_id, 0);	 //no phase at pwm beginning
+	pwm_set_cycle_and_duty(pwm_id, (u16) (1000 * CLOCK_SYS_CLOCK_1US), (u16) (0 * CLOCK_SYS_CLOCK_1US)  );
+	pwm_start(pwm_id);
+}
 
 void led_pwm_init_func(void)
 {
 	pwm_set_clk(CLOCK_SYS_CLOCK_HZ, CLOCK_SYS_CLOCK_HZ);
 	
 	//PB4 LED_G
-	gpio_set_func(GPIO_PB4, PWM4);
-	pwm_set_mode(PWM4_ID, PWM_NORMAL_MODE);
-	pwm_set_phase(PWM4_ID, 0);	 //no phase at pwm beginning
-	pwm_set_cycle_and_duty(PWM4_ID, (u16) (1000 * CLOCK_SYS_CLOCK_1US), (u16) (0 * CLOCK_SYS_CLOCK_1US)  );
-	pwm_start(PWM4_ID);
-	printf("led_pwm_init_func->PWM4:PB4:1000  0\n");
+	pwm_gpio_init(GPIO_PB4,PWM4,PWM4_ID,PWM_NORMAL_MODE);
+	printf("led_pwm_init_func-> LED_G->PWM4:PB4\n");
 
 	//PB2 LED_B
-	gpio_set_func(GPIO_PB2, PWM0);
-	pwm_set_mode(PWM0_ID, PWM_NORMAL_MODE);
-	pwm_set_phase(PWM0_ID, 0);	 //no phase at pwm beginning
-	pwm_set_cycle_and_duty(PWM0_ID, (u16) (1000 * CLOCK_SYS_CLOCK_1US), (u16) (0 * CLOCK_SYS_CLOCK_1US)  );
-	pwm_start(PWM0_ID);
-	printf("led_pwm_init_func->PWM0:PB2:1000  0\n");
+	pwm_gpio_init(GPIO_PB2,PWM0,PWM0_ID,PWM_NORMAL_MODE);
+	printf("led_pwm_init_func->LED_B->PWM0\n");
 	
 }
 
@@ -285,48 +286,48 @@ void led_luminace_segment_set_func(unsigned char seg_index)
 void led_event_proc_func(unsigned char Cmd)
 {
 	if(led_flash_cnt)return;
-	if(Cmd==LED_LUMINANCE_INC_CMD||Cmd==LED_LUMINANCE_DEC_CMD||Cmd==LED_CHROME_INC_CMD||Cmd==LED_CHROME_DEC_CMD)
+	if(Cmd==CMD_LUMINANT_INCREASE||Cmd==CMD_LUMINANT_DECREASE||Cmd==CMD_CHROMA_INCREASE||Cmd==CMD_CHROMA_DECREASE)
 		if(led_control.led_on==0)  //关灯状态不进行色温亮度调节
 			return;
 
 	switch(Cmd){
-		case LED_NONE_CMD:
-			printf("LED_NONE_CMD\n");
+		case CMD_NONE:
+			printf("CMD_NONE\n");
 			break;
 
-		case LED_ON_CMD://开灯
+		case CMD_ON://开灯
 			led_on_func();
-			printf("LED_ON_CMD\n");
+			printf("CMD_ON\n");
 			break;
 
-		case LED_OFF_CMD://关灯
+		case CMD_OFF://关灯
 			led_off_func();
-			printf("LED_OFF_CMD\n");
+			printf("CMD_OFF\n");
 			break;
 
-		case LED_LUMINANCE_INC_CMD://亮度加
+		case CMD_LUMINANT_INCREASE://亮度加
 			led_updata_luminance_func(1);
-			printf("LED_LUMINANCE_INC_CMD\n");
+			printf("CMD_LUMINANT_INCREASE\n");
 			break;
 
-		case LED_LUMINANCE_DEC_CMD://亮度减
+		case CMD_LUMINANT_DECREASE://亮度减
 			led_updata_luminance_func(0);
-			printf("LED_LUMINANCE_DEC_CMD\n");
+			printf("CMD_LUMINANT_DECREASE\n");
 			break;
 
-		case LED_CHROME_INC_CMD://色温加
+		case CMD_CHROMA_INCREASE://色温加
 			led_updata_chroma_func(1);
-			printf("LED_CHROME_INC_CMD\n");
+			printf("CMD_CHROMA_INCREASE\n");
 			break;
 
-		case LED_CHROME_DEC_CMD://色温减
+		case CMD_CHROMA_DECREASE://色温减
 			led_updata_chroma_func(0);
-			printf("LED_CHROME_DEC_CMD\n");
+			printf("CMD_CHROMA_DECREASE\n");
 			break;
 
-		case LED_NIGHT_CMD://夜灯模式
+		case CMD_QUICK_LOW_LIGHT://夜灯模式
 			led_updata_lumi_chrome_func(LOW_LIGHT_LUMINACE,50);
-			printf("LED_NIGHT_CMD\n");
+			printf("CMD_QUICK_LOW_LIGHT\n");
 			break;
 
 		default:

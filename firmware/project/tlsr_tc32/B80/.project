@@ -114,12 +114,32 @@
 		<link>
 			<name>vendor/light</name>
 			<type>2</type>
-			<location>D:/code/haiwen1/eaglet/eaglet_2.4g_prj/eaglet_demo/eaglet_demo/eagle_prj/demo/vendor/light</location>
+			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/light</locationURI>
+		</link>
+		<link>
+			<name>vendor/light_beacon</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/light_beacon</locationURI>
+		</link>
+		<link>
+			<name>vendor/light_rgb</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/light_rgb</locationURI>
 		</link>
 		<link>
 			<name>vendor/remote</name>
 			<type>2</type>
-			<location>D:/code/haiwen1/eaglet/eaglet_2.4g_prj/eaglet_demo/eaglet_demo/eagle_prj/demo/vendor/remote</location>
+			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/remote</locationURI>
+		</link>
+		<link>
+			<name>vendor/remote_beacon</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/remote_beacon</locationURI>
+		</link>
+		<link>
+			<name>vendor/remote_rgb</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/remote_rgb</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

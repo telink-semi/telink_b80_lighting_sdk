@@ -1,8 +1,8 @@
 #pragma once
 
 #define MAX_PAIRED_REMOTER  8
-#define RX_PACKGET_SIZE     64
-unsigned char g_rx_packet [RX_PACKGET_SIZE*2] __attribute__((aligned(4)));
+#define RX_PACKGET_SIZE     32
+unsigned char g_rx_packet [RX_PACKGET_SIZE*4] __attribute__((aligned(4)));
 
 typedef struct{
 	unsigned int  pid; //product ID Ò£¿ØÆ÷ID
@@ -34,7 +34,7 @@ typedef struct{
 
 	unsigned short  button_keep_counter;	// 13~14 sequence number in one certain channel.
 	unsigned short  control_key_value[3];	// 15, 16, 17, 18
-	unsigned char   reserved;
+	unsigned char   ttl;
 }rf_packet_led_remote_t;		//rf data packet from remoter end.
 
 LED_control_info_t led_control;

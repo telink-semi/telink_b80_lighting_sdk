@@ -12,7 +12,15 @@ typedef struct{
 
 	unsigned short button_keep_counter;	// 13~14 sequence number in one certain channel.
 	unsigned short control_key_value[3];	// 15, 16, 17, 18
-	unsigned char  reserved;
+	unsigned char  ttl;
 }rf_packet_led_remote_t;		//rf data packet from remoter end.
 
 rf_packet_led_remote_t  led_remote __attribute__((aligned(4)));
+
+
+void package_data_init_func(void);
+void package_data_set_newcmd(unsigned char cmd);
+void package_data_send_func(void);
+void package_data_store_func(void);
+
+
