@@ -12,3 +12,9 @@ typedef enum{
 	PAIRING_STATE=0,
 	NORMAL_STATE,
 }LED_Run_state_e;
+
+void sys_status_init(void);
+void sys_status_process(void);
+
+
+

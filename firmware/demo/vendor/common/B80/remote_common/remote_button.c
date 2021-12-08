@@ -55,17 +55,6 @@ unsigned char button_scan_func(void)
 	return key_value;
 }
 
-void  button_value_log(unsigned char value)
-{
-	if(BUTT_GROUP2_ON == value){
-		printf("BUTT_GROUP2_ON\n");
-	}else if(BUTT_GROUP2_OFF == value){
-		printf("BUTT_GROUP2_OFF\n");
-	}else{
-		printf("BUTT_CMD_NONE\n");
-	}
-}
-
 #endif
 
 

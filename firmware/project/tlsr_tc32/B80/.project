@@ -102,11 +102,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>vendor/RF_Demo</name>
-			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/RF_Demo</locationURI>
-		</link>
-		<link>
 			<name>vendor/common</name>
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/common/B80</locationURI>

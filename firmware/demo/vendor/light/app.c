@@ -43,11 +43,14 @@
  *          SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *******************************************************************************************************/
+#include "driver.h"
 #include "app_config.h"
 #include "sys_status.h"
 #include "led.h"
 #include "rf_control.h"
 #include "time_event.h"
+#include "light_ctr_store.h"
+
 
 #if(RF_MODE==RF_PRIVATE_1M || RF_MODE==RF_PRIVATE_2M || RF_MODE==RF_PRIVATE_500K || RF_MODE==RF_PRIVATE_250K)
 
@@ -68,9 +71,14 @@
 
 
 #elif(RF_AUTO_MODE == MANUAL)
+
+
 void user_init()
 {
-	printf("light start....\n");
+#if EEPROM_ENABLE
+	e2prom_init();
+#endif
+	LOG_PRINTF("light start....\n");
 	
 	rfc_init_func();
 
@@ -81,7 +89,6 @@ void user_init()
 	sys_status_init();
 
 	irq_enable();
-	
 }
 
 void main_loop (void)
@@ -90,7 +97,6 @@ void main_loop (void)
 	led_task_process_func();
 	time_event_process_func();
 	sys_status_check_func();
-
 }
 #endif
 #endif

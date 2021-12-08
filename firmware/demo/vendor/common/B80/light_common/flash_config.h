@@ -3,13 +3,18 @@
 #define FLASH_CONFIG_H_
 
 #include "types.h"
-
+#include "user_config.h"
 
 #define FLASH_SECTOR_SIZE                  (0x1000)
 
+#if EEPROM_ENABLE
+#define FLASH_LIGHT_CTR_MAX                   (0x100)
+#define FLASH_LIGHT_CTR_START_ADDR            (0)
+#else
 //flash light store 0x20000 ~ 0x21000
 #define FLASH_LIGHT_CTR_MAX                   (0x2000)
 #define FLASH_LIGHT_CTR_START_ADDR            (0x20000)
+#endif
 #define FLASH_LIGHT_CTR_END_ADDR              (FLASH_LIGHT_CTR_START_ADDR+FLASH_LIGHT_CTR_MAX)
 
 

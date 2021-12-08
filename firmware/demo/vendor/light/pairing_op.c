@@ -15,8 +15,8 @@ unsigned char paired_ID_match(unsigned int pid,unsigned char grp)
 	unsigned char i;
 	if(UNUSED_PID == pid)
 		return 0;
-	
-	for(i=0;i<MAX_PAIRED_REMOTER;i++){
+
+	for(i=0;i<led_control.paire_num;i++){
 		if(pid==led_control.pared_remote[i].pid)
 			if((grp==led_control.pared_remote[i].group_id)||grp==0xf)
 				return 1;
@@ -54,6 +54,7 @@ void clear_pared_code_func(void)
 		led_control.pared_remote[i].pid=UNUSED_PID;
 		led_control.pared_remote[i].group_id=0;
 	}
+	led_control.paire_num = 0;
 	led_control.paire_index=0;
 	led_control.power_on_recover=0;
 	led_para_save_func();
@@ -67,10 +68,11 @@ void pair_id_save_func(void)
 {
 	unsigned char i;
 	unsigned char temp;
+	
 	if(UNUSED_PID == remote_save_pid)
 		return;
 	
-	for(i=0;i<MAX_PAIRED_REMOTER;i++){
+	for(i=0;i<led_control.paire_num;i++){
 		if(remote_save_pid==led_control.pared_remote[i].pid){//ID匹配
 			if(led_control.pared_remote[i].group_id!=remote_save_grp){//组别匹配
 				write_position_detect(i);//保存
@@ -83,6 +85,10 @@ void pair_id_save_func(void)
 	for(i=0;i<MAX_PAIRED_REMOTER;i++){
 		if(UNUSED_PID == led_control.pared_remote[i].pid){//ID匹配
 			write_position_detect(i);//保存
+			led_control.paire_num++;
+			if(led_control.paire_num > MAX_PAIRED_REMOTER){
+				led_control.paire_num = MAX_PAIRED_REMOTER;
+			}
 			return;
 		}
 	}
@@ -90,6 +96,7 @@ void pair_id_save_func(void)
 	if(i==MAX_PAIRED_REMOTER){//已保存数据中没有匹配的
 		temp=led_control.paire_index;//保存的下标
 		led_control.paire_index++;
+		led_control.paire_num = MAX_PAIRED_REMOTER;
 		if(led_control.paire_index>=MAX_PAIRED_REMOTER)//是否超过最大保存值
 			led_control.paire_index=0;//超过后默认为0
 		write_position_detect(temp);//保存

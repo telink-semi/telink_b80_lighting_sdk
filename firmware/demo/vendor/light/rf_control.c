@@ -20,10 +20,10 @@ void rfc_init_func(void)
 	rf_acc_len_set(5);
 	rf_acc_code_set(0,access_code_usd);
 
-	printf("access_code_usd\n");
-	printhex(access_code_usd,sizeof(access_code_usd));
+	LOG_PRINTF("access_code_usd\n");
+	LOG_HEXDUMP(access_code_usd,sizeof(access_code_usd));
 
-	rf_trx_state_set(RF_MODE_RX,rf_channel[0]);
+	rf_set_channel(rf_channel[0],0);
 
 #if(PRI_MODE == ESB_MODE)
 
@@ -52,7 +52,8 @@ void rfc_change_channel_func(void)
 	static unsigned char Channel_index;
 	Channel_index++;
 	Channel_index&=3;
-	rf_trx_state_set(RF_MODE_RX,rf_channel[Channel_index]);
+	rf_set_channel(rf_channel[Channel_index],0);
+	rf_set_rxmode ();
 }
 /***********************************************************
  * 函数功能：转发中继数据包
@@ -61,25 +62,25 @@ void rfc_change_channel_func(void)
  **********************************************************/
 void rfc_send_relay_pkt(void)
 {
-	unsigned char i;
 
 	if(g_relay_pkt.ttl > 0){
 		
 		g_relay_pkt.ttl -= 1;
-		
-		for(i=0;i<4;i++){
-			rf_trx_state_set(RF_MODE_TX,rf_channel[i]);
-			sleep_us(200);
-			rf_tx_pkt((void *)&g_relay_pkt);
+
+		unsigned char i;
+		for(i=0;i<4;i++){			
+			rf_set_channel(rf_channel[i],0);
+			rf_set_txmode();
+			sleep_ms(1);
+			rf_tx_pkt((void *)&g_relay_pkt);	
 			while(!rf_tx_finish());
 			rf_tx_finish_clear_flag();
-		
 		}
 		rfc_change_channel_func();
 
 
-		printf("send_relay_pkt\n");
-		printhex((char *)&g_relay_pkt,sizeof(g_relay_pkt));
+		LOG_PRINTF("send_relay_pkt\n");
+		LOG_HEXDUMP((char *)&g_relay_pkt,sizeof(g_relay_pkt));
 	}
 }
 

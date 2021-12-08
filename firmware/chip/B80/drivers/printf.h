@@ -44,20 +44,12 @@
  *
  *******************************************************************************************************/
 #include "gpio.h"
+#include "user_config.h"
 #pragma once
-
-#define DEBUG_MODE 1
 
 #if(DEBUG_MODE==1)
 
-#define  DEBUG_IO		1
-#define  DEBUG_USB		2
-
-#define  DEBUG_BUS  	DEBUG_IO
-
 #if(DEBUG_BUS==DEBUG_IO)
-#define PRINT_BAUD_RATE             		115200   	//1M baud rate,should Not bigger than 1Mb/s
-#define DEBUG_INFO_TX_PIN           		GPIO_PA3
 #define TX_PIN_GPIO_EN()					gpio_set_func(DEBUG_INFO_TX_PIN , AS_GPIO);
 #define TX_PIN_PULLUP_1M()					gpio_setup_up_down_resistor(DEBUG_INFO_TX_PIN, PM_PIN_PULLUP_1M);
 #define TX_PIN_OUTPUT_EN()					gpio_set_output_en(DEBUG_INFO_TX_PIN,1)
@@ -67,13 +59,19 @@
 extern void tl_printf(const char *format, ...);
 extern void hex_printf(char *p_buf,int len );
 
+extern void tl_printf(const char *format, ...);
 #define printf		tl_printf
-#define printhex	hex_printf
+
+#define LOG_PRINTF		tl_printf
+#define LOG_HEXDUMP  	hex_printf
 
 #else
 
-static inline void no_printf(const char *format, ...){    return;}
-#define printf		no_printf
+//static inline void no_printf(const char *format, ...){    return;}
+//#define printf		no_printf
+#define printf
+#define LOG_PRINTF
+#define LOG_HEXDUMP
 
 #endif
 

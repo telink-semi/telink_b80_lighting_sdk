@@ -1,6 +1,6 @@
 //#include "../../common.h"
 #include "driver.h"
-#include "rf_control.h"
+#include "user_config.h"
 
 unsigned int channel_change_tick;
 /***********************************************************

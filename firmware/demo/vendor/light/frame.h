@@ -12,13 +12,14 @@ typedef struct{
 typedef struct{
 	Pairing_info_t pared_remote[MAX_PAIRED_REMOTER];    //must the first one.
 	unsigned char  paire_index;
+	unsigned char  paire_num;
 	unsigned char  luminance_index;//亮度下标
 	unsigned char  chroma_index;//色温下标
 	unsigned char  led_on;   //when power on "1" indicate the LED's off by the switch
 
 	unsigned char  power_on_recover;//上电状态是否切换标志
 	unsigned char  seg_index;//状态切换值
-    unsigned char  rev[18];
+    unsigned char  rev[17];
 }LED_control_info_t;
 #define LEN_LED_CONTROL_INFO   64
 

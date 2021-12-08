@@ -50,6 +50,7 @@
 #include "remote_ana_data.h"
 #include "keyboard.h"
 #include "remote_button.h"
+#include "types.h"
 
 #if(RF_MODE==RF_PRIVATE_1M || RF_MODE==RF_PRIVATE_2M || RF_MODE==RF_PRIVATE_500K || RF_MODE==RF_PRIVATE_250K)
 
@@ -75,7 +76,7 @@
 #elif(RF_AUTO_MODE == MANUAL)
 void user_init()
 {
-	printf("remote rgb start....\n");
+	LOG_PRINTF("remote rgb start....\n");
 
 	led_gpio_init(LED1);          //LED On
 	
@@ -125,29 +126,27 @@ void main_loop (void)
 					key_pre_value = KEY_NONE;
 
 					if(cmd_send_flag){
-						if(cmd_send_cnt < NUM_SENDING_CMD_CTR){//按键命令至少发送10次
-							cmd_send_cnt++;
+						if(cmd_send_cnt < NUM_SENDING_CMD_CTR){//按键命令至少发送15次
 							
-							printf("send cmd data,at least 10 times\n");
+							LOG_PRINTF("send cmd data,at least 15 times\n");
 
 						}else if(cmd_send_cnt < NUM_SENDING_CMD_CTR+NUM_SENDING_CMD_NONE){//发送空命令5次，清楚light之前的命令码
-							cmd_send_cnt++;
-							
-							package_data_set_newcmd(KEY_NONE);
 						
-							printf("send none data, 5 times\n");
+							package_data_set_newcmd(KEY_NONE,NULL);
+						
+							LOG_PRINTF("send none data, 5 times\n");
 			
 						}else{
 							cmd_send_flag = 0;
 							cmd_send_cnt  = 0;
-							printf("send complete,clear flag\n");
+							LOG_PRINTF("send complete,clear flag\n");
 						}
 							
 					}			
 				}
 
 				if(!cmd_send_flag){
-					printf("send complete&relese key,then sleep\n");
+					LOG_PRINTF("send complete&relese key,then sleep\n");
 					
 					package_data_store_func();
 				
@@ -164,7 +163,7 @@ void main_loop (void)
 
 					if(key_pre_value != key_value) 
 					{
-						package_data_set_newcmd(key_value);
+						package_data_set_newcmd(key_value,NULL);
 
 						cmd_send_flag = 1;
 						cmd_send_cnt  = 0;
@@ -189,9 +188,9 @@ void main_loop (void)
 						if(key_cmd_cnt_lumi_chro&0x20){//色温亮度按键按下时，每320ms调节1级
 							key_cmd_cnt_lumi_chro=0;
 							
-							package_data_set_newcmd(key_pre_value);
+							package_data_set_newcmd(key_pre_value,NULL);
 						
-							printf("pre_key_value=%d rf_seq_no increase\n",key_pre_value);
+							LOG_PRINTF("pre_key_value=%d rf_seq_no increase\n",key_pre_value);
 						}
 					}
 				}
@@ -203,7 +202,7 @@ void main_loop (void)
 
 				cmd_send_cnt++;
 
-				printf("send cmd data\n");
+				LOG_PRINTF("send cmd data\n");
 			}
 
 			#if REMOTE_DEBUG
@@ -213,7 +212,7 @@ void main_loop (void)
 				sleep_ms(10);
 			#endif
 			
-			printf("kb main loop\n");
+			LOG_PRINTF("kb main loop\n");
 		}
 #endif
 

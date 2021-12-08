@@ -1,6 +1,7 @@
 #pragma once
 
 
+#define UNUSED_PID      0xffffffff
 unsigned char save_remote_ID_func(unsigned int Id);
 void clear_remote_ID_func(void);
 unsigned char paired_ID_match(unsigned int Id);

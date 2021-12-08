@@ -104,14 +104,31 @@ extern "C" {
 
 
 #define RF_MODE					RF_BLE_1M
-#define RF_FREQ				    35
+#define RF_FREQ				    37
 
-#define PID_ADDR                0x3fe0
+#define PID_ADDR                0x3f00
 #define REMOTE_VID              0x5453
 
 #define TTL_MAX  			    5
-#define NUM_SENDING_CMD_CTR     10
+#define NUM_SENDING_CMD_CTR     15
 #define NUM_SENDING_CMD_NONE    5
+
+#define DEBUG_MODE              0
+
+#if(DEBUG_MODE==1)
+
+#define  DEBUG_IO		        1
+#define  DEBUG_USB		        2
+
+#define  DEBUG_BUS  	        DEBUG_IO
+
+#if(DEBUG_BUS==DEBUG_IO)
+#define PRINT_BAUD_RATE         1000000   	//1M baud rate,should Not bigger than 1Mb/s
+#define DEBUG_INFO_TX_PIN       GPIO_PA3
+#endif
+
+#endif
+
 
 /* Define system clock */
 #define CLOCK_SYS_CLOCK_HZ  	16000000

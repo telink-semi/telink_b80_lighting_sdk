@@ -45,13 +45,10 @@
  *******************************************************************************************************/
 #include "app_config.h"
 #include "frame.h"
-#include "types.h"
-#include "state.h"
+#include "sys_status.h"
 #include "rf_control.h"
 #include "time_event.h"
 #include "led_control.h"
-#include "user_pwm.h"
-#include "state.h"
 
 #if(RF_MODE==RF_PRIVATE_1M || RF_MODE==RF_PRIVATE_2M || RF_MODE==RF_PRIVATE_500K || RF_MODE==RF_PRIVATE_250K)
 
@@ -67,40 +64,36 @@
 #define SB_MODE   			2
 #define PRI_MODE			SB_MODE
 
-extern unsigned char led_on_cnt;
-unsigned char g_state;
-unsigned int  sys_run_tick;
-
-unsigned int  test_loop_tick;
-
-
 
 #if(RF_AUTO_MODE == AUTO)
 
+
 #elif(RF_AUTO_MODE == MANUAL)
+
+
 void user_init()
 {
-	printf("light rgb start....\n");
+#if EEPROM_ENABLE
+	e2prom_init();
+#endif
+	LOG_PRINTF("light rgb start....\n");
 	
-	rf_init_func();
-	//fm24c02_init_func(GPIO_PA5,GPIO_PB6);
-		
+	rfc_init_func();
+
 	led_pwm_init_func();
+	
 	led_init_func();
 	
-	g_state=PAIRING_STATE;
-	sys_run_tick=clock_time();
-
-	printf("PAIRRING_STATE\n");
+	sys_status_init();
 
 	irq_enable();
 }
 
-void main_loop(void)
+void main_loop (void)
 {
+	sys_status_process();
+	led_task_process_func();
 	time_event_process_func();
-	rf_packget_pro_func();
-	led_pask_process_func();
 }
 #endif
 #endif

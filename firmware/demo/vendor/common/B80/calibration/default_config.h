@@ -67,10 +67,10 @@ extern "C" {
 #define LED3     		        GPIO_PD4
 #define LED4     		        GPIO_PD5
 #elif (MCU_CORE_B80)
-#define LED1     		        GPIO_PB3
-#define LED2     		        GPIO_PB4
-#define LED3     		        GPIO_PB5
-#define LED4     		        GPIO_PB6
+#define LED1     		        GPIO_PD0
+#define LED2     		        GPIO_PD1
+#define LED3     		        GPIO_PD2
+#define LED4     		        GPIO_PD3
 #define LED5     		        GPIO_PD4
 #define LED6     		        GPIO_PD5
 #endif
@@ -108,12 +108,12 @@ extern "C" {
 
 
 
-#define RF_MODE					RF_PRIVATE_2M
+#define RF_MODE					RF_LR_S8_125K
 
 
 
 /* Define system clock */
-#define CLOCK_SYS_CLOCK_HZ  	16000000
+#define CLOCK_SYS_CLOCK_HZ  	24000000
 
 #if(MCU_CORE_B89)
 #if(CLOCK_SYS_CLOCK_HZ==12000000)

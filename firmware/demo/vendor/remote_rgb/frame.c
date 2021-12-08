@@ -24,8 +24,8 @@ void package_data_init_func(void)
 	remote_ana_read(&ana_data);
 	led_remote.rf_seq_no = ana_data.seq_no;//读上次包的序列值，若为第一次上电，则为0
 
-	printf("package_data_init_func\n");
-	printhex((char*)&led_remote,sizeof(led_remote));
+	LOG_PRINTF("package_data_init_func\n");
+	LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 
 }
 
@@ -36,29 +36,29 @@ void package_data_init_func(void)
  * 返 回 值：
  ******************************************************************/
 
-void package_data_set_newcmd(unsigned char key_value)
+void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 {
 	switch(key_value){
 		case KEY_NONE:
 			led_remote.control_key = (CMD_NONE<<4);
 	
-			printf("KEY_NONE\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_NONE\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_LIGHT_ON:
 		
 			led_remote.rf_seq_no++;
 			led_remote.control_key = (CMD_ON<<4);
-			printf("KEY_LIGHT_ON\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_LIGHT_ON\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_LIGHT_OFF:
 					
 			led_remote.rf_seq_no++;
 			led_remote.control_key = (CMD_OFF<<4);
 		
-			printf("KEY_LIGHT_OFF\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_LIGHT_OFF\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 
 		case KEY_LUMINANT_INCREASE:
@@ -66,62 +66,62 @@ void package_data_set_newcmd(unsigned char key_value)
 			led_remote.rf_seq_no++;
 			led_remote.control_key = (CMD_LUMINANT_INCREASE<<4);
 		
-			printf("KEY_LUMINANT_INCREASE\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_LUMINANT_INCREASE\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_LUMINANT_DECREASE:
 					
 			led_remote.rf_seq_no++;
 			led_remote.control_key = (CMD_LUMINANT_DECREASE<<4);	
 		
-			printf("KEY_LUMINANT_DECREASE\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_LUMINANT_DECREASE\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_CHROMA_INCREASE:
 
 			led_remote.rf_seq_no++;
 			led_remote.control_key = (CMD_CHROMA_INCREASE<<4);		
 		
-			printf("KEY_CHROMA_INCREASE\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_CHROMA_INCREASE\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_CHROMA_DECREASE:
 					
 			led_remote.rf_seq_no++;
 			led_remote.control_key = (CMD_CHROMA_DECREASE<<4);	
 		
-			printf("KEY_CHROMA_DECREASE\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_CHROMA_DECREASE\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_NIGHT_LIGHT_CMD:
 					
 			led_remote.rf_seq_no++;
 			led_remote.control_key = (CMD_NIGHT_LIGHT_CMD<<4);	
 		
-			printf("KEY_NIGHT_LIGHT_CMD\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_NIGHT_LIGHT_CMD\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_BREATH_RGB_MODE_CMD:
 			led_remote.rf_seq_no++;
 			led_remote.control_key = (CMD_BREATH_RGB_MODE_CMD<<4);	
 		
-			printf("KEY_BREATH_RGB_MODE_CMD\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_BREATH_RGB_MODE_CMD\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;	
 		case KEY_PAIRE_CODE_CMD:
 			led_remote.rf_seq_no++;
 			led_remote.control_key = (CMD_PAIRE_CODE_CMD<<4);	
 		
-			printf("KEY_PAIRE_CODE_CMD\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_PAIRE_CODE_CMD\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 
 		break;
 		case KEY_CLEAR_CODE_CMD:
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (KEY_CLEAR_CODE_CMD<<4);	
+			led_remote.control_key = (CMD_CLEAR_CODE_CMD<<4);	
 			
-			printf("KEY_CLEAR_CODE_CMD\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_CLEAR_CODE_CMD\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 
 		break;
 		case KEY_SET_RGB_CMD:
@@ -131,12 +131,12 @@ void package_data_set_newcmd(unsigned char key_value)
 			led_remote.value[1] = 500; //G
 			led_remote.value[2] = 500; //B
 			
-			printf("KEY_SET_RGB_CMD\n");
-			printhex((char*)&led_remote,sizeof(led_remote));
+			LOG_PRINTF("KEY_SET_RGB_CMD\n");
+			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;	
 		
 		default:
-			printf("CMD_TYPE_LIGHT_OTHER\n");
+			LOG_PRINTF("CMD_TYPE_LIGHT_OTHER\n");
 		break;
 
 	}
@@ -153,7 +153,7 @@ void package_data_send_func(void)//发送数据
 	led_remote.ttl = TTL_MAX;
 	rfc_send_data((unsigned char*)&led_remote);
 	
-	printhex((char*)&led_remote,sizeof(led_remote));
+	LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 }
 
 /*******************************************************************

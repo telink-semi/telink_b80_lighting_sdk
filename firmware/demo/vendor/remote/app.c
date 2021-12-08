@@ -49,6 +49,7 @@
 #include "rf_control.h"
 #include "keyboard.h"
 #include "cmd_def.h"
+#include "types.h"
 
 #if(RF_MODE==RF_PRIVATE_1M || RF_MODE==RF_PRIVATE_2M || RF_MODE==RF_PRIVATE_500K || RF_MODE==RF_PRIVATE_250K)
 
@@ -75,7 +76,7 @@
 void user_init()
 {
 
-	printf("remote start....\n");
+	LOG_PRINTF("remote start....\n");
 
 	led_gpio_init(LED1);          //LED On
 	
@@ -132,7 +133,7 @@ void main_loop (void)
 						 ||key_pre_value==KEY_LIGHT_OFF_GROUP4)
 						{
 							
-							package_data_set_newcmd(key_pre_value);
+							package_data_set_newcmd(key_pre_value,NULL);
 							
 							cmd_send_flag = 1;
 							cmd_send_cnt  = 0;
@@ -143,34 +144,32 @@ void main_loop (void)
 					}
 					
 					key_pre_value = KEY_NONE;
-
+					
 					flag_night_light_cmd = 0;
 					flag_light_off_cmd   = 0;
 
 					if(cmd_send_flag){
-						if(cmd_send_cnt < NUM_SENDING_CMD_CTR){//按键命令至少发送10次
-							cmd_send_cnt++;
+						if(cmd_send_cnt < NUM_SENDING_CMD_CTR){//按键命令至少发送15次
 							
-							printf("send cmd data,at least 10 times\n");
+							LOG_PRINTF("send cmd data,at least 15 times\n");
 
 						}else if(cmd_send_cnt < NUM_SENDING_CMD_CTR+NUM_SENDING_CMD_NONE){//发送空命令5次，清楚light之前的命令码
-							cmd_send_cnt++;
 							
-							package_data_set_newcmd(KEY_NONE);
+							package_data_set_newcmd(KEY_NONE,NULL);
 						
-							printf("send none data, 5 times\n");
+							LOG_PRINTF("send none data, 5 times\n");
 			
 						}else{
 							cmd_send_flag = 0;
 							cmd_send_cnt  = 0;
-							printf("send complete,clear flag\n");
+							LOG_PRINTF("send complete,clear flag\n");
 						}
 							
 					}			
 				}
 
 				if((!flag_light_off_cmd)&(!cmd_send_flag)){
-					printf("send complete&relese key,then sleep\n");
+					LOG_PRINTF("send complete&relese key,then sleep\n");
 					
 					package_data_store_func();
 				
@@ -196,9 +195,12 @@ void main_loop (void)
 						
 						key_cmd_cnt_lumi_chro=0;
 						key_cmd_cnt_off++;
-						if(key_cmd_cnt_off&0x80){ //every 1.28s,send night light cmd
+						//LOG_PRINTF("key_cmd_cnt_off=%d\n",key_cmd_cnt_off);
+						if(key_cmd_cnt_off&0x80){ //0x80+wakeup_intervel(10ms)=1.28s(real time:2.2s), send night light cmd
 							key_cmd_cnt_off=0;
-							package_data_set_newcmd(KEY_QUICK_LOW_LIGHT);
+							u8 para[1];
+							para[0] = package_get_group(key_value);
+							package_data_set_newcmd(KEY_QUICK_LOW_LIGHT,para);
 
 							cmd_send_flag = 1;
 							cmd_send_cnt  = 0;
@@ -209,9 +211,12 @@ void main_loop (void)
 						}
 	
 					}else{
+
+						key_cmd_cnt_off=0;
+						
 						if(key_pre_value != key_value) 
 						{
-							package_data_set_newcmd(key_value);
+							package_data_set_newcmd(key_value,NULL);
 
 							cmd_send_flag = 1;
 							cmd_send_cnt  = 0;
@@ -236,9 +241,9 @@ void main_loop (void)
 						if(key_cmd_cnt_lumi_chro&0x20){//色温亮度按键按下时，每320ms调节1级
 							key_cmd_cnt_lumi_chro=0;
 							
-							package_data_set_newcmd(key_pre_value);
+							package_data_set_newcmd(key_pre_value,NULL);
 						
-							printf("pre_key_value=%d rf_seq_no increase\n",key_pre_value);
+							LOG_PRINTF("pre_key_value=%d rf_seq_no increase\n",key_pre_value);
 						}
 					}
 				}
@@ -250,7 +255,7 @@ void main_loop (void)
 
 				cmd_send_cnt++;
 
-				printf("send cmd data\n");
+				LOG_PRINTF("send cmd data\n");
 			}
 
 			#if REMOTE_DEBUG
@@ -260,7 +265,7 @@ void main_loop (void)
 				sleep_ms(10);
 			#endif
 			
-			printf("kb main loop\n");
+			LOG_PRINTF("kb main loop\n");
 		}
 #endif
 

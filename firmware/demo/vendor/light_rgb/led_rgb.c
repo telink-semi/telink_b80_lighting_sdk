@@ -1,10 +1,37 @@
 //#include "../../common.h"
 #include "driver.h"
-#include "state.h"
 #include "frame.h"
 #include "led_rgb.h"
 #include "user_pwm.h"
 #include "app_config.h"
+
+void pwm_gpio_init_1(unsigned int pwm_io,unsigned int pwm_x,unsigned int pwm_id,unsigned int pwm_mode)
+{
+	gpio_set_func(pwm_io, pwm_x);
+	pwm_set_mode(pwm_id, pwm_mode);
+	pwm_set_phase(pwm_id, 0);	 //no phase at pwm beginning
+	pwm_set_cycle_and_duty(pwm_id, (unsigned short) (1000 * CLOCK_SYS_CLOCK_1US), (unsigned short) (0 * CLOCK_SYS_CLOCK_1US)  );
+	pwm_start(pwm_id);
+}
+
+void led_rgb_pwm_init_func(void)
+{
+
+	//PB6 LED_R
+	pwm_gpio_init_1(LED_R,PWM4,PWM4_ID,PWM_NORMAL_MODE);
+	LOG_PRINTF("led_pwm_init_func->LED_R:1000  0\n");
+
+	
+	//PB4 LED_G
+	pwm_gpio_init_1(LED_G,PWM1,PWM1_ID,PWM_NORMAL_MODE);
+	LOG_PRINTF("led_pwm_init_func->LED_G:1000  0\n");
+
+	//PB2 LED_B
+	pwm_gpio_init_1(LED_B,PWM0,PWM0_ID,PWM_NORMAL_MODE);
+	LOG_PRINTF("led_pwm_init_func->LED_B:PB2:1000  0\n");
+	
+}
+
 /***********************************************************
  * 函数功能：RGB灯开
  * 参       数：
@@ -62,8 +89,8 @@ void led_set_rgb_power_func(unsigned short Red_v,unsigned short Green_v,unsigned
 	pwm_set_cycle_and_duty(PWM1_ID, (unsigned short) (1000 * CLOCK_SYS_CLOCK_1US), (unsigned short) (Green_v * CLOCK_SYS_CLOCK_1US)  );
 	pwm_set_cycle_and_duty(PWM0_ID, (unsigned short) (1000 * CLOCK_SYS_CLOCK_1US), (unsigned short) (Blue_v * CLOCK_SYS_CLOCK_1US)  );
 
-//	printf("led_pwm_control_func->PWM4:PB6:1000  %d\n",Red_v);
-//	printf("led_pwm_control_func->PWM1:PB4:1000  %d\n",Green_v);
-//	printf("led_pwm_control_func->PWM0:PB2:1000  %d\n",Blue_v);
+//	LOG_PRINTF("led_pwm_control_func->PWM4:PB6:1000  %d\n",Red_v);
+//	LOG_PRINTF("led_pwm_control_func->PWM1:PB4:1000  %d\n",Green_v);
+//	LOG_PRINTF("led_pwm_control_func->PWM0:PB2:1000  %d\n",Blue_v);
 
 }

@@ -7,8 +7,8 @@
 
 const unsigned char rf_channel[4]={1,24,51,76};
 
+#define BLE_ACCESS_CODE			0xd6be898e //0x9A3CC36A//0xA5CC336A//
 
-#define BLE_ACCESS_CODE			0x9A3CC36A//0xA5CC336A//0xd6be898e//
 void rfc_init_func(void)
 {
 
@@ -121,7 +121,7 @@ void rfc_send_data(unsigned char *rf_data)
 	rf_set_txmode();
 	
 	for(i=0;i<3;i++){
-		rf_set_ble_channel(37+i);
+		rf_set_ble_channel(RF_FREQ+i);
 		sleep_us(200);
 		rf_tx_pkt(rf_data);	
 		sleep_us(2000);  //2mS is enough for packet sending

@@ -1,52 +1,31 @@
 //#include "../../common.h"
 #include "driver.h"
 #include "frame.h"
-#include "pairing_op.h"
-#include "led.h"
 #include "rf_control.h"
 #include "app_config.h"
-#include "cmd_def.h"
 
-extern unsigned int  sys_run_tick;
-extern unsigned char g_state;
+#define BLE_ACCESS_CODE			0xd6be898e //0x9A3CC36A//0xA5CC336A//
 
-unsigned char led_on_cnt=0;
-void g_status_log(void)
-{
-	if(PAIRRING_STATE == g_state){
-		printf("PAIRRING_STATE\n");
-	}else if(CLEARCODE_STATE == g_state){
-		printf("CLEARCODE_STATE\n");
-
-	}else if(NORMAL_STATE == g_state){
-		printf("NORMAL_STATE\n");
-	
-	}else if(PAIRRING_STATE == g_state){
-		printf("PAIRRING_STATE\n");
-	}else{
-		printf("LAST_SYS_STATE\n");
-	}
-}
-
-#define BLE_ACCESS_CODE			0x9A3CC36A//0xA5CC336A//0xd6be898e//
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºRF³õÊ¼»¯
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šRFåˆå§‹åŒ–
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
-void rf_init_func(void)
+void rfc_init_func(void)
 {
-
-	rf_rx_buffer_set(blt_rxbuffer,64, 0);
 	
 	rf_set_power_level_index (RF_POWER);
 	rf_set_ble_crc_adv ();
-	rf_set_ble_access_code_value(BLE_ACCESS_CODE);	
+	rf_set_tx_rx_off();
+	
 #if(RF_MODE==RF_BLE_1M_NO_PN)
 	rf_set_channel(RF_FREQ,0);
 #else
 	rf_set_ble_channel(RF_FREQ);
 #endif
+	rf_set_ble_access_code_value(BLE_ACCESS_CODE);	
+
+	rf_rx_buffer_set(blt_rxbuffer,64, 0);
 	rf_set_rxmode ();
 
 	irq_enable_type(FLD_IRQ_ZB_RT_EN); //enable RF irq
@@ -56,108 +35,49 @@ void rf_init_func(void)
 
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÌøÆµ£¬4¸öÆµµãÑ­»·ÇĞ»»
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šè·³é¢‘ï¼Œ4ä¸ªé¢‘ç‚¹å¾ªç¯åˆ‡æ¢
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
-void rf_change_channel_func(void)
+void rfc_change_channel_func(void)
 {
 	static unsigned char Channel_index;
 	rf_set_tx_rx_off();
-	sleep_us(200);
 	Channel_index++;
 	if(Channel_index > 2)
 		Channel_index = 0;
-	rf_set_ble_channel(37 + Channel_index);
+	rf_set_ble_channel(RF_FREQ + Channel_index);
 	sleep_us(200);
 	rf_set_rxmode ();
 
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º×ª·¢ÖĞ¼ÌÊı¾İ°ü
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šè½¬å‘ä¸­ç»§æ•°æ®åŒ…
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
-void send_relay_pkt(void)
+void rfc_send_relay_pkt(void)
 {
-
-	unsigned char i;
 
 	if(g_relay_pkt.ttl > 0){
 		
 		g_relay_pkt.ttl -= 1;
-		
-		rf_set_txmode();
-		
-		for(i=0;i<3;i++){
-			rf_set_ble_channel(37+i);
-			sleep_us(200);
-			rf_tx_pkt ((void *)&g_relay_pkt);
-			sleep_us(2000);  //2mS is enough for packet sending
-			
+
+		unsigned char i;
+		for(i=0;i<3;i++){	
+			rf_set_tx_rx_off();
+			rf_set_ble_channel(RF_FREQ+i);
+			rf_set_txmode();
+			sleep_ms(1);
+			rf_tx_pkt((void *)&g_relay_pkt);	
 			while(!rf_tx_finish());
 			rf_tx_finish_clear_flag();
 		}
+		rfc_change_channel_func();
 
-		rf_change_channel_func();
 
-		printf("send_relay_pkt\n");
-		printhex((char *)&g_relay_pkt,sizeof(g_relay_pkt));
+		LOG_PRINTF("send_relay_pkt\n");
+		LOG_HEXDUMP((char *)&g_relay_pkt,sizeof(g_relay_pkt));
 	}
 }
-/***********************************************************
- * º¯Êı¹¦ÄÜ£ºÊÕµ½RFÊı¾İºó´¦Àíº¯Êı
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
- **********************************************************/
-void rf_packget_pro_func(void)
-{
-	if(g_packget_new){//ÓĞĞÂµÄrfÊı¾İ°ü
-		g_packget_new=0;
-		if(g_state==PAIRRING_STATE){//ÊÇ·ñÎª¶ÔÂë×´Ì¬
-			if(g_packget_cmd==CMD_ON){//°´¼üÖµÊÇ·ñÎª¿ªµÆ½¡
-				if((UNUSED_PID != g_packget_pid)&&(GROUP_ALL != g_packget_grp)){
-					sys_run_tick=clock_time();
-					remote_save_grp=g_packget_grp;//±£´æ×é±ğ
-					remote_save_pid=g_packget_pid;//±£´æÒ£¿ØÆ÷ID
-					g_state=CLEARCODE_STATE;//½øÈëÏÂÒ»¸ö×´Ì¬
-					led_on_cnt=1;
-					printf("PAIRRING_STATE to CLEARCODE_STATE:led_on_cnt=%d\n",led_on_cnt);
-				}
-			}else if(g_packget_cmd!=CMD_NONE){//²»Îª¿ªµÆ¼ü
-				if(paired_ID_match(g_packget_pid,g_packget_grp)){//Ò£¿ØÆ÷µÄID¼°×é±ğÊÇ·ñÆ¥Åä£¬ÈôÆ¥Åä£¬ÔòÍË³ö¶ÔÂë£¬½øÈëÕı³£×´Ì¬
-					g_state=NORMAL_STATE;
-					printf("1exit pair to NORMAL_STATE\n");
-				}
-			}
-		}else if(g_state==CLEARCODE_STATE){
-			if(remote_save_pid==g_packget_pid){//Ò£¿ØÆ÷IDÊÇ·ñÒ»ÖÂ
-				if(g_packget_cmd==CMD_ON){//ÊÇ·ñÎª¿ªµÆ¼ü
-					sys_run_tick=clock_time();//¸üĞÂ½ÓÊÕÃüÁîµÄÊ±¼äµã
-					led_on_cnt++;
-					printf("CLEARCODE_STATE:led_on_cnt=%d\n",led_on_cnt);
-					if(led_on_cnt>4){//³¬¹ı4´ÎÔòÇåÂë
-						clear_pared_code_func();
-						led_flash_updata(5);
-						g_state=NORMAL_STATE;
-						printf("clear pair to NORMAL_STATE\n");
-					}
-				}else if(g_packget_cmd!=CMD_NONE){//·Ç¿ªµÆ¼°¿Õ¼üÖµ
-					if(paired_ID_match(g_packget_pid,g_packget_grp)){//Ò£¿ØÆ÷µÄID¼°×é±ğÊÇ·ñÆ¥Åä£¬ÈôÆ¥Åä£¬ÔòÍË³ö¶ÔÂë£¬½øÈëÕı³£×´Ì¬
-						g_state=NORMAL_STATE;
-						printf("3exit pair to NORMAL_STATE\n");
-					}
-				}
-			}
-		}else if(g_state==NORMAL_STATE){//Õı³£×´Ì¬
-			send_relay_pkt();
-			if(paired_ID_match(g_packget_pid,g_packget_grp)){//Ò£¿ØÆ÷µÄID¼°×é±ğÊÇ·ñÆ¥Åä£¬ÈôÆ¥Åä£¬ÔòÖ´ĞĞÃüÁî
-				if(g_packget_cmd!=CMD_SET_LUMI_CHROMA){
-					led_event_proc_func(g_packget_cmd);//Ö´ĞĞÃüÁî
-				}else{
-					led_set_lumi_chrome_func(g_packget_lumi,g_packget_chrome);//ÉèÖÃÉ«ÎÂÖµ
-				}
-			}
-		}
-	}
-}
+

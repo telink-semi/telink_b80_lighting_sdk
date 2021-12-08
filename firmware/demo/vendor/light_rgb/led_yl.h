@@ -16,6 +16,7 @@ unsigned char led_state_change_flag;
 unsigned int led_change_tick;
 
 
+void led_yl_pwm_init_func(void);
 void led_on_func(void);
 void led_off_func(void);
 void led_event_proc_func(unsigned char Cmd);

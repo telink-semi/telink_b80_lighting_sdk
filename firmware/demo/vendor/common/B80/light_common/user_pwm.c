@@ -1,5 +1,5 @@
 //#include "../common.h"
-#include "app_config.h"
+#include "user_config.h"
 #include "driver.h"
 
 unsigned short pwm_maxvalue[5]={0xffff,0xffff,0xffff,0xffff,0xffff};

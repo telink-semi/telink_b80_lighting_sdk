@@ -100,76 +100,76 @@ void  keyscan_value_log(unsigned char value)
 {
 	switch(value){
 		case KEY_LUMINANT_INCREASE:
-			printf("KEY_LUMINANT_INCREASE\n");
+			LOG_PRINTF("KEY_LUMINANT_INCREASE\n");
 		break;
 		case KEY_LUMINANT_DECREASE:
-			printf("KEY_LUMINANT_DECREASE\n");
+			LOG_PRINTF("KEY_LUMINANT_DECREASE\n");
 		break;
 		case KEY_CHROMA_INCREASE:
-			printf("KEY_CHROMA_INCREASE\n");
+			LOG_PRINTF("KEY_CHROMA_INCREASE\n");
 		break;
 		case KEY_CHROMA_DECREASE:
-			printf("KEY_CHROMA_DECREASE\n");
+			LOG_PRINTF("KEY_CHROMA_DECREASE\n");
 		break;
 		case KEY_QUICK_LOW_LIGHT:
-			printf("KEY_QUICK_LOW_LIGHT\n");
+			LOG_PRINTF("KEY_QUICK_LOW_LIGHT\n");
 		break;
 		case KEY_SET_LUMI_CHROMA:
-			printf("KEY_SET_LUMI_CHROMA\n");
+			LOG_PRINTF("KEY_SET_LUMI_CHROMA\n");
 		break;
 		case KEY_LIGHT_ON_ALL:
-			printf("KEY_LIGHT_ON_ALL\n");
+			LOG_PRINTF("KEY_LIGHT_ON_ALL\n");
 		break;
 		case KEY_LIGHT_OFF_ALL:
-			printf("KEY_LIGHT_OFF_ALL\n");
+			LOG_PRINTF("KEY_LIGHT_OFF_ALL\n");
 		break;
 		case KEY_LIGHT_ON_GROUP1:
-			printf("KEY_LIGHT_ON_GROUP1\n");
+			LOG_PRINTF("KEY_LIGHT_ON_GROUP1\n");
 		break;
 		case KEY_LIGHT_OFF_GROUP1:
-			printf("KEY_LIGHT_OFF_GROUP1\n");
+			LOG_PRINTF("KEY_LIGHT_OFF_GROUP1\n");
 		break;
 		case KEY_LIGHT_ON_GROUP2:
-			printf("KEY_LIGHT_ON_GROUP2\n");
+			LOG_PRINTF("KEY_LIGHT_ON_GROUP2\n");
 		break;
 		case KEY_LIGHT_OFF_GROUP2:
-			printf("KEY_LIGHT_OFF_GROUP2\n");
+			LOG_PRINTF("KEY_LIGHT_OFF_GROUP2\n");
 		break;
 		case KEY_LIGHT_ON_GROUP3:
-			printf("KEY_LIGHT_ON_GROUP3\n");
+			LOG_PRINTF("KEY_LIGHT_ON_GROUP3\n");
 		break;
 		case KEY_LIGHT_OFF_GROUP3:
-			printf("KEY_LIGHT_OFF_GROUP3\n");
+			LOG_PRINTF("KEY_LIGHT_OFF_GROUP3\n");
 		break;
 		case KEY_LIGHT_ON_GROUP4:
-			printf("KEY_LIGHT_ON_GROUP4\n");
+			LOG_PRINTF("KEY_LIGHT_ON_GROUP4\n");
 		break;
 		case KEY_LIGHT_OFF_GROUP4:
-			printf("KEY_LIGHT_OFF_GROUP4\n");
+			LOG_PRINTF("KEY_LIGHT_OFF_GROUP4\n");
 		break;
 		case KEY_LIGHT_ON:
-			printf("KEY_LIGHT_ON\n");
+			LOG_PRINTF("KEY_LIGHT_ON\n");
 		break;
 		case KEY_LIGHT_OFF:
-			printf("KEY_LIGHT_OFF\n");
+			LOG_PRINTF("KEY_LIGHT_OFF\n");
 		break;
 		case KEY_NIGHT_LIGHT_CMD:
-			printf("KEY_NIGHT_LIGHT_CMD\n");
+			LOG_PRINTF("KEY_NIGHT_LIGHT_CMD\n");
 		break;
 		case KEY_PAIRE_CODE_CMD:
-			printf("KEY_PAIRE_CODE_CMD\n");
+			LOG_PRINTF("KEY_PAIRE_CODE_CMD\n");
 		break;
 		case KEY_CLEAR_CODE_CMD:
-			printf("KEY_CLEAR_CODE_CMD\n");
+			LOG_PRINTF("KEY_CLEAR_CODE_CMD\n");
 		break;
 		case KEY_BREATH_RGB_MODE_CMD:
-			printf("KEY_BREATH_RGB_MODE_CMD\n");
+			LOG_PRINTF("KEY_BREATH_RGB_MODE_CMD\n");
 		break;
 		case KEY_SET_RGB_CMD:
-			printf("KEY_SET_RGB_CMD\n");
+			LOG_PRINTF("KEY_SET_RGB_CMD\n");
 		break;
 		default:
-			printf("KEY_NONE\n");
+			LOG_PRINTF("KEY_NONE\n");
 		break;
 	}
 

@@ -52,13 +52,13 @@ _attribute_ram_code_sec_ void light_irq_handler(void)
 		rf_rx_buffer_reconfig(next_pkt_addr);
 		rf_irq_clr_src(FLD_RF_IRQ_RX);
 		
-		//printf("irq_handler rf_rx\n");
+		//LOG_PRINTF("irq_handler rf_rx\n");
 
 		unsigned char *p=raw_pkt;            //½ÓÊÕ»º´æµÄÖ¸ÕëµØÖ·
-		printhex(p,RX_PACKGET_SIZE);
+		//LOG_HEXDUMP(p,RX_PACKGET_SIZE);
 
 		if(RF_NRF_SB_PACKET_CRC_OK(p)){                         //æ ¡éªŒæ¥æ”¶åŒ…
-			//printf("rf check success\n");
+			//LOG_PRINTF("rf check success\n");
 			rf_packet_led_remote_t *pkt=(rf_packet_led_remote_t *)(p);
 			if(pkt->vid==REMOTE_VID){//åŒ¹é…äº§å“ID
 				if(check_pkt_info(pkt)){
@@ -76,7 +76,7 @@ _attribute_ram_code_sec_ void light_irq_handler(void)
 				}
 			}
 		}else{
-			printf("rf check failed\n");
+			//LOG_PRINTF("rf check failed\n");
 		}
 	}
 

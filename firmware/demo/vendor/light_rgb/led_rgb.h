@@ -10,7 +10,7 @@ unsigned short led_green_cur;
 unsigned char led_rgb_state_change_flag;
 unsigned int led_rgb_change_tick;
 
-
+void led_rgb_pwm_init_func(void);
 void led_on_rgb_func(void);
 void led_rgb_off_func(void);
 void led_rgb_set_func(unsigned short Red_v,unsigned short Green_v,unsigned short Blue_v);

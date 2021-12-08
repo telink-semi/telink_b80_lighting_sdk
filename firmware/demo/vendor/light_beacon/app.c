@@ -44,10 +44,10 @@
  *
  *******************************************************************************************************/
 #include "app_config.h"
-#include "frame.h"
-#include "types.h"
+#include "sys_status.h"
 #include "led.h"
 #include "rf_control.h"
+#include "time_event.h"
 
 #if(RF_MODE==RF_BLE_1M || RF_MODE == RF_BLE_2M || RF_MODE == RF_LR_S2_500K || RF_MODE == RF_LR_S8_125K || RF_MODE==RF_BLE_1M_NO_PN)
 
@@ -59,128 +59,36 @@
 #define MANUAL				2
 #define RF_AUTO_MODE 		MANUAL
 
-#define RF_FREQ				35
-
-
-#define ACCESS_CODE			0x29417671
-
-extern unsigned char led_on_cnt;
-unsigned char g_state;
-unsigned int  sys_run_tick;
-
-unsigned int  test_loop_tick;
-
-/***********************************************************
- * ????????????????
- * ??       ????
- * ?? ??  ???
- **********************************************************/
-void check_sys_state_func(void)
-{
-	if(g_state==PAIRRING_STATE){
-		if(clock_time_exceed(sys_run_tick,6000000)){//???6s?????????????????????????
-			g_state=NORMAL_STATE;
-			printf("PAIRRING_STATE 6s timeout to NORMAL_STATE\n");
-		}
-	}else if(g_state==CLEARCODE_STATE){//??????????
-		if(clock_time_exceed(sys_run_tick,500000)){//????????????????500ms??????????¦Ï????
-			if(led_on_cnt==1){//????1?¦Ï????????????????
-				led_flash_updata(3);//???3??
-				pair_id_save_func();//???????
-
-				printf("pair success to NORMAL_STATE\n");
-			}
-			g_state=NORMAL_STATE;//????????????
-			printf("CLEARCODE_STATE 500ms timeout to NORMAL_STATE\n");
-		}
-	}
-
-}
-
 #if(RF_AUTO_MODE == AUTO)
-/*
-#define TX_INTERVAL_MS    1
 
-void user_init()
-{
-	//1.init the LED pin,for indication
-	gpio_set_func(LED1 ,AS_GPIO);
-	gpio_set_output_en(LED1, 1); //enable output
-	gpio_set_input_en(LED1 ,0);	 //disable input
-	gpio_write(LED1, 0);         //LED On
-
-	rf_set_power_level_index (RF_POWER);
-	rf_set_tx_rx_off_auto_mode();
-#if(RF_MODE==RF_BLE_1M_NO_PN)
-	rf_set_channel(RF_FREQ,0);
-#else
-	rf_set_ble_channel(RF_FREQ);
-#endif
-
-	rf_access_code_comm(ACCESS_CODE);
-
-}
-
-void main_loop (void)
-{
-#if(RF_TX_RX_MODE==TX)
-	while(1)
-	{
-		sleep_ms(1);
-    	rf_start_stx (ble_tx_packet, clock_time() + 16*1000*TX_INTERVAL_MS);
-		while(!rf_tx_finish());
-		rf_tx_finish_clear_flag();
-		tx_cnt++;
-	}
-
-
-#elif(RF_TX_RX_MODE==RX)
-	rf_rx_buffer_set(rx_packet,64, 0);
-	rf_start_srx(clock_time() + 100*16);
-
-	while(1)
-	{
-		if(rf_is_rx_finish())
-		{
-		    if(RF_BLE_PACKET_CRC_OK(rx_packet)&&RF_BLE_PACKET_LENGTH_OK(rx_packet))
-			{
-				gpio_toggle(LED1);
-				rx_cnt++;
-			}
-			rf_rx_finish_clear_flag();
-			rf_set_tx_rx_off_auto_mode();
-			rf_start_srx(clock_time() + 100*16);
-
-		}
-	}
-#endif
-}
-*/
 
 #elif(RF_AUTO_MODE == MANUAL)
+
+
 void user_init()
 {
-	printf("light beacon start....\n");
+#if EEPROM_ENABLE
+	e2prom_init();
+#endif
+	LOG_PRINTF("light beacon start....\n");
 	
-	rf_init_func();
+	rfc_init_func();
 
 	led_pwm_init_func();
+	
 	led_init_func();
 	
-	g_state=PAIRRING_STATE;
-	sys_run_tick=clock_time();
+	sys_status_init();
 
 	irq_enable();
-	
 }
 
 void main_loop (void)
 {
-	rf_packget_pro_func();
+	sys_status_process();
 	led_task_process_func();
 	time_event_process_func();
-	check_sys_state_func();
-
+	sys_status_check_func();
 }
 #endif
 #endif

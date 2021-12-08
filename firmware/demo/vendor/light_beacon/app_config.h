@@ -49,7 +49,7 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
+#define EEPROM_ENABLE	        1
 
 #if (MCU_CORE_B89)
 #define LED1     		        GPIO_PD0
@@ -67,10 +67,17 @@ extern "C" {
 #define LED3     		        GPIO_PD4
 #define LED4     		        GPIO_PD5
 #elif (MCU_CORE_B80)
-#define LED1     		        GPIO_PB3
-#define LED2     		        GPIO_PB4
+#if EEPROM_ENABLE
+#define LED_G     		        GPIO_PD3
+#define LED_B     		        GPIO_PD6
+#define LED3     		        GPIO_PA0
+#define LED4     		        GPIO_PB0
+#else
+#define LED_G     		        GPIO_PB4
+#define LED_B     		        GPIO_PB2
 #define LED3     		        GPIO_PB5
 #define LED4     		        GPIO_PB6
+#endif
 #define LED5     		        GPIO_PD4
 #define LED6     		        GPIO_PD5
 #endif
@@ -109,12 +116,26 @@ extern "C" {
 
 
 #define RF_MODE					RF_BLE_1M
-#define RF_FREQ				    35
+#define RF_FREQ				    37
 
 #define RX_PAYLOAD_LEN		    32
 #define REMOTE_VID              0x5453
 
+#define DEBUG_MODE              0
 
+#if(DEBUG_MODE==1)
+
+#define  DEBUG_IO		        1
+#define  DEBUG_USB		        2
+
+#define  DEBUG_BUS  	        DEBUG_IO
+
+#if(DEBUG_BUS==DEBUG_IO)
+#define PRINT_BAUD_RATE         1000000   	//1M baud rate,should Not bigger than 1Mb/s
+#define DEBUG_INFO_TX_PIN       GPIO_PB1
+#endif
+
+#endif
 
 
 /* Define system clock */

@@ -22,8 +22,9 @@ typedef struct{
 	unsigned char  rf_len1;
 	unsigned short vid;
 	unsigned int   pid;
-	unsigned char  rf_seq_no;
 	unsigned char  control_key;
+	unsigned char  rf_seq_no;
+
 	unsigned short value[3];
 	unsigned char  ttl;
 	unsigned char  reverse[3];
@@ -33,6 +34,6 @@ rf_packet_led_remote_t led_remote __attribute__((aligned(4)));
 
 
 void package_data_init_func(void);
-void package_data_set_newcmd(unsigned char cmd);
+void package_data_set_newcmd(unsigned char key_value,unsigned char* para);
 void package_data_send_func(void);
 void package_data_store_func(void);

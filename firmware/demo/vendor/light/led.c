@@ -33,13 +33,16 @@ void led_pwm_init_func(void)
 	pwm_set_clk(CLOCK_SYS_CLOCK_HZ, CLOCK_SYS_CLOCK_HZ);
 	
 	//PB4 LED_G
-	pwm_gpio_init(GPIO_PB4,PWM4,PWM4_ID,PWM_NORMAL_MODE);
-	printf("led_pwm_init_func-> LED_G->PWM4:PB4\n");
+	pwm_gpio_init(LED_G,PWM4,PWM4_ID,PWM_NORMAL_MODE);
+	LOG_PRINTF("led_pwm_init_func-> LED_G->PWM4\n");
 
 	//PB2 LED_B
-	pwm_gpio_init(GPIO_PB2,PWM0,PWM0_ID,PWM_NORMAL_MODE);
-	printf("led_pwm_init_func->LED_B->PWM0\n");
-	
+	pwm_gpio_init(LED_B,PWM0,PWM0_ID,PWM_NORMAL_MODE);
+	LOG_PRINTF("led_pwm_init_func->LED_B->PWM0\n");
+#if 0
+	pwm_set_cycle_and_duty(PWM4_ID, (u16) (1000 * CLOCK_SYS_CLOCK_1US), (u16) (1000 * CLOCK_SYS_CLOCK_1US) );
+	pwm_set_cycle_and_duty(PWM0_ID, (u16) (1000 * CLOCK_SYS_CLOCK_1US), (u16) (1000 * CLOCK_SYS_CLOCK_1US) );
+#endif
 }
 
 
@@ -52,8 +55,8 @@ void led_para_init_func(void)
 {
 
 	unsigned char ret = lightctr_store_read(&led_control);
-	printf("lightctr_store_read\n");
-	printhex((u8*)&led_control,sizeof(led_control));
+	LOG_PRINTF("lightctr_store_read\n");
+	LOG_HEXDUMP((u8*)&led_control,sizeof(led_control));
 
 	if(ret == F_NO_ERROR){
 
@@ -69,15 +72,20 @@ void led_para_init_func(void)
 		if(led_control.seg_index > 3)//超过最大切换状态值，默认为0
 			led_control.seg_index = 0;
 
+		if(led_control.paire_num > MAX_PAIRED_REMOTER){
+			led_control.paire_num = 0;
+		}
+
 	}else{
 		led_control.paire_index = 0;
+		led_control.paire_num = 0;
 		led_control.luminance_index = MAX_LUMINANCE_INDEX;
 		led_control.chroma_index = MAX_CHROME_INDEX;
 		led_control.seg_index = 0;
 	}
 
-	printf("led_para_init_func\n");
-	printhex((u8*)&led_control,sizeof(led_control));
+	LOG_PRINTF("led_para_init_func\n");
+	LOG_HEXDUMP((u8*)&led_control,sizeof(led_control));
 
 }
 /***********************************************************
@@ -94,8 +102,8 @@ void led_para_save_func(void)
 	lightctr_store_write(&led_control);
 
 
-	printf("led para save success\n");
-	printhex((char*)&led_control,sizeof(led_control));
+	LOG_PRINTF("led para save success\n");
+	LOG_HEXDUMP((char*)&led_control,sizeof(led_control));
 
 }
 /***********************************************************
@@ -136,6 +144,20 @@ void led_off_func(void)
 	led_lumina_target=0;
 //	led_chroma_target=0;
 	led_control.led_on=0;
+}
+
+void led_night_light_func(unsigned short Lumi,unsigned char Chroma)
+{
+	led_state_change_flag=1;
+	led_lumina_target=Lumi;
+	led_chroma_target=Chroma;
+
+	if(led_control.led_on==0){//若当前状态为关灯
+		led_lumina_cur=0;//亮度当前值为0
+		led_chroma_cur=led_chroma_target;//色温当前值为0
+		led_control.led_on=1;//led状态为开灯状态
+	}
+
 }
 /***********************************************************
  * 函数功能：更新亮度
@@ -227,8 +249,8 @@ void led_pwm_control_func(int Lumina, int Chroma)
 	pwm_set_cycle_and_duty(PWM4_ID, (u16) (1000 * CLOCK_SYS_CLOCK_1US), (u16) (Whrite_pwm_val * CLOCK_SYS_CLOCK_1US) );
 	pwm_set_cycle_and_duty(PWM0_ID, (u16) (1000 * CLOCK_SYS_CLOCK_1US), (u16) (Yellow_pwm_val * CLOCK_SYS_CLOCK_1US) );
 
-//	printf("led_pwm_control_func->PWM4:PB4:1000  %d\n",Whrite_pwm_val);
-//	printf("led_pwm_control_func->PWM0:PB2:1000  %d\n",Yellow_pwm_val);
+//	LOG_PRINTF("led_pwm_control_func->PWM4:PB4:1000  %d\n",Whrite_pwm_val);
+//	LOG_PRINTF("led_pwm_control_func->PWM0:PB2:1000  %d\n",Yellow_pwm_val);
 }
 /***********************************************************
  * 函数功能：设置LED
@@ -238,7 +260,7 @@ void led_pwm_control_func(int Lumina, int Chroma)
  **********************************************************/
 void led_power_control_func(int Lumina, int Chroma)
 {
-	printf("led_power_control_func\n");
+	LOG_PRINTF("led_power_control_func\n");
 	
 	unsigned char i;
 	led_lumina_target = led_lumina_cur = Lumina;
@@ -292,42 +314,46 @@ void led_event_proc_func(unsigned char Cmd)
 
 	switch(Cmd){
 		case CMD_NONE:
-			printf("CMD_NONE\n");
+			LOG_PRINTF("CMD_NONE\n");
 			break;
 
 		case CMD_ON://开灯
 			led_on_func();
-			printf("CMD_ON\n");
+			LOG_PRINTF("CMD_ON\n");
 			break;
 
 		case CMD_OFF://关灯
 			led_off_func();
-			printf("CMD_OFF\n");
+			LOG_PRINTF("CMD_OFF\n");
 			break;
 
 		case CMD_LUMINANT_INCREASE://亮度加
+			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_luminance_func(1);
-			printf("CMD_LUMINANT_INCREASE\n");
+			LOG_PRINTF("CMD_LUMINANT_INCREASE\n");
 			break;
 
 		case CMD_LUMINANT_DECREASE://亮度减
+			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_luminance_func(0);
-			printf("CMD_LUMINANT_DECREASE\n");
+			LOG_PRINTF("CMD_LUMINANT_DECREASE\n");
 			break;
 
 		case CMD_CHROMA_INCREASE://色温加
+			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_chroma_func(1);
-			printf("CMD_CHROMA_INCREASE\n");
+			LOG_PRINTF("CMD_CHROMA_INCREASE\n");
 			break;
 
 		case CMD_CHROMA_DECREASE://色温减
+			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_chroma_func(0);
-			printf("CMD_CHROMA_DECREASE\n");
+			LOG_PRINTF("CMD_CHROMA_DECREASE\n");
 			break;
 
-		case CMD_QUICK_LOW_LIGHT://夜灯模式
-			led_updata_lumi_chrome_func(LOW_LIGHT_LUMINACE,50);
-			printf("CMD_QUICK_LOW_LIGHT\n");
+		case CMD_QUICK_LOW_LIGHT://夜灯模式	
+			led_night_light_func(LOW_LIGHT_LUMINACE,50);
+			LOG_PRINTF("CMD_QUICK_LOW_LIGHT\n");
 			break;
 
 		default:
@@ -438,7 +464,7 @@ void led_task_process_func(void)
 				led_chroma_cur=chroma_one_step_updata(led_chroma_target,led_chroma_cur);
 			}
 
-			//printf("led_task_process_func\n");
+			//LOG_PRINTF("led_task_process_func\n");
 			led_pwm_control_func(led_lumina_cur,led_chroma_cur);//设置LED
 			
 			if( (led_chroma_cur==led_chroma_target) && (led_lumina_cur==led_lumina_target) ){//变化完成

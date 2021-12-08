@@ -1,6 +1,7 @@
 //#include "../../common.h"
 #include "driver.h"
 #include "frame.h"
+#include "pairing_op.h"
 #include "light_ctr_store.h"
 /***********************************************************
  * 函数功能：把ID值写入eeprom
@@ -27,27 +28,26 @@
 //{
 //	fm24c02_write_func(Addr,Data);
 //}
-/***********************************************************
- * 函数功能：保存遥控器ID
- * 参       数：Id    保存的Id值
- * 返 回  值：成功返回1  不成功返回0
+
+ /***********************************************************
+ * 函数功能：查询ID是否跟已保存的id匹配
+ * 参       数：
+ * 返 回  值：匹配成功返回1  不成功返回0
  **********************************************************/
-unsigned char save_remote_ID_func(unsigned int Id)
+unsigned char paired_ID_match(unsigned int Id)
 {
 	unsigned char i;
+	
+	if(UNUSED_PID == Id)
+		return 0;
+		
 	for(i=0;i<MAX_PAIRED_REMOTER;i++){
 		if(Id==led_control.remote_id[i])
 			return 1;
 	}
-	led_control.remote_id[led_control.paire_index]=Id;
-	led_control.paire_index++;
-	if(led_control.paire_index>=MAX_PAIRED_REMOTER)
-		led_control.paire_index=0;
-	
-	lightctr_store_write(&led_control);
-
-	return 1;
+	return 0;
 }
+
 /***********************************************************
  * 函数功能：清除保存的遥控器ID值
  * 参       数：
@@ -57,9 +57,10 @@ void clear_remote_ID_func(void)
 {
 	unsigned char i;
 	for(i=0;i<MAX_PAIRED_REMOTER;i++){
-		led_control.remote_id[i]=0xffffffff;
+		led_control.remote_id[i]=UNUSED_PID;
 		//write_id_direct(i,0xffffffff);
 	}
+	led_control.paire_num = 0;
 	led_control.paire_index=0;
 
 	lightctr_store_write(&led_control);
@@ -67,18 +68,31 @@ void clear_remote_ID_func(void)
 	//write_data_direct_func(PAIRE_INDEX_ADDR,led_control.paire_index);
 }
 /***********************************************************
- * 函数功能：查询ID是否跟已保存的id匹配
- * 参       数：
- * 返 回  值：匹配成功返回1  不成功返回0
+ * 函数功能：保存遥控器ID
+ * 参       数：Id    保存的Id值
+ * 返 回  值：成功返回1  不成功返回0
  **********************************************************/
-unsigned char paired_ID_match(unsigned int Id)
+unsigned char save_remote_ID_func(unsigned int Id)
 {
 	unsigned char i;
-	for(i=0;i<MAX_PAIRED_REMOTER;i++){
+	
+	for(i=0;i<led_control.paire_num ;i++){
 		if(Id==led_control.remote_id[i])
 			return 1;
 	}
-	return 0;
+	led_control.remote_id[led_control.paire_index]=Id;
+	led_control.paire_index++;
+	if(led_control.paire_index>=MAX_PAIRED_REMOTER)
+		led_control.paire_index=0;
+		
+	led_control.paire_num++;
+	if(led_control.paire_num > MAX_PAIRED_REMOTER){
+		led_control.paire_num = MAX_PAIRED_REMOTER;
+	}
+	
+	lightctr_store_write(&led_control);
+
+	return 1;
 }
 /***********************************************************
  * 函数功能：保存灯的控制信息

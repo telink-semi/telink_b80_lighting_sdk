@@ -21,10 +21,10 @@ void rfc_init_func(void)
 	rf_acc_code_set(0,access_code_usd);
 
 
-	printf("access_code_usd\n");
-	printhex(access_code_usd,sizeof(access_code_usd));
+	LOG_PRINTF("access_code_usd\n");
+	LOG_HEXDUMP(access_code_usd,sizeof(access_code_usd));
 
-	rf_trx_state_set(RF_MODE_TX,rf_channel[0]);
+	rf_set_channel(rf_channel[0],0);
 	
 #if(PRI_MODE == ESB_MODE)
 
@@ -131,8 +131,8 @@ void rfc_send_data(unsigned char *rf_data)
 {
 	unsigned char i;
 	for(i=0;i<4;i++){
-		rf_trx_state_set(RF_MODE_TX,rf_channel[i]);
-		sleep_us(200);
+		rf_set_channel(rf_channel[i],0);
+		sleep_ms(1);
 		rf_tx_pkt(rf_data);	
 		while(!rf_tx_finish());
 		rf_tx_finish_clear_flag();

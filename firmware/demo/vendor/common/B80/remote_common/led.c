@@ -1,5 +1,5 @@
 #include "led.h"
-#include "app_config.h"
+#include "user_config.h"
 #include "driver.h"
 
 void led_gpio_init(unsigned int led)

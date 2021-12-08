@@ -1,14 +1,37 @@
 //#include "../../common.h"
 #include "driver.h"
 #include "led_yl.h"
-#include "state.h"
 #include "frame.h"
 #include "cmd_def.h"
 #include "user_pwm.h"
 #include "app_config.h"
+#include "sys_status.h"
 
 const unsigned short led_luminance_value[MAX_LUMINANCE_INDEX+1]={40,67,102,144,193,250,313,384,462,547,640,740,846,1000};
 const unsigned char  led_chroma_value[MAX_CHROME_INDEX+1]={0,10,20,30,40,50,60,70,80,90,100};
+
+void pwm_gpio_init(unsigned int pwm_io,unsigned int pwm_x,unsigned int pwm_id,unsigned int pwm_mode)
+{
+	gpio_set_func(pwm_io, pwm_x);
+	pwm_set_mode(pwm_id, pwm_mode);
+	pwm_set_phase(pwm_id, 0);	 //no phase at pwm beginning
+	pwm_set_cycle_and_duty(pwm_id, (unsigned short) (1000 * CLOCK_SYS_CLOCK_1US), (unsigned short) (0 * CLOCK_SYS_CLOCK_1US)  );
+	pwm_start(pwm_id);
+}
+
+void led_yl_pwm_init_func(void)
+{
+
+	//PB5 LED_W
+	pwm_gpio_init(LED_W,PWM3,PWM3_ID,PWM_NORMAL_MODE);
+	LOG_PRINTF("led_pwm_init_func->PWM3:PB5:1000  0\n");
+
+
+	//PB6 LED_Y
+	pwm_gpio_init(LED_Y,PWM5,PWM5_ID,PWM_NORMAL_MODE);
+	LOG_PRINTF("led_pwm_init_func->PWM5:PB7:1000  0\n");
+	
+}
 
 /***********************************************************
  * 函数功能：色温亮度值状态更新
@@ -42,9 +65,9 @@ void led_pwm_control_func(int Lumina, int Chroma)
 
 	//pwm_set_cycle_and_duty(PWM4_ID, (unsigned short) (1000 * CLOCK_SYS_CLOCK_1US), (unsigned short) (Yellow_pwm_val * CLOCK_SYS_CLOCK_1US)  );
 
-//	printf("led_pwm_control_func->PWM3:PB5:1000  %d\n",Whrite_pwm_val);
-//	printf("led_pwm_control_func->PWM5:PB7:1000  %d\n",Yellow_pwm_val);
-	//printf("led_pwm_control_func->PWM4:PB6:1000  %d\n",Yellow_pwm_val);
+//	LOG_PRINTF("led_pwm_control_func->PWM3:PB5:1000  %d\n",Whrite_pwm_val);
+//	LOG_PRINTF("led_pwm_control_func->PWM5:PB7:1000  %d\n",Yellow_pwm_val);
+	//LOG_PRINTF("led_pwm_control_func->PWM4:PB6:1000  %d\n",Yellow_pwm_val);
 }
 /***********************************************************
  * 函数功能：计算当前亮度值
@@ -117,6 +140,19 @@ void led_off_func(void)
 //	led_chroma_target=0;
 	led_control.led_state=LED_OFF_STATE;
 }
+
+void led_night_light_func(unsigned short Lumi,unsigned char Chroma)
+{
+	if(led_control.led_state!=LED_YL_ON_STATE){//若当前状态为关灯
+		led_lumina_cur=0;//亮度当前值为0
+		led_chroma_cur=0;//色温当前值为0
+		led_control.led_state=LED_YL_ON_STATE;//led状态为开灯状态
+	}
+
+	led_updata_lumi_chrome_func(Lumi,Chroma);
+}
+
+
 /***********************************************************
  * 函数功能：更新亮度
  * 参       数：Type   更新类型 1为加  0为减
@@ -203,23 +239,27 @@ void led_event_proc_func(unsigned char Cmd)
 			break;
 
 		case CMD_LUMINANT_INCREASE://亮度加
+			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_luminance_func(1);
 			break;
 
 		case CMD_LUMINANT_DECREASE://亮度减
+			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_luminance_func(0);
 			break;
 
 		case CMD_CHROMA_INCREASE://色温加
+			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_chroma_func(1);
 			break;
 
 		case CMD_CHROMA_DECREASE://色温减
+			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_chroma_func(0);
 			break;
 
 		case CMD_NIGHT_LIGHT_CMD://夜灯模式
-			led_updata_lumi_chrome_func(LOW_LIGHT_LUMINACE,50);
+			led_night_light_func(LOW_LIGHT_LUMINACE,50);
 			break;
 
 		default:

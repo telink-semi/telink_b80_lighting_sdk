@@ -15,10 +15,6 @@
 #define KEY_CMD_CHOOSE      KEY_VALUE_BUTTON7
 #define KEY_CMD_SEND        KEY_VALUE_BUTTON8
 
-#define BUTT_CMD_NONE       KEY_VALUE_NONE
-#define BUTT_LIGHT_OFF      KEY_VALUE_BUTTON7
-#define BUTT_LIGHT_ON       KEY_VALUE_BUTTON8
-
 void          button_init(void);
 unsigned char button_scan_func(void);
 unsigned char button_all_relese(void);

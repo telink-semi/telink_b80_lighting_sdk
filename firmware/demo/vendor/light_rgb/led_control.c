@@ -2,11 +2,12 @@
 #include "driver.h"
 #include "led_control.h"
 #include "frame.h"
-#include "state.h"
 #include "led_rgb.h"
 #include "led_yl.h"
 #include "pairing_op.h"
 #include "light_ctr_store.h"
+#include "sys_status.h"
+#include "app_config.h"
 
 unsigned int led_yl_updata_tick;     //…´Œ¬µ∆∏¸–¬ ±º‰µ„
 unsigned int led_rgb_updata_tick;    //RGBµ∆∏¸–¬ ±º‰µ„
@@ -27,6 +28,14 @@ const unsigned short breath_value[14][3]={   //∫ÙŒ¸ƒ£ Ω∏˜∏ˆµ∆µƒ¡¡∂»÷µ∑÷±Œ™∫Ï°¢¬
 		{0,0,0},
 		{1000,1000,1000},
 };
+
+void led_pwm_init_func(void)
+{
+	pwm_set_clk(CLOCK_SYS_CLOCK_HZ, CLOCK_SYS_CLOCK_HZ);
+	led_rgb_pwm_init_func();
+	led_yl_pwm_init_func();
+}
+
 /***********************************************************
  * ∫Ø ˝π¶ƒ‹£∫LED≤Œ ˝≥ı ºªØ
  * ≤Œ        ˝£∫
@@ -36,8 +45,8 @@ void led_para_init_func(void)
 {
 
 	unsigned char ret = lightctr_store_read(&led_control);
-	printf("lightctr_store_read\n");
-	printhex((u8*)&led_control,sizeof(led_control));
+	LOG_PRINTF("lightctr_store_read\n");
+	LOG_HEXDUMP((u8*)&led_control,sizeof(led_control));
 
 	unsigned char i = 0;
 
@@ -46,6 +55,9 @@ void led_para_init_func(void)
 		if(led_control.paire_index >= MAX_PAIRED_REMOTER)//»Ù≥¨π˝◊Ó¥Û÷µ£¨‘Úƒ¨»œŒ™0
 			led_control.paire_index = 0;
 
+		if(led_control.paire_num >= MAX_PAIRED_REMOTER)//»Ù≥¨π˝◊Ó¥Û÷µ£¨‘Úƒ¨»œŒ™0
+			led_control.paire_num = 0;
+			
 		if(led_control.luminance_index > MAX_LUMINANCE_INDEX)//≥¨π˝◊Ó¥Û¡¡∂»÷µ£¨ƒ¨»œŒ™◊Ó¥Û÷µ
 			led_control.luminance_index = MAX_LUMINANCE_INDEX;
 
@@ -63,6 +75,7 @@ void led_para_init_func(void)
 
 	}else{
 		led_control.paire_index = 0;
+		led_control.paire_num = 0;
 		led_control.luminance_index = MAX_LUMINANCE_INDEX;
 		led_control.chroma_index = MAX_CHROME_INDEX;
 		led_control.led_state=LED_YL_ON_STATE;
@@ -72,8 +85,8 @@ void led_para_init_func(void)
 		}
 	}
 
-	printf("led_para_init_func\n");
-	printhex((u8*)&led_control,sizeof(led_control));
+	LOG_PRINTF("led_para_init_func\n");
+	LOG_HEXDUMP((u8*)&led_control,sizeof(led_control));
 
 }
 /***********************************************************
@@ -104,7 +117,7 @@ void led_flash_updata_func(unsigned char Cnt)
  * ≤Œ        ˝£∫
  * ∑µ ªÿ  ÷µ£∫
  **********************************************************/
-void led_pask_process_func(void)
+void led_task_process_func(void)
 {
 	if(led_flash_cnt){// «∑Ò”–…¡À∏
 		if(clock_time_exceed(led_flash_tick,500000)){// «∑ÒµΩ¥Ô…¡À∏ ±º‰
