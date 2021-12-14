@@ -109,29 +109,14 @@ _attribute_ram_code_sec_noinline_ void irq_handler(void)
  */
 int main (void) {
 
-#if (MCU_CORE_B85)
-	cpu_wakeup_init();
-#elif (MCU_CORE_B87)
-	cpu_wakeup_init(LDO_MODE, EXTERNAL_XTAL_24M);
-#elif (MCU_CORE_B89 || MCU_CORE_B80)
+#if (MCU_CORE_B80)
 	cpu_wakeup_init(EXTERNAL_XTAL_24M);
 #endif
-
-#if (MCU_CORE_B85) || (MCU_CORE_B87)
-	//Note: This function must be called, otherwise an abnormal situation may occur.
-	//Called immediately after cpu_wakeup_init, set in other positions, some calibration values may not take effect.
-	user_read_flash_value_calib();
-#elif (MCU_CORE_B89)
-	//Note: This function must be called, otherwise an abnormal situation may occur.
-	//Called immediately after cpu_wakeup_init, set in other positions, some calibration values may not take effect.
-	user_read_otp_value_calib();
-#endif
-
-#if (MCU_CORE_B89 || MCU_CORE_B80)
+#if ( MCU_CORE_B80)
 	rf_mode_init();
 #endif
 
-#if (MCU_CORE_B89 || MCU_CORE_B80)
+#if ( MCU_CORE_B80)
 #if(RF_MODE==RF_BLE_1M)//1
 	 rf_set_ble_1M_mode();
 #elif(RF_MODE==RF_BLE_1M_NO_PN)//2
@@ -158,44 +143,6 @@ int main (void) {
 	rf_set_ant_mode();
 #elif(RF_MODE==RF_BLE_1M_STX2RX)//1
 	 rf_set_ble_1M_mode();
-#endif
-#else
-#if(RF_MODE==RF_BLE_2M)
-	rf_drv_init(RF_MODE_BLE_2M);
-#elif(RF_MODE==RF_BLE_1M)
-	rf_drv_init(RF_MODE_BLE_1M);
-#elif(RF_MODE==RF_BLE_1M_NO_PN)
-	rf_drv_init(RF_MODE_BLE_1M_NO_PN);
-#elif(RF_MODE==RF_ZIGBEE_250K)
-	rf_drv_init(RF_MODE_ZIGBEE_250K);
-#elif(RF_MODE==RF_LR_S2_500K)
-	rf_drv_init(RF_MODE_LR_S2_500K);
-#elif(RF_MODE==RF_LR_S8_125K)
-	rf_drv_init(RF_MODE_LR_S8_125K);
-#elif(RF_MODE==RF_PRIVATE_250K)
-	rf_drv_init(RF_MODE_PRIVATE_250K);
-#elif(RF_MODE==RF_PRIVATE_500K)
-	rf_drv_init(RF_MODE_PRIVATE_500K);
-#elif(RF_MODE==RF_PRIVATE_1M)
-	rf_drv_init(RF_MODE_PRIVATE_1M);
-#elif(RF_MODE==RF_PRIVATE_2M)
-	rf_drv_init(RF_MODE_PRIVATE_2M);
-#elif(RF_MODE==RF_ANT)
-	rf_drv_init(RF_MODE_ANT);
-#elif(RF_MODE==RF_BLE_1M_STX2RX)//1
-	rf_drv_init(RF_MODE_BLE_1M);
-
-#endif
-#if (MCU_CORE_B87)
-#if(RF_MODE==RF_HYBEE_1M)
-	rf_drv_init(RF_MODE_HYBEE_1M);
-#elif(RF_MODE==RF_HYBEE_2M)
-	rf_drv_init(RF_MODE_HYBEE_2M);
-#elif(RF_MODE==RF_HYBEE_500K)
-	rf_drv_init(RF_MODE_HYBEE_500K);
-#elif(RF_MODE==RF_BLE_SDK_TEST)//1
-	rf_drv_init(RF_MODE_BLE_1M);
-#endif
 #endif
 
 	gpio_init(0);

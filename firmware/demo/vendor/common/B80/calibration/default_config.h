@@ -51,22 +51,8 @@ extern "C" {
 #endif
 
 
-#if (MCU_CORE_B89)
-#define LED1     		        GPIO_PD0
-#define LED2     		        GPIO_PD1
-#define LED3     		        GPIO_PD2
-#define LED4     		        GPIO_PD3
-#elif (MCU_CORE_B87)
-#define LED1     		        GPIO_PD2
-#define LED2     		        GPIO_PD3
-#define LED3     		        GPIO_PD4
-#define LED4     		        GPIO_PD5
-#elif (MCU_CORE_B85)
-#define LED1     		        GPIO_PD2
-#define LED2     		        GPIO_PD3
-#define LED3     		        GPIO_PD4
-#define LED4     		        GPIO_PD5
-#elif (MCU_CORE_B80)
+
+#if (MCU_CORE_B80)
 #define LED1     		        GPIO_PD0
 #define LED2     		        GPIO_PD1
 #define LED3     		        GPIO_PD2
@@ -75,13 +61,8 @@ extern "C" {
 #define LED6     		        GPIO_PD5
 #endif
 
-#if (MCU_CORE_B85)
-#define RF_POWER			RF_POWER_P10p46dBm
-#elif(MCU_CORE_B87)
-#define RF_POWER			RF_POWER_P11p26dBm
-#elif(MCU_CORE_B89)
-#define RF_POWER			RF_POWER_P4p98dBm
-#elif(MCU_CORE_B80)
+
+#if(MCU_CORE_B80)
 #define RF_POWER			RF_POWER_P11p46dBm
 #endif
 
@@ -97,12 +78,6 @@ extern "C" {
 #define RF_PRIVATE_2M			10
 #define RF_ANT					11
 
-#if (MCU_CORE_B87)
-#define RF_HYBEE_1M				12
-#define RF_HYBEE_2M				13
-#define RF_HYBEE_500K			14
-#define RF_BLE_SDK_TEST			20
-#endif
 
 #define RF_BLE_1M_STX2RX		15
 
@@ -115,15 +90,7 @@ extern "C" {
 /* Define system clock */
 #define CLOCK_SYS_CLOCK_HZ  	24000000
 
-#if(MCU_CORE_B89)
-#if(CLOCK_SYS_CLOCK_HZ==12000000)
-	#define SYS_CLK  	SYS_CLK_12M_Crystal
-#elif (CLOCK_SYS_CLOCK_HZ==16000000)
-	#define SYS_CLK  	SYS_CLK_16M_Crystal
-#elif (CLOCK_SYS_CLOCK_HZ==24000000)
-	#define SYS_CLK  	SYS_CLK_24M_Crystal
-#endif
-#else
+#if(MCU_CORE_B80)
 #if(CLOCK_SYS_CLOCK_HZ==12000000)
 	#define SYS_CLK  	SYS_CLK_12M_Crystal
 #elif (CLOCK_SYS_CLOCK_HZ==16000000)
