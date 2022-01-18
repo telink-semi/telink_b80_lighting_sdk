@@ -43,6 +43,7 @@
  *          SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *******************************************************************************************************/
+#include "driver.h"
 #include "app_config.h"
 #include "frame.h"
 #include "led.h"

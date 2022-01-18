@@ -37,7 +37,7 @@
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.def.1526099403" name="Define Syms (-D)" superClass="com.telink.tc32eclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="MCU_CORE_B80=1"/>
-									<listOptionValue builtIn="false" value="_SYMBOL_LIGHT_"/>
+									<listOptionValue builtIn="false" value="_SYMBOL_LIGHT_=1"/>
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.std.1729767903" name="Language Standard" superClass="com.telink.tc32eclipse.compiler.option.std" value="com.telink.tc32eclipse.compiler.option.std.gnu99" valueType="enumerated"/>
 								<option id="com.telink.tc32eclipse.compiler.option.otherflags.513703152" name="Other flags" superClass="com.telink.tc32eclipse.compiler.option.otherflags" value="-fshort-wchar -fms-extensions" valueType="string"/>
@@ -1857,7 +1857,7 @@
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.def.903130060" name="Define Syms (-D)" superClass="com.telink.tc32eclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="MCU_CORE_B80=1"/>
-									<listOptionValue builtIn="false" value="_SYMBOL_REMOTE_"/>
+									<listOptionValue builtIn="false" value="_SYMBOL_REMOTE_=1"/>
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.std.1875883329" name="Language Standard" superClass="com.telink.tc32eclipse.compiler.option.std" value="com.telink.tc32eclipse.compiler.option.std.gnu99" valueType="enumerated"/>
 								<option id="com.telink.tc32eclipse.compiler.option.otherflags.1882997531" name="Other flags" superClass="com.telink.tc32eclipse.compiler.option.otherflags" value="-fshort-wchar -fms-extensions" valueType="string"/>
@@ -5491,7 +5491,7 @@
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.def.788589953" name="Define Syms (-D)" superClass="com.telink.tc32eclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="MCU_CORE_B80=1"/>
-									<listOptionValue builtIn="false" value="_SYMBOL_LIGHT_RGB_"/>
+									<listOptionValue builtIn="false" value="_SYMBOL_LIGHT_RGB_=1"/>
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.std.29627067" name="Language Standard" superClass="com.telink.tc32eclipse.compiler.option.std" value="com.telink.tc32eclipse.compiler.option.std.gnu99" valueType="enumerated"/>
 								<option id="com.telink.tc32eclipse.compiler.option.otherflags.131778778" name="Other flags" superClass="com.telink.tc32eclipse.compiler.option.otherflags" value="-fshort-wchar -fms-extensions" valueType="string"/>
@@ -7311,7 +7311,7 @@
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.def.1836177173" name="Define Syms (-D)" superClass="com.telink.tc32eclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="MCU_CORE_B80=1"/>
-									<listOptionValue builtIn="false" value="_SYMBOL_LIGHT_BEACON_"/>
+									<listOptionValue builtIn="false" value="_SYMBOL_LIGHT_BEACON_=1"/>
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.std.1489447369" name="Language Standard" superClass="com.telink.tc32eclipse.compiler.option.std" value="com.telink.tc32eclipse.compiler.option.std.gnu99" valueType="enumerated"/>
 								<option id="com.telink.tc32eclipse.compiler.option.otherflags.569569880" name="Other flags" superClass="com.telink.tc32eclipse.compiler.option.otherflags" value="-fshort-wchar -fms-extensions" valueType="string"/>
@@ -9131,7 +9131,7 @@
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.def.654891990" name="Define Syms (-D)" superClass="com.telink.tc32eclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="MCU_CORE_B80=1"/>
-									<listOptionValue builtIn="false" value="_SYMBOL_REMOTE_RGB_"/>
+									<listOptionValue builtIn="false" value="_SYMBOL_REMOTE_RGB_=1"/>
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.std.2054575007" name="Language Standard" superClass="com.telink.tc32eclipse.compiler.option.std" value="com.telink.tc32eclipse.compiler.option.std.gnu99" valueType="enumerated"/>
 								<option id="com.telink.tc32eclipse.compiler.option.otherflags.677484033" name="Other flags" superClass="com.telink.tc32eclipse.compiler.option.otherflags" value="-fshort-wchar -fms-extensions" valueType="string"/>
@@ -10951,7 +10951,7 @@
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.def.428240600" name="Define Syms (-D)" superClass="com.telink.tc32eclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="MCU_CORE_B80=1"/>
-									<listOptionValue builtIn="false" value="_SYMBOL_REMOTE_BEACON_"/>
+									<listOptionValue builtIn="false" value="_SYMBOL_REMOTE_BEACON_=1"/>
 								</option>
 								<option id="com.telink.tc32eclipse.compiler.option.std.442815847" name="Language Standard" superClass="com.telink.tc32eclipse.compiler.option.std" value="com.telink.tc32eclipse.compiler.option.std.gnu99" valueType="enumerated"/>
 								<option id="com.telink.tc32eclipse.compiler.option.otherflags.1732494893" name="Other flags" superClass="com.telink.tc32eclipse.compiler.option.otherflags" value="-fshort-wchar -fms-extensions" valueType="string"/>
