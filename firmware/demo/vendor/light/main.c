@@ -151,9 +151,19 @@ int main (void) {
 
 	clock_init(SYS_CLK);
 
+#if (MODULE_WATCHDOG_ENABLE)
+	wd_set_interval_ms(WATCHDOG_INIT_TIMEOUT,CLOCK_SYS_CLOCK_1MS);
+	wd_start();
+#endif
+
 	user_init();
 
 	while (1) {
+		
+		#if (MODULE_WATCHDOG_ENABLE)
+		wd_clear();
+		#endif
+	
 		main_loop ();
 	}
 	return 0;

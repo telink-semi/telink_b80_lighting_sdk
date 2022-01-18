@@ -134,9 +134,9 @@ enum{
 };
 
 
-
-
-
+/////////////////// watchdog  //////////////////////////////
+#define MODULE_WATCHDOG_ENABLE		0
+#define WATCHDOG_INIT_TIMEOUT		4000  //ms
 
 
 /* Disable C linkage for C++ Compilers: */
