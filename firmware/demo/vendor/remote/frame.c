@@ -19,8 +19,10 @@ void package_data_init_func(void)
 	led_remote.rf_len = led_remote.dma_len-1;
 	led_remote.rf_len1 = led_remote.dma_len-2;
 	led_remote.vid = REMOTE_VID;//设置VID值，目前灯设置为0x5453，客户可自定义
-	//	led_remote.pid = 0x12345678;//设置遥控器ID，一般采用滚码方式
 	otp_read(PID_ADDR,1,&led_remote.pid);
+	if(led_remote.pid = 0xffffffff){		
+		led_remote.pid = 0x12345678;//设置遥控器ID，一般采用滚码方式
+	}
 
 	ana_dataTypeDef ana_data;
 	remote_ana_read(&ana_data);
