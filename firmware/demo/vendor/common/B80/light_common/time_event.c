@@ -2,7 +2,7 @@
 #include "driver.h"
 #include "user_config.h"
 
-unsigned int channel_change_tick;
+_attribute_data_retention_ unsigned int channel_change_tick;
 /***********************************************************
  * 函数功能：时间处理函数
  * 参       数：

@@ -9,16 +9,11 @@
 #define light_ctr_printf     
 #define light_ctr_hex 
 
-#if EEPROM_ENABLE
-#define I2C_GPIO_SDA            GPIO_PC0
-#define I2C_GPIO_SCL            GPIO_PC1
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
 
-#define     BUFF_DATA_LEN				16
-#define     SLAVE_DEVICE_ADDR			0
-#define     SLAVE_DEVICE_ADDR_LEN		1
-#define     I2C_CLK_SPEED				100000
 #define 	EEPROM_ADR					0xa0	
 #define 	T_WR_US						5000
+
 #define     EEPROM_PAGE_SIZE		    8
 
 void e2prom_write(unsigned char adr, unsigned char *p, int len){
@@ -42,57 +37,75 @@ void e2prom_write_page (unsigned char adr, unsigned char *p, int len)
 		p    += nw;
 		len  -= nw;
 	}while(len > 0);
+
 }
 
-
-
-
-
 void e2prom_read (unsigned char adr, unsigned char *p, int len){
+
 	i2c_read_series(adr,1, p, len);
+	sleep_us(T_WR_US);
 }
 
 void e2prom_init(void)
 {
-	i2c_gpio_set(I2C_GPIO_SDA,I2C_GPIO_SCL);
-	i2c_master_init(EEPROM_ADR, (unsigned char)(CLOCK_SYS_CLOCK_HZ/(4*I2C_CLK_SPEED)) ); // 100KHz
+
+#if(PCBA_8208_SEL == PCBA_8208_C1T261A30_V1_1_2021_12_14)
+	//1.init the LED pin,for indication
+	gpio_set_func(E2PROM_GPIO_WCB ,AS_GPIO);
+	gpio_set_output_en(E2PROM_GPIO_WCB, 1); //enable output
+	gpio_set_input_en(E2PROM_GPIO_WCB ,0);//disable input
+	gpio_write(E2PROM_GPIO_WCB, 0); 			 //eeprom write enable
+#endif
+
+	i2c_gpio_set(E2PROM_GPIO_SDA,E2PROM_GPIO_SCL);
+	i2c_master_init(EEPROM_ADR, (unsigned char)(CLOCK_SYS_CLOCK_HZ/(4*E2PROM_CLK_SPEED)) ); // 100KHz
 }
 #endif
+
 void lightctr_flash_write_page(unsigned long addr, unsigned long len, unsigned char *buf)
 {
-#if EEPROM_ENABLE
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
 	e2prom_write_page(FLASH_LIGHT_CTR_START_ADDR+addr,buf,len);
-#else
+#elif(STORAGE_TYPE == STORAGE_TYPE_FLASH)
 	flash_write_page(FLASH_LIGHT_CTR_START_ADDR+addr,len,buf);
+#else
+
 #endif
 }
 
 void lightctr_flash_read_page(unsigned long addr, unsigned long len, unsigned char *buf)
 {
-#if EEPROM_ENABLE
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
 	e2prom_read(FLASH_LIGHT_CTR_START_ADDR+addr,buf,len);
-#else
+#elif(STORAGE_TYPE == STORAGE_TYPE_FLASH)
 	flash_read_page(FLASH_LIGHT_CTR_START_ADDR+addr,len,buf);
+#else
+
 #endif
 }
 
 void lightctr_flash_erase_sector(unsigned long addr)
 {
-#if EEPROM_ENABLE
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
 
 	unsigned char earse_data[8]={0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 	for(int i=0;i<32;i++){
 		lightctr_flash_write_page(i<<3,8,earse_data);
 		
 	}
-#else
+#elif(STORAGE_TYPE == STORAGE_TYPE_FLASH)
 	flash_erase_sector(FLASH_LIGHT_CTR_START_ADDR+addr);
+#else
+
 #endif
 }
 
 
 unsigned char find_last_node_adr(unsigned long* addr)
 {
+
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)||(STORAGE_TYPE == STORAGE_TYPE_FLASH)
+
 	LED_control_info_t buf_temp;
 	unsigned long  read_addr = 0;
 	unsigned int i_cnt = 0;
@@ -121,11 +134,17 @@ unsigned char find_last_node_adr(unsigned long* addr)
 	}
 	
 	return F_NO_ERROR;
+#else
+	return F_NO_DATA;
+#endif
 
 }
 
 unsigned char lightctr_store_write(LED_control_info_t* data)
 {
+
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)||(STORAGE_TYPE == STORAGE_TYPE_FLASH)
+
 	unsigned long addr = 0;
 	u8 ret = find_last_node_adr(&addr);
 	if(ret == F_NO_ERROR){
@@ -144,10 +163,15 @@ unsigned char lightctr_store_write(LED_control_info_t* data)
 	lightctr_flash_write_page(addr,LEN_LED_CONTROL_INFO,data);
 
 	return F_NO_ERROR;
+#else
+	return F_NO_ERROR;
+#endif
 }
 
 unsigned char lightctr_store_read(LED_control_info_t* data)
 {
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)||(STORAGE_TYPE == STORAGE_TYPE_FLASH)
+
 	unsigned long addr = 0;
 	u8 ret = find_last_node_adr(&addr);
 	
@@ -158,15 +182,20 @@ unsigned char lightctr_store_read(LED_control_info_t* data)
 	lightctr_flash_read_page(addr,LEN_LED_CONTROL_INFO,data);
 	
 	return F_NO_ERROR;
+#else
+	return F_NO_DATA;
+#endif
 }
 
 
 #define TEST_DATA_LEN   26
+#define TEST_ADR        0x00
 void lightctr_test(void)
 {
-	lightctr_flash_erase_sector(0);
 
-	#if EEPROM_ENABLE
+	#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
+
+	lightctr_flash_erase_sector(0);
 
 	unsigned char test_data[TEST_DATA_LEN];
 	unsigned char test_data_bak[TEST_DATA_LEN];
@@ -177,11 +206,14 @@ void lightctr_test(void)
 		test_data[i_cnt] = i_cnt;
 	}
 		
-	e2prom_write_page(0x05,test_data,TEST_DATA_LEN);
-	e2prom_read(0x05,test_data_bak,TEST_DATA_LEN);
+	e2prom_write_page(TEST_ADR,test_data,TEST_DATA_LEN);
+	e2prom_read(TEST_ADR,test_data_bak,TEST_DATA_LEN);
 
 	light_ctr_printf("lightctr_test\n");
 	light_ctr_hex(test_data_bak,TEST_DATA_LEN);
+
+	#elif(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
+	lightctr_flash_erase_sector(0);
 	
 	#endif
 

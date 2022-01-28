@@ -73,7 +73,7 @@
 #elif(RF_AUTO_MODE == MANUAL)
 
 
-void user_init()
+void user_init_normal()
 {
 #if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
 	e2prom_init();
@@ -91,12 +91,42 @@ void user_init()
 	irq_enable();
 }
 
+void user_init_deepRetn()
+{
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
+	e2prom_init();
+#endif
+	led_pwm_init_func();
+	rfc_init_func();
+	led_init_func_ret();
+	irq_enable();
+}
+
+#define DELAY_CNT_NUM      100
+_attribute_data_retention_ unsigned int t0 = 0;
+_attribute_data_retention_ unsigned int delay_cnt = 0;
+
 void main_loop (void)
 {
 	sys_status_process();
 	led_task_process_func();
 	time_event_process_func();
 	sys_status_check_func();
+
+
+	if(clock_time_exceed(t0,2000)){
+		t0= clock_time();
+		delay_cnt++;
+
+		if(delay_cnt>DELAY_CNT_NUM){
+			 delay_cnt = DELAY_CNT_NUM+1;
+		}
+				
+		if((delay_cnt > DELAY_CNT_NUM)&&(!led_task_busy())){ //>20ms and led not change
+			 delay_cnt = 0;
+			 cpu_sleep_wakeup(DEEPSLEEP_MODE_RET_SRAM_LOW16K , PM_WAKEUP_TIMER,(clock_time() + 250*CLOCK_16M_SYS_TIMER_CLK_1MS));
+		}
+	}
 }
 #endif
 #endif

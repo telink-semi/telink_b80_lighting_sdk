@@ -9,25 +9,6 @@ const unsigned char rf_channel[4]={1,24,51,76};
 
 #define BLE_ACCESS_CODE			0xd6be898e //0x9A3CC36A//0xA5CC336A//
 
-void rfc_init_func(void)
-{
-
-		//rf_rx_buffer_set(blt_rxbuffer,64, 0);
-		
-		rf_set_power_level_index (RF_POWER);
-		rf_set_ble_crc_adv ();
-		rf_set_ble_access_code_value(BLE_ACCESS_CODE);	
-#if(RF_MODE==RF_BLE_1M_NO_PN)
-		rf_set_channel(RF_FREQ,0);
-#else
-		rf_set_ble_channel(RF_FREQ);
-#endif
-		rf_set_txmode();
-		
-		irq_enable();//开系统总中断
-
-
-}
 
 void rfc_reg_init(void)
 {
@@ -67,6 +48,29 @@ void rfc_reg_init(void)
 
 
 }
+
+void rfc_init_func(void)
+{
+	rfc_reg_init();
+
+		//rf_rx_buffer_set(blt_rxbuffer,64, 0);
+		
+		rf_set_power_level_index (RF_POWER);
+		rf_set_ble_crc_adv ();
+		rf_set_ble_access_code_value(BLE_ACCESS_CODE);	
+#if(RF_MODE==RF_BLE_1M_NO_PN)
+		rf_set_channel(RF_FREQ,0);
+#else
+		rf_set_ble_channel(RF_FREQ);
+#endif
+		rf_set_txmode();
+		
+		irq_enable();//开系统总中断
+
+
+}
+
+
 
 void rfc_suspend_exit(void)
 {

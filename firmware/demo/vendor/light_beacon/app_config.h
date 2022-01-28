@@ -49,22 +49,47 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-#define EEPROM_ENABLE	        1
 
-#if (MCU_CORE_B80)
-#if EEPROM_ENABLE
-#define LED_G     		        GPIO_PD3
-#define LED_B     		        GPIO_PD6
-#define LED3     		        GPIO_PA0
-#define LED4     		        GPIO_PB0
-#else
-#define LED_G     		        GPIO_PB4
-#define LED_B     		        GPIO_PB2
-#define LED3     		        GPIO_PB5
-#define LED4     		        GPIO_PB6
+
+#define PCBA_8208_C1T261A30_V1_1_2021_12_14   1  //8208_flash
+#define PCBA_8208_C1T268A20_V1_0_2021_10_22   2  //8208_otp+eeprom
+
+
+#define PCBA_8208_SEL			PCBA_8208_C1T261A30_V1_1_2021_12_14 
+
+
+#if(PCBA_8208_SEL == PCBA_8208_C1T261A30_V1_1_2021_12_14)
+#define LED_G     		        GPIO_PA4
+#define LED_B     		        GPIO_PA5
+#elif(PCBA_8208_SEL == PCBA_8208_C1T268A20_V1_0_2021_10_22)  
+#define LED_G     		        GPIO_PD6
+#define LED_B     		        GPIO_PD3
 #endif
+#define LED3     		        GPIO_PD2
+#define LED4     		        GPIO_PD3
 #define LED5     		        GPIO_PD4
 #define LED6     		        GPIO_PD5
+
+#define STORAGE_TYPE_NONE       0 //not store data
+#define STORAGE_TYPE_EEPROM     1 //store data in eeprom
+#define STORAGE_TYPE_FLASH      2 //store data in flash
+
+#define STORAGE_TYPE            STORAGE_TYPE_FLASH
+
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
+
+#define E2PROM_CLK_SPEED		100000 //100kHz
+
+#if(PCBA_8208_SEL == PCBA_8208_C1T261A30_V1_1_2021_12_14)
+#define E2PROM_GPIO_SDA         GPIO_PD5
+#define E2PROM_GPIO_SCL         GPIO_PD6
+#define E2PROM_GPIO_WCB         GPIO_PD7 //connect GND -> write enable
+#else
+//EP3F12N02
+#define E2PROM_GPIO_SDA         GPIO_PC0
+#define E2PROM_GPIO_SCL         GPIO_PC1
+//#define E2PROM_GPIO_WCB                   //GND->write enable
+#endif
 #endif
 
 

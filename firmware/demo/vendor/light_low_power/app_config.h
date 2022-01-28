@@ -59,19 +59,16 @@ extern "C" {
 
 
 #if(PCBA_8208_SEL == PCBA_8208_C1T261A30_V1_1_2021_12_14)
-#define LED_R     		        GPIO_PA7
-#define LED_G     		        GPIO_PA5
-#define LED_B     		        GPIO_PA4
-#define LED_Y     		        GPIO_PD6
-#define LED_W     		        GPIO_PA6
+#define LED_G     		        GPIO_PA4
+#define LED_B     		        GPIO_PA5
 #elif(PCBA_8208_SEL == PCBA_8208_C1T268A20_V1_0_2021_10_22)  
-#define LED_R     		        GPIO_PB4
 #define LED_G     		        GPIO_PD6
 #define LED_B     		        GPIO_PD3
-#define LED_Y     		        GPIO_PB5
-#define LED_W     		        GPIO_PA0
 #endif
-
+#define LED3     		        GPIO_PD2
+#define LED4     		        GPIO_PD3
+#define LED5     		        GPIO_PD4
+#define LED6     		        GPIO_PD5
 
 #define STORAGE_TYPE_NONE       0 //not store data
 #define STORAGE_TYPE_EEPROM     1 //store data in eeprom
@@ -95,6 +92,46 @@ extern "C" {
 #endif
 #endif
 
+/* IDLE MODE */
+#define IDLE_TIMER_WAKEUP				1
+
+/* SUSPEND MODE */
+#define SUSPEND_PAD_WAKEUP   			2
+#define SUSPEND_32K_RC_WAKEUP   		3
+#define SUSPEND_32K_XTAL_WAKEUP			4
+#if(MCU_CORE_B87)
+#define SUSPEND_MDEC_WAKEUP				5
+#define SUSPEND_CORE_WAKEUP				6
+#endif
+
+/* DEEPSLEEP MODE */
+#define DEEP_PAD_WAKEUP		 			7
+#define DEEP_32K_RC_WAKEUP      		8
+#define DEEP_32K_XTAL_WAKEUP      		9
+#if(MCU_CORE_B89)
+#define DEEP_DEBOUNCE_WAKEUP      		10
+#elif(MCU_CORE_B87)
+#define DEEP_MDEC_WAKEUP      			10
+#endif
+
+/* DEEPSLEEP WITH RETENTION MODE */
+#define DEEP_RET_PAD_WAKEUP     		11
+#define DEEP_RET_32K_RC_WAKEUP     		12
+#define DEEP_RET_32K_XTAL_WAKEUP     	13
+#if(MCU_CORE_B89)
+#define DEEP_RET_DEBOUNCE_WAKEUP      	14
+#elif(MCU_CORE_B87)
+#define DEEP_RET_MDEC_WAKEUP      		14
+#endif
+
+#if(MCU_CORE_B89)
+/* SHUTDOWN_MODE */
+#define	SHUTDOWN_PAD_WAKEUP				15
+#endif
+
+#define PM_MODE			     			DEEP_RET_32K_RC_WAKEUP
+
+
 #if(MCU_CORE_B80)
 #define RF_POWER			RF_POWER_P11p46dBm
 #endif
@@ -116,7 +153,7 @@ extern "C" {
 
 
 
-#define RF_MODE					RF_PRIVATE_1M
+#define RF_MODE					RF_PRIVATE_2M
 
 #define RX_PAYLOAD_LEN		    32
 #define REMOTE_VID              0x5453

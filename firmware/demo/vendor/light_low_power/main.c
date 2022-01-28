@@ -1,5 +1,5 @@
 /********************************************************************************************************
- * @file	app_pri_mode.c
+ * @file	main.c
  *
  * @brief	This is the source file for b85m
  *
@@ -43,60 +43,108 @@
  *          SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *******************************************************************************************************/
-#include "driver.h"
 #include "app_config.h"
-#include "sys_status.h"
-#include "led.h"
-#include "rf_control.h"
-#include "time_event.h"
-#include "light_ctr_store.h"
+#include "calibration.h"
+#include "light_interrupt.h"
+
+extern void user_init_normal();
+extern void user_init_deepRetn();
+
+extern void main_loop (void);
+extern unsigned int tx_state;
+extern unsigned int rx_state;
+extern unsigned int timeout_state;
 
 
-#if(RF_MODE==RF_PRIVATE_1M || RF_MODE==RF_PRIVATE_2M || RF_MODE==RF_PRIVATE_500K || RF_MODE==RF_PRIVATE_250K)
+/**
+ * @brief		This function serves to handle the interrupt of MCU
+ * @param[in] 	none
+ * @return 		none
+ */
 
-#define TX					1
-#define RX					2
-#define RF_TX_RX_MODE			RX
-
-#define AUTO  				1
-#define MANUAL				2
-#define RF_AUTO_MODE 		MANUAL
-
-#define ESB_MODE  			1
-#define SB_MODE   			2
-#define PRI_MODE			SB_MODE
-
-
-#if(RF_AUTO_MODE == AUTO)
-
-
-#elif(RF_AUTO_MODE == MANUAL)
-
-
-void user_init()
+_attribute_ram_code_sec_noinline_ void irq_handler(void)
 {
-#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
-	e2prom_init();
-#endif
-	LOG_PRINTF("light start....\n");
+//#if(RF_MODE==RF_BLE_1M_STX2RX)//1
+//	unsigned short rf_irq_src = rf_irq_src_get();
+//	if (rf_irq_src) {
+//		if (rf_irq_src & FLD_RF_IRQ_TX) {
+//			tx_state = 1;
+//			gpio_toggle(LED1);
+//			rf_irq_clr_src(FLD_RF_IRQ_TX);
+//		}
 
-	led_pwm_init_func();
-	
-	led_init_func();
-	
-	sys_status_init();
-	
-	rfc_init_func();
+//		if (rf_irq_src & FLD_RF_IRQ_RX) {
+//			rx_state = 1;
+//			gpio_toggle(LED2);
+//			rf_irq_clr_src(FLD_RF_IRQ_RX);
+//		}
 
-	irq_enable();
+//		if (rf_irq_src & FLD_RF_IRQ_RX_TIMEOUT)
+//		{
+//			timeout_state = 1;
+//			gpio_toggle(LED3);
+//			rf_irq_clr_src(FLD_RF_IRQ_RX_TIMEOUT);
+//		}
+
+//		if (rf_irq_src & FLD_RF_IRQ_FIRST_TIMEOUT)
+//		{
+//			timeout_state = 1;
+//			gpio_toggle(LED3);
+//			rf_irq_clr_src(FLD_RF_IRQ_FIRST_TIMEOUT);
+//		}
+//	}
+//#endif
+//#if (MCU_CORE_B87)
+//#if(RF_MODE==RF_BLE_SDK_TEST)
+//	irq_rf_handler();
+//#endif
+//#endif
+
+	light_irq_handler();
+
 }
 
-void main_loop (void)
-{
-	sys_status_process();
-	led_task_process_func();
-	time_event_process_func();
-	sys_status_check_func();
+/**
+ * @brief		This is main function
+ * @param[in]	none
+ * @return      none
+ */
+int main (void) {
+#if(PM_MODE==SUSPEND_32K_XTAL_WAKEUP||PM_MODE==DEEP_32K_XTAL_WAKEUP||PM_MODE==DEEP_RET_32K_XTAL_WAKEUP)
+	blc_pm_select_external_32k_crystal();
+#else
+	blc_pm_select_internal_32k_crystal();
+#endif
+
+#if (MCU_CORE_B80)
+	cpu_wakeup_init(EXTERNAL_XTAL_24M);
+#endif
+
+	int deepRetWakeUp = pm_is_MCU_deepRetentionWakeup();  //MCU deep retention wakeUp
+
+	gpio_init( !deepRetWakeUp );  //analog resistance will keep available in deepSleep mode, so no need initialize again
+
+	clock_init(SYS_CLK);
+
+#if (MODULE_WATCHDOG_ENABLE)
+	wd_set_interval_ms(WATCHDOG_INIT_TIMEOUT,CLOCK_SYS_CLOCK_1MS);
+	wd_start();
+#endif
+
+	if( deepRetWakeUp ){
+		user_init_deepRetn ();
+	}
+	else{
+		user_init_normal ();
+	}
+
+	while (1) {
+		
+		#if (MODULE_WATCHDOG_ENABLE)
+		wd_clear();
+		#endif
+	
+		main_loop ();
+	}
+	return 0;
 }
-#endif
-#endif

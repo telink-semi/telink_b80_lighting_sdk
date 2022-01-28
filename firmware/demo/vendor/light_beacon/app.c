@@ -68,18 +68,18 @@
 
 void user_init()
 {
-#if EEPROM_ENABLE
+#if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)
 	e2prom_init();
 #endif
 	LOG_PRINTF("light beacon start....\n");
-	
-	rfc_init_func();
 
 	led_pwm_init_func();
 	
 	led_init_func();
 	
 	sys_status_init();
+	
+	rfc_init_func();
 
 	irq_enable();
 }

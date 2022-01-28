@@ -40,6 +40,10 @@
 	#include "../../../light_rgb/rf_control.h"
 #elif (_SYMBOL_REMOTE_RGB_)
 	#include "../../../remote_rgb/app_config.h"
+#elif (_SYMBOL_LIGHT_LOW_POWER_)
+	#include "../../../light_low_power/app_config.h"
+	#include "../../../light_low_power/frame.h"
+	#include "../../../light_low_power/rf_control.h"
 #else
 	#include "default_config.h"
 #endif

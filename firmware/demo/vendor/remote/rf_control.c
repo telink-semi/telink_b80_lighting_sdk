@@ -6,43 +6,6 @@
 
 const unsigned char rf_channel[4]={1,24,51,76};
 
-
-void rfc_init_func(void)
-{
-
-	rf_set_power_level_index (RF_POWER);
-	rf_set_tx_rx_off();
-
-	//rf_access_code_comm(ACCESS_CODE);
-
-	unsigned char access_code_usd[] = RF_ACCESS_CODE_USE;
-
-	rf_acc_len_set(5);
-	rf_acc_code_set(0,access_code_usd);
-
-
-	LOG_PRINTF("access_code_usd\n");
-	LOG_HEXDUMP(access_code_usd,sizeof(access_code_usd));
-
-	rf_set_channel(rf_channel[0],0);
-	
-#if(PRI_MODE == ESB_MODE)
-
-#elif(PRI_MODE == SB_MODE)
-	rf_fix_payload_len_set(RX_PAYLOAD_LEN);
-#endif
-
-	rf_set_txmode();
-
-	irq_enable();//开系统总中断
-
-
-//	irq_disable();
-//	irq_clr_src();
-//	rf_irq_disable(FLD_RF_IRQ_ALL);
-
-}
-
 void rfc_reg_init(void)
 {
 #if (MCU_CORE_B80)
@@ -82,6 +45,41 @@ void rfc_reg_init(void)
 
 
 }
+
+void rfc_init_func(void)
+{
+	rfc_reg_init();
+
+	rf_set_power_level_index (RF_POWER);
+	rf_set_tx_rx_off();
+
+	//rf_access_code_comm(ACCESS_CODE);
+
+	unsigned char access_code_usd[] = RF_ACCESS_CODE_USE;
+
+	rf_acc_len_set(5);
+	rf_acc_code_set(0,access_code_usd);
+
+
+	LOG_PRINTF("access_code_usd\n");
+	LOG_HEXDUMP(access_code_usd,sizeof(access_code_usd));
+
+	rf_set_channel(rf_channel[0],0);
+	
+#if(PRI_MODE == ESB_MODE)
+
+#elif(PRI_MODE == SB_MODE)
+	rf_fix_payload_len_set(RX_PAYLOAD_LEN);
+#endif
+
+	rf_set_txmode();
+
+	irq_enable();//开系统总中断
+
+
+}
+
+
 
 void rfc_suspend_exit(void)
 {

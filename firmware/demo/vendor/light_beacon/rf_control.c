@@ -6,6 +6,46 @@
 
 #define BLE_ACCESS_CODE			0xd6be898e //0x9A3CC36A//0xA5CC336A//
 
+void rfc_reg_init(void)
+{
+#if (MCU_CORE_B80)
+		rf_mode_init();
+#endif
+	
+#if (MCU_CORE_B80)
+#if(RF_MODE==RF_BLE_1M)//1
+		 rf_set_ble_1M_mode();
+#elif(RF_MODE==RF_BLE_1M_NO_PN)//2
+		rf_set_ble_1M_NO_PN_mode();
+#elif(RF_MODE==RF_BLE_2M)//3
+		rf_set_ble_2M_mode();
+#elif(RF_MODE==RF_BLE_2M_NO_PN)//4
+		rf_set_ble_2M_NO_PN_mode();
+#elif(RF_MODE==RF_LR_S2_500K)//5
+		rf_set_ble_500K_mode();
+#elif(RF_MODE==RF_LR_S8_125K)//6
+		rf_set_ble_125K_mode();
+#elif((RF_MODE==RF_ZIGBEE_250K))//7
+		rf_set_zigbee_250K_mode();
+#elif(RF_MODE==RF_PRIVATE_250K)//8
+		rf_set_pri_250K_mode();
+#elif(RF_MODE==RF_PRIVATE_500K)//9
+		rf_set_pri_500K_mode();
+#elif(RF_MODE==RF_PRIVATE_1M)
+		 rf_set_pri_1M_mode();
+#elif(RF_MODE==RF_PRIVATE_2M)
+		rf_set_pri_2M_mode();
+#elif(RF_MODE==RF_ANT)
+		rf_set_ant_mode();
+#elif(RF_MODE==RF_BLE_1M_STX2RX)//1
+		 rf_set_ble_1M_mode();
+#endif
+
+#endif
+
+
+}
+
 /***********************************************************
  * 函数功能：RF初始化
  * 参       数：
@@ -13,6 +53,7 @@
  **********************************************************/
 void rfc_init_func(void)
 {
+	rfc_reg_init();
 	
 	rf_set_power_level_index (RF_POWER);
 	rf_set_ble_crc_adv ();
