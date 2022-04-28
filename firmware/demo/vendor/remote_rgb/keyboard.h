@@ -1,3 +1,27 @@
+/********************************************************************************************************
+ * @file	keyboard.h
+ *
+ * @brief	This is the header file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
@@ -6,30 +30,30 @@
 #if KEYBOARD_ENABLE
 
 typedef enum{
-	KEY_NONE=0,                //ÎŞ²Ù×÷ÃüÁî
-	KEY_LUMINANT_INCREASE,     //ÁÁ¶È¼Ó
-	KEY_LUMINANT_DECREASE,     //ÁÁ¶È¼õ
-	KEY_CHROMA_INCREASE,       //É«ÎÂ¼Ó
-	KEY_CHROMA_DECREASE,       //É«ÎÂ¼õ
-	KEY_QUICK_LOW_LIGHT,       //Ò¹µÆ 
-	KEY_SET_LUMI_CHROMA,       //ÉèÖÃÉ«ÎÂ¡¢ÁÁ¶È
-	KEY_LIGHT_ON_ALL,          //¿ªµÆÃüÁî-È«×é
-	KEY_LIGHT_OFF_ALL,         //¹ØµÆÃüÁî-È«×é
-	KEY_LIGHT_ON_GROUP1,       //¿ªµÆÃüÁî-×é1
-	KEY_LIGHT_OFF_GROUP1,      //¹ØµÆÃüÁî-×é1
-	KEY_LIGHT_ON_GROUP2,       //¿ªµÆÃüÁî-×é2
-	KEY_LIGHT_OFF_GROUP2,      //¹ØµÆÃüÁî-×é2
-	KEY_LIGHT_ON_GROUP3,       //¿ªµÆÃüÁî-×é3
-	KEY_LIGHT_OFF_GROUP3,      //¹ØµÆÃüÁî-×é3
-	KEY_LIGHT_ON_GROUP4,       //¿ªµÆÃüÁî-×é4
-	KEY_LIGHT_OFF_GROUP4,      //¹ØµÆÃüÁî-×é4
-	KEY_LIGHT_ON,              //¿ªµÆÃüÁî
-	KEY_LIGHT_OFF,             //¹ØµÆÃüÁî
-	KEY_NIGHT_LIGHT_CMD,       //Ò¹µÆ 
-	KEY_PAIRE_CODE_CMD,        //¶ÔÂëÃüÁî
-	KEY_CLEAR_CODE_CMD,        //ÇåÂëÃüÁî
-	KEY_BREATH_RGB_MODE_CMD,   //RGBºôÎüµÆÄ£Ê½ 
-	KEY_SET_RGB_CMD,           //ÉèÖÃµÆRGBÖµ 
+	KEY_NONE=0,                //æ— æ“ä½œå‘½ä»¤
+	KEY_LUMINANT_INCREASE,     //äº®åº¦åŠ 
+	KEY_LUMINANT_DECREASE,     //äº®åº¦å‡
+	KEY_CHROMA_INCREASE,       //è‰²æ¸©åŠ 
+	KEY_CHROMA_DECREASE,       //è‰²æ¸©å‡
+	KEY_QUICK_LOW_LIGHT,       //å¤œç¯ 
+	KEY_SET_LUMI_CHROMA,       //è®¾ç½®è‰²æ¸©ã€äº®åº¦
+	KEY_LIGHT_ON_ALL,          //å¼€ç¯å‘½ä»¤-å…¨ç»„
+	KEY_LIGHT_OFF_ALL,         //å…³ç¯å‘½ä»¤-å…¨ç»„
+	KEY_LIGHT_ON_GROUP1,       //å¼€ç¯å‘½ä»¤-ç»„1
+	KEY_LIGHT_OFF_GROUP1,      //å…³ç¯å‘½ä»¤-ç»„1
+	KEY_LIGHT_ON_GROUP2,       //å¼€ç¯å‘½ä»¤-ç»„2
+	KEY_LIGHT_OFF_GROUP2,      //å…³ç¯å‘½ä»¤-ç»„2
+	KEY_LIGHT_ON_GROUP3,       //å¼€ç¯å‘½ä»¤-ç»„3
+	KEY_LIGHT_OFF_GROUP3,      //å…³ç¯å‘½ä»¤-ç»„3
+	KEY_LIGHT_ON_GROUP4,       //å¼€ç¯å‘½ä»¤-ç»„4
+	KEY_LIGHT_OFF_GROUP4,      //å…³ç¯å‘½ä»¤-ç»„4
+	KEY_LIGHT_ON,              //å¼€ç¯å‘½ä»¤
+	KEY_LIGHT_OFF,             //å…³ç¯å‘½ä»¤
+	KEY_NIGHT_LIGHT_CMD,       //å¤œç¯ 
+	KEY_PAIRE_CODE_CMD,        //å¯¹ç å‘½ä»¤
+	KEY_CLEAR_CODE_CMD,        //æ¸…ç å‘½ä»¤
+	KEY_BREATH_RGB_MODE_CMD,   //RGBå‘¼å¸ç¯æ¨¡å¼ 
+	KEY_SET_RGB_CMD,           //è®¾ç½®ç¯RGBå€¼ 
 	KEY_LAST,	
 }KB_type_def;
 

@@ -1,3 +1,27 @@
+/********************************************************************************************************
+ * @file	led.c
+ *
+ * @brief	This is the source file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 //#include "../../common.h"
 #include "driver.h"
 #include "frame.h"
@@ -47,9 +71,9 @@ void led_pwm_init_func(void)
 
 
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºLED²ÎÊı³õÊ¼»¯
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šLEDå‚æ•°åˆå§‹åŒ–
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_para_init_func(void)
 {
@@ -60,16 +84,16 @@ void led_para_init_func(void)
 
 	if(ret == F_NO_ERROR){
 
-		if(led_control.paire_index >= MAX_PAIRED_REMOTER)//Èô³¬¹ı×î´óÖµ£¬ÔòÄ¬ÈÏÎª0
+		if(led_control.paire_index >= MAX_PAIRED_REMOTER)//è‹¥è¶…è¿‡æœ€å¤§å€¼ï¼Œåˆ™é»˜è®¤ä¸º0
 			led_control.paire_index = 0;
 
-		if(led_control.luminance_index > MAX_LUMINANCE_INDEX)//³¬¹ı×î´óÁÁ¶ÈÖµ£¬Ä¬ÈÏÎª×î´óÖµ
+		if(led_control.luminance_index > MAX_LUMINANCE_INDEX)//è¶…è¿‡æœ€å¤§äº®åº¦å€¼ï¼Œé»˜è®¤ä¸ºæœ€å¤§å€¼
 			led_control.luminance_index = MAX_LUMINANCE_INDEX;
 
-		if(led_control.chroma_index > MAX_CHROME_INDEX)//³¬¹ı×î´óÉ«ÎÂÖµ£¬Ä¬ÈÏÎª×î´óÖµ
+		if(led_control.chroma_index > MAX_CHROME_INDEX)//è¶…è¿‡æœ€å¤§è‰²æ¸©å€¼ï¼Œé»˜è®¤ä¸ºæœ€å¤§å€¼
 			led_control.chroma_index = MAX_CHROME_INDEX;
 
-		if(led_control.seg_index > 3)//³¬¹ı×î´óÇĞ»»×´Ì¬Öµ£¬Ä¬ÈÏÎª0
+		if(led_control.seg_index > 3)//è¶…è¿‡æœ€å¤§åˆ‡æ¢çŠ¶æ€å€¼ï¼Œé»˜è®¤ä¸º0
 			led_control.seg_index = 0;
 
 		if(led_control.paire_num > MAX_PAIRED_REMOTER){
@@ -89,9 +113,9 @@ void led_para_init_func(void)
 
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º±£´æ²ÎÊı
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šä¿å­˜å‚æ•°
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_para_save_func(void)
 {
@@ -107,9 +131,9 @@ void led_para_save_func(void)
 
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÉ«ÎÂÁÁ¶ÈÖµ×´Ì¬¸üĞÂ
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šè‰²æ¸©äº®åº¦å€¼çŠ¶æ€æ›´æ–°
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_updata_lumi_chrome_func(unsigned short Lumi,unsigned char Chroma)
 {
@@ -118,25 +142,25 @@ void led_updata_lumi_chrome_func(unsigned short Lumi,unsigned char Chroma)
 	led_state_change_flag=1;
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º¿ªµÆ
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šå¼€ç¯
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_on_func(void)
 {
 	led_state_change_flag=1;
-	led_lumina_target=led_luminance_value[led_control.luminance_index];//ÉèÖÃÁÁ¶ÈÄ¿±êÖµ
-	led_chroma_target=led_chroma_value[led_control.chroma_index];//ÉèÖÃÉ«ÎÂÄ¿±êÖµ
-	if(led_control.led_on==0){//Èôµ±Ç°×´Ì¬Îª¹ØµÆ
-		led_lumina_cur=0;//ÁÁ¶Èµ±Ç°ÖµÎª0
-		led_chroma_cur=led_chroma_target;//É«ÎÂµ±Ç°ÖµÎª0
-		led_control.led_on=1;//led×´Ì¬Îª¿ªµÆ×´Ì¬
+	led_lumina_target=led_luminance_value[led_control.luminance_index];//è®¾ç½®äº®åº¦ç›®æ ‡å€¼
+	led_chroma_target=led_chroma_value[led_control.chroma_index];//è®¾ç½®è‰²æ¸©ç›®æ ‡å€¼
+	if(led_control.led_on==0){//è‹¥å½“å‰çŠ¶æ€ä¸ºå…³ç¯
+		led_lumina_cur=0;//äº®åº¦å½“å‰å€¼ä¸º0
+		led_chroma_cur=led_chroma_target;//è‰²æ¸©å½“å‰å€¼ä¸º0
+		led_control.led_on=1;//ledçŠ¶æ€ä¸ºå¼€ç¯çŠ¶æ€
 	}
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºLED¹ØµÆ
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šLEDå…³ç¯
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_off_func(void)
 {
@@ -152,59 +176,59 @@ void led_night_light_func(unsigned short Lumi,unsigned char Chroma)
 	led_lumina_target=Lumi;
 	led_chroma_target=Chroma;
 
-	if(led_control.led_on==0){//Èôµ±Ç°×´Ì¬Îª¹ØµÆ
-		led_lumina_cur=0;//ÁÁ¶Èµ±Ç°ÖµÎª0
-		led_chroma_cur=led_chroma_target;//É«ÎÂµ±Ç°ÖµÎª0
-		led_control.led_on=1;//led×´Ì¬Îª¿ªµÆ×´Ì¬
+	if(led_control.led_on==0){//è‹¥å½“å‰çŠ¶æ€ä¸ºå…³ç¯
+		led_lumina_cur=0;//äº®åº¦å½“å‰å€¼ä¸º0
+		led_chroma_cur=led_chroma_target;//è‰²æ¸©å½“å‰å€¼ä¸º0
+		led_control.led_on=1;//ledçŠ¶æ€ä¸ºå¼€ç¯çŠ¶æ€
 	}
 
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º¸üĞÂÁÁ¶È
- * ²Î       Êı£ºType   ¸üĞÂÀàĞÍ 1Îª¼Ó  0Îª¼õ
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šæ›´æ–°äº®åº¦
+ * å‚       æ•°ï¼šType   æ›´æ–°ç±»å‹ 1ä¸ºåŠ   0ä¸ºå‡
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_updata_luminance_func(unsigned char Type)
 {
 	unsigned short ChromaValue;
 	unsigned short LuminaceValue;
-	if(Type){//Îª1£¬Ôò¼Ó
+	if(Type){//ä¸º1ï¼Œåˆ™åŠ 
 		led_control.luminance_index++;
 	}else{
-		if(led_control.luminance_index)//²»Îª0Ôò¼õ£¬Îª0Ôò±£´æ²»±ä
+		if(led_control.luminance_index)//ä¸ä¸º0åˆ™å‡ï¼Œä¸º0åˆ™ä¿å­˜ä¸å˜
 			led_control.luminance_index--;
 	}
-	if(led_control.luminance_index>MAX_LUMINANCE_INDEX)//ÁÁ¶È³¬¹ı×î´óÖµ£¬ÔòÄ¬ÈÏÎª×î´óÖµ
+	if(led_control.luminance_index>MAX_LUMINANCE_INDEX)//äº®åº¦è¶…è¿‡æœ€å¤§å€¼ï¼Œåˆ™é»˜è®¤ä¸ºæœ€å¤§å€¼
 		led_control.luminance_index=MAX_LUMINANCE_INDEX;
 	ChromaValue=led_chroma_value[led_control.chroma_index];
 	LuminaceValue=led_luminance_value[led_control.luminance_index];
 	led_updata_lumi_chrome_func(LuminaceValue,ChromaValue);
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º¸üĞÂÉ«ÎÂ
- * ²Î       Êı£ºType   ¸üĞÂÀàĞÍ 1Îª¼Ó  0Îª¼õ
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šæ›´æ–°è‰²æ¸©
+ * å‚       æ•°ï¼šType   æ›´æ–°ç±»å‹ 1ä¸ºåŠ   0ä¸ºå‡
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_updata_chroma_func(unsigned char Type)
 {
 	unsigned short ChromaValue;
 	unsigned short LuminaceValue;
-	if(Type){//Îª1£¬Ôò¼Ó
+	if(Type){//ä¸º1ï¼Œåˆ™åŠ 
 		led_control.chroma_index++;
 	}else{
-		if(led_control.chroma_index)//²»Îª0Ôò¼õ£¬Îª0±£³Ö²»±ä
+		if(led_control.chroma_index)//ä¸ä¸º0åˆ™å‡ï¼Œä¸º0ä¿æŒä¸å˜
 			led_control.chroma_index--;
 	}
-	if(led_control.chroma_index>MAX_CHROME_INDEX)//³¬¹ı×î´óÖµ£¬ÔòÄ¬ÈÏÎª×î´óÖµ
+	if(led_control.chroma_index>MAX_CHROME_INDEX)//è¶…è¿‡æœ€å¤§å€¼ï¼Œåˆ™é»˜è®¤ä¸ºæœ€å¤§å€¼
 		led_control.chroma_index=MAX_CHROME_INDEX;
 	ChromaValue=led_chroma_value[led_control.chroma_index];
 	LuminaceValue=led_luminance_value[led_control.luminance_index];
-	led_updata_lumi_chrome_func(LuminaceValue,ChromaValue);//¸üĞÂ×´Ì¬
+	led_updata_lumi_chrome_func(LuminaceValue,ChromaValue);//æ›´æ–°çŠ¶æ€
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºLED³õÊ¼»¯
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šLEDåˆå§‹åŒ–
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 
 static u32 tick_local_lightmode = 0;
@@ -217,18 +241,18 @@ void led_init_func(void)
 	led_para_init_func();
 	led_lumina_cur=0;
 	led_chroma_cur=led_chroma_value[led_control.chroma_index];
-	if(led_control.power_on_recover==0xff){//µ±Îª0xffÊ±£¬ÇĞ»»×´Ì¬
+	if(led_control.power_on_recover==0xff){//å½“ä¸º0xffæ—¶ï¼Œåˆ‡æ¢çŠ¶æ€
 		led_control.seg_index++;
 		led_control.seg_index&=3;
-		led_luminace_segment_set_func(led_control.seg_index);//ÉèÖÃ×´Ì¬
-	}else{//²»ÇĞ»»×´Ì¬Ê±£¬Õı³£¿ªµÆ
+		led_luminace_segment_set_func(led_control.seg_index);//è®¾ç½®çŠ¶æ€
+	}else{//ä¸åˆ‡æ¢çŠ¶æ€æ—¶ï¼Œæ­£å¸¸å¼€ç¯
 		led_on_func();
 
 		led_control.power_on_recover=0xff;
 		tick_local_lightmode = clock_time()|1;
 	}
 	
-	led_para_save_func();//±£´æ×´Ì¬
+	led_para_save_func();//ä¿å­˜çŠ¶æ€
 }
 
 
@@ -238,17 +262,17 @@ void led_init_func_ret(void)
 }
 
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÉèÖÃLEDµÄPWM
- * ²Î       Êı£ºLumina   ÁÁ¶ÈÖµ
- *        Chroma   É«ÎÂÖµ
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šè®¾ç½®LEDçš„PWM
+ * å‚       æ•°ï¼šLumina   äº®åº¦å€¼
+ *        Chroma   è‰²æ¸©å€¼
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_pwm_control_func(int Lumina, int Chroma)
 {
 	int Whrite_pwm_val, Yellow_pwm_val;
 
-	Whrite_pwm_val = Lumina * Chroma/100;//°×µÆµÄÕ¼¿Õ±È£¬ÁÁ¶ÈÖµ*±ÈÀı
-	Yellow_pwm_val = Lumina - Whrite_pwm_val;//»ÆµÆµÄÕ¼¿Õ±È
+	Whrite_pwm_val = Lumina * Chroma/100;//ç™½ç¯çš„å ç©ºæ¯”ï¼Œäº®åº¦å€¼*æ¯”ä¾‹
+	Yellow_pwm_val = Lumina - Whrite_pwm_val;//é»„ç¯çš„å ç©ºæ¯”
 
 //	PWM_DutyValueSet(PWM4, Whrite_pwm_val);
 //	PWM_DutyValueSet(PWM0, Yellow_pwm_val);
@@ -260,10 +284,10 @@ void led_pwm_control_func(int Lumina, int Chroma)
 //	LOG_PRINTF("led_pwm_control_func->PWM0:PB2:1000  %d\n",Yellow_pwm_val);
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÉèÖÃLED
- * ²Î       Êı£ºLumina  ÁÁ¶ÈÖµ
- *        Chroma  É«ÎÂÖµ
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šè®¾ç½®LED
+ * å‚       æ•°ï¼šLumina  äº®åº¦å€¼
+ *        Chroma  è‰²æ¸©å€¼
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_power_control_func(int Lumina, int Chroma)
 {
@@ -272,18 +296,18 @@ void led_power_control_func(int Lumina, int Chroma)
 	unsigned char i;
 	led_lumina_target = led_lumina_cur = Lumina;
 	led_chroma_target = led_chroma_cur = Chroma;
-	for(i=0;i<(MAX_LUMINANCE_INDEX+1);i++)//²éÕÒÁÁ¶È¶ÔÓ¦µÄÏÂ±êÖµ
+	for(i=0;i<(MAX_LUMINANCE_INDEX+1);i++)//æŸ¥æ‰¾äº®åº¦å¯¹åº”çš„ä¸‹æ ‡å€¼
 		if(Lumina<=led_luminance_value[i])
 			break;
 	led_control.luminance_index = i;
-	led_control.chroma_index = (Chroma+5)/10;//É«ÎÂÒ»¼¶Îª10
+	led_control.chroma_index = (Chroma+5)/10;//è‰²æ¸©ä¸€çº§ä¸º10
 	led_pwm_control_func(Lumina, Chroma);
 
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÉèÖÃledµÄ4ÖÖ×´Ì¬
- * ²Î       Êı£ºseg_index £º¶ÔÓ¦µÄ×´Ì¬
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šè®¾ç½®ledçš„4ç§çŠ¶æ€
+ * å‚       æ•°ï¼šseg_index ï¼šå¯¹åº”çš„çŠ¶æ€
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_luminace_segment_set_func(unsigned char seg_index)
 {
@@ -308,15 +332,15 @@ void led_luminace_segment_set_func(unsigned char seg_index)
 	}
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÒ£¿ØÆ÷ÃüÁîÖ´ĞĞ
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šé¥æ§å™¨å‘½ä»¤æ‰§è¡Œ
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_event_proc_func(unsigned char Cmd)
 {
 	if(led_flash_cnt)return;
 	if(Cmd==CMD_LUMINANT_INCREASE||Cmd==CMD_LUMINANT_DECREASE||Cmd==CMD_CHROMA_INCREASE||Cmd==CMD_CHROMA_DECREASE)
-		if(led_control.led_on==0)  //¹ØµÆ×´Ì¬²»½øĞĞÉ«ÎÂÁÁ¶Èµ÷½Ú
+		if(led_control.led_on==0)  //å…³ç¯çŠ¶æ€ä¸è¿›è¡Œè‰²æ¸©äº®åº¦è°ƒèŠ‚
 			return;
 
 	switch(Cmd){
@@ -324,41 +348,41 @@ void led_event_proc_func(unsigned char Cmd)
 			LOG_PRINTF("CMD_NONE\n");
 			break;
 
-		case CMD_ON://¿ªµÆ
+		case CMD_ON://å¼€ç¯
 			led_on_func();
 			LOG_PRINTF("CMD_ON\n");
 			break;
 
-		case CMD_OFF://¹ØµÆ
+		case CMD_OFF://å…³ç¯
 			led_off_func();
 			LOG_PRINTF("CMD_OFF\n");
 			break;
 
-		case CMD_LUMINANT_INCREASE://ÁÁ¶È¼Ó
+		case CMD_LUMINANT_INCREASE://äº®åº¦åŠ 
 			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_luminance_func(1);
 			LOG_PRINTF("CMD_LUMINANT_INCREASE\n");
 			break;
 
-		case CMD_LUMINANT_DECREASE://ÁÁ¶È¼õ
+		case CMD_LUMINANT_DECREASE://äº®åº¦å‡
 			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_luminance_func(0);
 			LOG_PRINTF("CMD_LUMINANT_DECREASE\n");
 			break;
 
-		case CMD_CHROMA_INCREASE://É«ÎÂ¼Ó
+		case CMD_CHROMA_INCREASE://è‰²æ¸©åŠ 
 			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_chroma_func(1);
 			LOG_PRINTF("CMD_CHROMA_INCREASE\n");
 			break;
 
-		case CMD_CHROMA_DECREASE://É«ÎÂ¼õ
+		case CMD_CHROMA_DECREASE://è‰²æ¸©å‡
 			led_set_lumi_chrome_func(led_lumina_cur,led_chroma_cur);
 			led_updata_chroma_func(0);
 			LOG_PRINTF("CMD_CHROMA_DECREASE\n");
 			break;
 
-		case CMD_QUICK_LOW_LIGHT://Ò¹µÆÄ£Ê½	
+		case CMD_QUICK_LOW_LIGHT://å¤œç¯æ¨¡å¼	
 			led_night_light_func(LOW_LIGHT_LUMINACE,50);
 			LOG_PRINTF("CMD_QUICK_LOW_LIGHT\n");
 			break;
@@ -369,16 +393,16 @@ void led_event_proc_func(unsigned char Cmd)
 	}
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÉèÖÃÉ«ÎÂÁÁ¶ÈÖµ
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šè®¾ç½®è‰²æ¸©äº®åº¦å€¼
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_set_lumi_chrome_func(unsigned short Lumi,unsigned short Chroma)
 {
 	unsigned char i;
-	if(Lumi>led_luminance_value[MAX_LUMINANCE_INDEX])//³¬¹ı×î´óÖµ£¬Ä¬ÈÏÎª×î´ó
+	if(Lumi>led_luminance_value[MAX_LUMINANCE_INDEX])//è¶…è¿‡æœ€å¤§å€¼ï¼Œé»˜è®¤ä¸ºæœ€å¤§
 		Lumi=led_luminance_value[MAX_LUMINANCE_INDEX];
-	if(Chroma>led_chroma_value[MAX_CHROME_INDEX])//³¬¹ı×î´óÖµ£¬Ä¬ÈÏÎª×î´ó
+	if(Chroma>led_chroma_value[MAX_CHROME_INDEX])//è¶…è¿‡æœ€å¤§å€¼ï¼Œé»˜è®¤ä¸ºæœ€å¤§
 		Chroma=led_chroma_value[MAX_CHROME_INDEX];
 	led_control.chroma_index=Chroma/10;
 	for(i=0;i<(MAX_LUMINANCE_INDEX+1);i++)
@@ -388,14 +412,14 @@ void led_set_lumi_chrome_func(unsigned short Lumi,unsigned short Chroma)
 	led_updata_lumi_chrome_func(Lumi,Chroma);
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º¼ÆËãµ±Ç°ÁÁ¶ÈÖµ
- * ²Î       Êı£ºtarget   ÁÁ¶ÈÄ¿±êÖµ
- *        cur      µ±Ç°ÁÁ¶ÈÖµ
- * ·µ »Ø  Öµ£º¼ÆËãºóµÄÁÁ¶ÈÖµ
+ * å‡½æ•°åŠŸèƒ½ï¼šè®¡ç®—å½“å‰äº®åº¦å€¼
+ * å‚       æ•°ï¼štarget   äº®åº¦ç›®æ ‡å€¼
+ *        cur      å½“å‰äº®åº¦å€¼
+ * è¿” å›  å€¼ï¼šè®¡ç®—åçš„äº®åº¦å€¼
  **********************************************************/
 unsigned short lumina_one_step_updata(unsigned short target,unsigned short cur)
 {
-	unsigned short temp=cur>>6;//ÁÁ¶ÈÖµÔ½´ó£¬±ä»¯¾ÍÔ½´ó
+	unsigned short temp=cur>>6;//äº®åº¦å€¼è¶Šå¤§ï¼Œå˜åŒ–å°±è¶Šå¤§
 	if(temp<10)
 		temp=10;
 
@@ -416,10 +440,10 @@ unsigned short lumina_one_step_updata(unsigned short target,unsigned short cur)
 	return cur;
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º¼ÆËãÉ«ÎÂÖµ
- * ²Î       Êı£ºtarget   ÁÁ¶ÈÄ¿±êÖµ
- *        cur      µ±Ç°ÁÁ¶ÈÖµ
- * ·µ »Ø  Öµ£º¼ÆËãºóµÄÉ«ÎÂÖµ
+ * å‡½æ•°åŠŸèƒ½ï¼šè®¡ç®—è‰²æ¸©å€¼
+ * å‚       æ•°ï¼štarget   äº®åº¦ç›®æ ‡å€¼
+ *        cur      å½“å‰äº®åº¦å€¼
+ * è¿” å›  å€¼ï¼šè®¡ç®—åçš„è‰²æ¸©å€¼
  **********************************************************/
 unsigned short chroma_one_step_updata(unsigned short target,unsigned short cur)
 {
@@ -430,28 +454,28 @@ unsigned short chroma_one_step_updata(unsigned short target,unsigned short cur)
 	return cur;
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÉÁË¸´ÎÊı¸üĞÂ
- * ²Î       Êı£ºFlash_cnt  ÉÁË¸µÄ´ÎÊı
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šé—ªçƒæ¬¡æ•°æ›´æ–°
+ * å‚       æ•°ï¼šFlash_cnt  é—ªçƒçš„æ¬¡æ•°
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_flash_updata(unsigned char Flash_cnt)
 {
 	led_flash_cnt=Flash_cnt;
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºLEDÈÎÎñ´¦Àí
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šLEDä»»åŠ¡å¤„ç†
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_task_process_func(void)
 {
-	if(led_flash_cnt){//ledÊÇ·ñÓĞÉÁË¸
-		if(clock_time_exceed(led_flash_tick,500000)){//500ms¸üĞÂÒ»´Î×´Ì¬
+	if(led_flash_cnt){//ledæ˜¯å¦æœ‰é—ªçƒ
+		if(clock_time_exceed(led_flash_tick,500000)){//500msæ›´æ–°ä¸€æ¬¡çŠ¶æ€
 			led_flash_tick=clock_time();
 			if(led_control.led_on==0){
 				led_control.led_on=1;
 				led_power_control_func(500,50);
-				if(led_flash_cnt!=0xff)//Îª0xffÊ±£¬ÎŞÏŞ´ÎÉÁË¸
+				if(led_flash_cnt!=0xff)//ä¸º0xffæ—¶ï¼Œæ— é™æ¬¡é—ªçƒ
 					led_flash_cnt--;
 			}else{
 				led_control.led_on=0;
@@ -460,23 +484,23 @@ void led_task_process_func(void)
 		}
 	}
 
-	if(led_state_change_flag){//LED×´Ì¬ÓĞ±ä»¯
-		if(clock_time_exceed(led_change_tick,5000)){//Ã¿5ms¸üĞÂÒ»´Î
+	if(led_state_change_flag){//LEDçŠ¶æ€æœ‰å˜åŒ–
+		if(clock_time_exceed(led_change_tick,5000)){//æ¯5msæ›´æ–°ä¸€æ¬¡
 			led_change_tick=clock_time();
-			if(led_lumina_cur!=led_lumina_target){//ÁÁ¶ÈÓĞ±ä»¯
+			if(led_lumina_cur!=led_lumina_target){//äº®åº¦æœ‰å˜åŒ–
 				led_lumina_cur=lumina_one_step_updata(led_lumina_target,led_lumina_cur);
 			}
 
-			if(led_chroma_cur!=led_chroma_target){//É«ÎÂÓĞ±ä»¯
+			if(led_chroma_cur!=led_chroma_target){//è‰²æ¸©æœ‰å˜åŒ–
 				led_chroma_cur=chroma_one_step_updata(led_chroma_target,led_chroma_cur);
 			}
 
 			//LOG_PRINTF("led_task_process_func\n");
-			led_pwm_control_func(led_lumina_cur,led_chroma_cur);//ÉèÖÃLED
+			led_pwm_control_func(led_lumina_cur,led_chroma_cur);//è®¾ç½®LED
 			
-			if( (led_chroma_cur==led_chroma_target) && (led_lumina_cur==led_lumina_target) ){//±ä»¯Íê³É
+			if( (led_chroma_cur==led_chroma_target) && (led_lumina_cur==led_lumina_target) ){//å˜åŒ–å®Œæˆ
 				led_state_change_flag=0;
-				led_para_save_func();//±£´æ×´Ì¬
+				led_para_save_func();//ä¿å­˜çŠ¶æ€
 
 				if(!tick_local_lightmode){
 					led_control.power_on_recover=0;

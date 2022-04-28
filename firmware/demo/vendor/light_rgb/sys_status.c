@@ -1,3 +1,27 @@
+/********************************************************************************************************
+ * @file	sys_status.c
+ *
+ * @brief	This is the source file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 #include "sys_status.h"
 
 #include "driver.h"
@@ -44,108 +68,108 @@ void sys_status_init(void)
 
 unsigned int debug,debug1;
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÊÕµ½RFÊı¾İºó´¦Àíº¯Êı
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šæ”¶åˆ°RFæ•°æ®åå¤„ç†å‡½æ•°
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void sys_status_process(void)
 {
-	if(g_state==PAIRING_STATE){//´¦ÓÚ¶ÔÂë×´Ì¬
-		if(g_package_new){//ÊÕµ½ĞÂµÄÊı¾İ°ü
+	if(g_state==PAIRING_STATE){//å¤„äºå¯¹ç çŠ¶æ€
+		if(g_package_new){//æ”¶åˆ°æ–°çš„æ•°æ®åŒ…
 			g_package_new=0;
-			if(g_package_cmd==CMD_PAIRE_CODE_CMD){//¶ÔÂëÃüÁî			
+			if(g_package_cmd==CMD_PAIRE_CODE_CMD){//å¯¹ç å‘½ä»¤			
 				if(UNUSED_PID != g_package_pid){
 					if(led_control.led_state!=LED_YL_ON_STATE){
 						led_control.led_state=LED_OFF_STATE;
 					}
 					led_rgb_off_func();
-					save_remote_ID_func(g_package_pid);//±£´æID
-					led_flash_updata_func(3);          //ÉÁË¸3´Î
-					g_state=NORMAL_STATE;              //½øÈë±ê×¼Ä£Ê½
+					save_remote_ID_func(g_package_pid);//ä¿å­˜ID
+					led_flash_updata_func(3);          //é—ªçƒ3æ¬¡
+					g_state=NORMAL_STATE;              //è¿›å…¥æ ‡å‡†æ¨¡å¼
 
 					LOG_PRINTF("pair success to NORMAL_STATE\n");
 				}
 
-			}else if(g_package_cmd==CMD_CLEAR_CODE_CMD){//ÇåÂëÃüÁî
+			}else if(g_package_cmd==CMD_CLEAR_CODE_CMD){//æ¸…ç å‘½ä»¤
 				if(UNUSED_PID != g_package_pid){
 					if(led_control.led_state!=LED_YL_ON_STATE){
 						led_control.led_state=LED_OFF_STATE;
 					}
 					led_rgb_off_func();
-					clear_remote_ID_func();                 //Çå³ıËùÓĞ±£´æµÄIDÖµ
-					led_flash_updata_func(5);               //ÉÁË¸5´Î
-					g_state=NORMAL_STATE;                   //½øÈë±ê×¼Ä£Ê½
+					clear_remote_ID_func();                 //æ¸…é™¤æ‰€æœ‰ä¿å­˜çš„IDå€¼
+					led_flash_updata_func(5);               //é—ªçƒ5æ¬¡
+					g_state=NORMAL_STATE;                   //è¿›å…¥æ ‡å‡†æ¨¡å¼
 
 					LOG_PRINTF("clear pair to NORMAL_STATE\n");
 				}
-			}else if(g_package_cmd!=CMD_NONE){      //²»ÊÇ¿Õ¼ü
-				if(paired_ID_match(g_package_pid))      //ÈôIDÆ¥Åä
+			}else if(g_package_cmd!=CMD_NONE){      //ä¸æ˜¯ç©ºé”®
+				if(paired_ID_match(g_package_pid))      //è‹¥IDåŒ¹é…
 				{
-					g_state=NORMAL_STATE;				//ÍË³ö¶ÔÂëÄ£Ê½
+					g_state=NORMAL_STATE;				//é€€å‡ºå¯¹ç æ¨¡å¼
 					LOG_PRINTF("1exit pair to NORMAL_STATE\n");							
 				}
 			}
 		}
 
-		if(clock_time_exceed(sys_run_tick,6000000)){      //¿ªµÆ6sÒÔºóÍË³ö¶ÔÂëÄ£Ê½
+		if(clock_time_exceed(sys_run_tick,6000000)){      //å¼€ç¯6sä»¥åé€€å‡ºå¯¹ç æ¨¡å¼
 			g_state=NORMAL_STATE;
 			LOG_PRINTF("PAIRRING_STATE 6s timeout to NORMAL_STATE\n");
 		}
-	}else if(g_state==NORMAL_STATE){                    //Õı³£¿ØÖÆÄ£Ê½
-		if(g_package_new){                              //ÊÕµ½ĞÂ°ü
+	}else if(g_state==NORMAL_STATE){                    //æ­£å¸¸æ§åˆ¶æ¨¡å¼
+		if(g_package_new){                              //æ”¶åˆ°æ–°åŒ…
 			g_package_new=0;
-			if(paired_ID_match(g_package_pid)){         //IDÊÇ·ñÆ¥Åä
-				if(g_package_cmd!=pre_package_cmd||g_package_seq!=pre_package_seq){//IDÓë°üĞòÁĞºÅÊÇ·ñÏàÍ¬£¬Á½¸ö¶¼ÏàÍ¬ÔòÈÏÎªÊÇÍ¬Ò»¸ö°ü£¬¶ªÆú
-					if(led_control.led_state==LED_RGB_ON_STATE||led_control.led_state==LED_RGB_BREATH_STATE){//µ±Ç°µÆ´¦ÓÚRGBÄ£Ê½
-						if(g_package_cmd==CMD_ON){//É«ÎÂµÆ¿ªµÆÃüÁîÍË³öRGBÄ£Ê½
-							led_rgb_off_func();       //¹Ø±ÕRGB
-							led_on_func();            //´ò¿ªÉ«ÎÂµÆ
+			if(paired_ID_match(g_package_pid)){         //IDæ˜¯å¦åŒ¹é…
+				if(g_package_cmd!=pre_package_cmd||g_package_seq!=pre_package_seq){//IDä¸åŒ…åºåˆ—å·æ˜¯å¦ç›¸åŒï¼Œä¸¤ä¸ªéƒ½ç›¸åŒåˆ™è®¤ä¸ºæ˜¯åŒä¸€ä¸ªåŒ…ï¼Œä¸¢å¼ƒ
+					if(led_control.led_state==LED_RGB_ON_STATE||led_control.led_state==LED_RGB_BREATH_STATE){//å½“å‰ç¯å¤„äºRGBæ¨¡å¼
+						if(g_package_cmd==CMD_ON){//è‰²æ¸©ç¯å¼€ç¯å‘½ä»¤é€€å‡ºRGBæ¨¡å¼
+							led_rgb_off_func();       //å…³é—­RGB
+							led_on_func();            //æ‰“å¼€è‰²æ¸©ç¯
 							led_control.led_state = LED_YL_ON_STATE;
 						}else if(g_package_cmd==CMD_OFF){
-							led_rgb_off_func();       //¹Ø±ÕRGB
-							led_off_func();            //¹Ø±ÕÉ«ÎÂµÆ
+							led_rgb_off_func();       //å…³é—­RGB
+							led_off_func();            //å…³é—­è‰²æ¸©ç¯
 							led_control.led_state = LED_OFF_STATE;
-						}else if(g_package_cmd==CMD_SET_RGB_CMD){//ÃüÁîÎªÉèÖÃRGBÖµ
+						}else if(g_package_cmd==CMD_SET_RGB_CMD){//å‘½ä»¤ä¸ºè®¾ç½®RGBå€¼
 							led_off_func();
 							led_control.led_state=LED_RGB_ON_STATE;
 							led_control.rgb_value[0] = g_package_red;
 							led_control.rgb_value[1] = g_package_green;
 							led_control.rgb_value[2] = g_package_blue;
 							led_rgb_set_func(g_package_red,g_package_green,g_package_blue);
-							save_led_state_info_func();//±£´æ×´Ì¬
-						}else if(g_package_cmd==CMD_BREATH_RGB_MODE_CMD){//RGBºôÎüÄ£Ê½
+							save_led_state_info_func();//ä¿å­˜çŠ¶æ€
+						}else if(g_package_cmd==CMD_BREATH_RGB_MODE_CMD){//RGBå‘¼å¸æ¨¡å¼
 							led_control.led_state=LED_RGB_BREATH_STATE;
-						}else if(g_package_cmd==CMD_NIGHT_LIGHT_CMD){//RGBºôÎüÄ£Ê½
-							led_rgb_off_func();       //¹Ø±ÕRGB
+						}else if(g_package_cmd==CMD_NIGHT_LIGHT_CMD){//RGBå‘¼å¸æ¨¡å¼
+							led_rgb_off_func();       //å…³é—­RGB
 							led_event_proc_func(CMD_NIGHT_LIGHT_CMD);
 						}
-					}else{//µ±Ç°×´Ì¬ÎªÉ«ÎÂµÆÄ£Ê½
-						if(g_package_cmd<CMD_PAIRE_CODE_CMD){//°´¼üÃüÁîÎªÉ«ÎÂµÆµÄ°´¼üÃüÁî
-							if(g_package_cmd!=CMD_SET_LUMI_CHROMA){//·ÇÉèÖÃÉ«ÎÂµÆ
-								if(g_package_cmd==CMD_NIGHT_LIGHT_CMD){//RGBºôÎüÄ£Ê½
-									led_rgb_off_func(); 	  //¹Ø±ÕRGB
+					}else{//å½“å‰çŠ¶æ€ä¸ºè‰²æ¸©ç¯æ¨¡å¼
+						if(g_package_cmd<CMD_PAIRE_CODE_CMD){//æŒ‰é”®å‘½ä»¤ä¸ºè‰²æ¸©ç¯çš„æŒ‰é”®å‘½ä»¤
+							if(g_package_cmd!=CMD_SET_LUMI_CHROMA){//éè®¾ç½®è‰²æ¸©ç¯
+								if(g_package_cmd==CMD_NIGHT_LIGHT_CMD){//RGBå‘¼å¸æ¨¡å¼
+									led_rgb_off_func(); 	  //å…³é—­RGB
 								}
-								led_event_proc_func(g_package_cmd);//Ö´ĞĞÃüÁî
+								led_event_proc_func(g_package_cmd);//æ‰§è¡Œå‘½ä»¤
 							}else{
-								led_set_lumi_chrome_func(g_package_lumi,g_package_chroma);//ÉèÖÃÉ«ÎÂÖµ
+								led_set_lumi_chrome_func(g_package_lumi,g_package_chroma);//è®¾ç½®è‰²æ¸©å€¼
 							}
-						}else if(g_package_cmd==CMD_SET_RGB_CMD){//ÉèÖÃRGBµÄÖµ
+						}else if(g_package_cmd==CMD_SET_RGB_CMD){//è®¾ç½®RGBçš„å€¼
 							led_off_func();
 							led_control.led_state=LED_RGB_ON_STATE;
 							led_control.rgb_value[0] = g_package_red;
 							led_control.rgb_value[1] = g_package_green;
 							led_control.rgb_value[2] = g_package_blue;
 							led_rgb_set_func(g_package_red,g_package_green,g_package_blue);
-							save_led_state_info_func();//±£´æ×´Ì¬
-						}else if(g_package_cmd==CMD_BREATH_RGB_MODE_CMD){//RGBºôÎüÄ£Ê½
+							save_led_state_info_func();//ä¿å­˜çŠ¶æ€
+						}else if(g_package_cmd==CMD_BREATH_RGB_MODE_CMD){//RGBå‘¼å¸æ¨¡å¼
 							led_off_func();
 							led_control.led_state=LED_RGB_BREATH_STATE;
 						}
 					}
 				}
 			}
-			pre_package_cmd=g_package_cmd;//±£´æÃüÁî
-			pre_package_seq=g_package_seq;//±£´æĞòÁĞºÅ
+			pre_package_cmd=g_package_cmd;//ä¿å­˜å‘½ä»¤
+			pre_package_seq=g_package_seq;//ä¿å­˜åºåˆ—å·
 		}
 	}
 }

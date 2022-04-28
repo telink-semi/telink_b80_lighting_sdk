@@ -1,13 +1,37 @@
+/********************************************************************************************************
+ * @file	pairing_op.c
+ *
+ * @brief	This is the source file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 //#include "../../common.h"
 #include "driver.h"
 #include "frame.h"
 #include "pairing_op.h"
 #include "light_ctr_store.h"
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º°ÑIDÖµĞ´Èëeeprom
- * ²Î       Êı£ºPosition   IDËùÔÚµÄÏÂ±êÖµ
- *        Id         Ğ´ÈëµÄidÖµ
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šæŠŠIDå€¼å†™å…¥eeprom
+ * å‚       æ•°ï¼šPosition   IDæ‰€åœ¨çš„ä¸‹æ ‡å€¼
+ *        Id         å†™å…¥çš„idå€¼
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 //void write_id_direct(unsigned char Position,unsigned int Id)
 //{
@@ -19,10 +43,10 @@
 //	}
 //}
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º°ÑÊı¾İĞ´Èëµ½eeprom
- * ²Î       Êı£ºAddr     eepromµÄµØÖ·
- *       Data      Ğ´ÈëµÄÊı¾İÖµ
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šæŠŠæ•°æ®å†™å…¥åˆ°eeprom
+ * å‚       æ•°ï¼šAddr     eepromçš„åœ°å€
+ *       Data      å†™å…¥çš„æ•°æ®å€¼
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 //void write_data_direct_func(unsigned char Addr,unsigned char Data)
 //{
@@ -30,9 +54,9 @@
 //}
 
  /***********************************************************
- * º¯Êı¹¦ÄÜ£º²éÑ¯IDÊÇ·ñ¸úÒÑ±£´æµÄidÆ¥Åä
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£ºÆ¥Åä³É¹¦·µ»Ø1  ²»³É¹¦·µ»Ø0
+ * å‡½æ•°åŠŸèƒ½ï¼šæŸ¥è¯¢IDæ˜¯å¦è·Ÿå·²ä¿å­˜çš„idåŒ¹é…
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼šåŒ¹é…æˆåŠŸè¿”å›1  ä¸æˆåŠŸè¿”å›0
  **********************************************************/
 unsigned char paired_ID_match(unsigned int Id)
 {
@@ -49,9 +73,9 @@ unsigned char paired_ID_match(unsigned int Id)
 }
 
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÇå³ı±£´æµÄÒ£¿ØÆ÷IDÖµ
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šæ¸…é™¤ä¿å­˜çš„é¥æ§å™¨IDå€¼
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void clear_remote_ID_func(void)
 {
@@ -68,9 +92,9 @@ void clear_remote_ID_func(void)
 	//write_data_direct_func(PAIRE_INDEX_ADDR,led_control.paire_index);
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º±£´æÒ£¿ØÆ÷ID
- * ²Î       Êı£ºId    ±£´æµÄIdÖµ
- * ·µ »Ø  Öµ£º³É¹¦·µ»Ø1  ²»³É¹¦·µ»Ø0
+ * å‡½æ•°åŠŸèƒ½ï¼šä¿å­˜é¥æ§å™¨ID
+ * å‚       æ•°ï¼šId    ä¿å­˜çš„Idå€¼
+ * è¿” å›  å€¼ï¼šæˆåŠŸè¿”å›1  ä¸æˆåŠŸè¿”å›0
  **********************************************************/
 unsigned char save_remote_ID_func(unsigned int Id)
 {
@@ -95,9 +119,9 @@ unsigned char save_remote_ID_func(unsigned int Id)
 	return 1;
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º±£´æµÆµÄ¿ØÖÆĞÅÏ¢
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šä¿å­˜ç¯çš„æ§åˆ¶ä¿¡æ¯
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void save_led_control_info_func(void)
 {
@@ -109,9 +133,9 @@ void save_led_control_info_func(void)
 	lightctr_store_write(&led_control);
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£º±£´æµÆµÄ×´Ì¬ĞÅÏ¢
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šä¿å­˜ç¯çš„çŠ¶æ€ä¿¡æ¯
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void save_led_state_info_func(void)
 {

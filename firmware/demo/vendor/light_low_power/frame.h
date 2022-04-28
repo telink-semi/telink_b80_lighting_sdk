@@ -1,3 +1,27 @@
+/********************************************************************************************************
+ * @file	frame.h
+ *
+ * @brief	This is the header file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 #pragma once
 
 #define MAX_PAIRED_REMOTER  8
@@ -5,20 +29,20 @@
 unsigned char g_rx_packet [RX_PACKGET_SIZE*4] __attribute__((aligned(4)));
 
 typedef struct{
-	unsigned int  pid; //product ID Ò£¿ØÆ÷ID
-	unsigned char group_id;//group_id = 1, 2, 4, 8, fÒ£¿ØÆ÷¶ÔÓ¦µÄ×éID
+	unsigned int  pid; //product ID é¥æ§å™¨ID
+	unsigned char group_id;//group_id = 1, 2, 4, 8, fé¥æ§å™¨å¯¹åº”çš„ç»„ID
 }Pairing_info_t;
 
 typedef struct{
 	Pairing_info_t pared_remote[MAX_PAIRED_REMOTER];    //must the first one.
 	unsigned char  paire_index;
 	unsigned char  paire_num;
-	unsigned char  luminance_index;//ÁÁ¶ÈÏÂ±ê
-	unsigned char  chroma_index;//É«ÎÂÏÂ±ê
+	unsigned char  luminance_index;//äº®åº¦ä¸‹æ ‡
+	unsigned char  chroma_index;//è‰²æ¸©ä¸‹æ ‡
 	unsigned char  led_on;   //when power on "1" indicate the LED's off by the switch
 
-	unsigned char  power_on_recover;//ÉÏµç×´Ì¬ÊÇ·ñÇĞ»»±êÖ¾
-	unsigned char  seg_index;//×´Ì¬ÇĞ»»Öµ
+	unsigned char  power_on_recover;//ä¸Šç”µçŠ¶æ€æ˜¯å¦åˆ‡æ¢æ ‡å¿—
+	unsigned char  seg_index;//çŠ¶æ€åˆ‡æ¢å€¼
     unsigned char  rev[17];
 }LED_control_info_t;
 #define LEN_LED_CONTROL_INFO   64

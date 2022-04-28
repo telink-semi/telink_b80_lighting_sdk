@@ -1,3 +1,27 @@
+/********************************************************************************************************
+ * @file	led_rgb.c
+ *
+ * @brief	This is the source file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 //#include "../../common.h"
 #include "driver.h"
 #include "frame.h"
@@ -33,9 +57,9 @@ void led_rgb_pwm_init_func(void)
 }
 
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºRGBµÆ¿ª
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šRGBç¯å¼€
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_on_rgb_func(void)
 {
@@ -48,9 +72,9 @@ void led_on_rgb_func(void)
 	led_rgb_state_change_flag=1;
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºRGBµÆ¹Ø
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šRGBç¯å…³
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_rgb_off_func(void)
 {
@@ -60,25 +84,25 @@ void led_rgb_off_func(void)
 	led_rgb_state_change_flag=1;
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÉèÖÃRGBµÆµÄÄ¿±êÁÁ¶È£¬½¥±ä
- * ²Î       Êı£ºRed_v     ºìµÆµÄPWMÖµ
- *        Green_v   ÂÌµÆµÄPWMÖµ
- *        Blue_v    À¶µÆµÄPWMÖµ
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šè®¾ç½®RGBç¯çš„ç›®æ ‡äº®åº¦ï¼Œæ¸å˜
+ * å‚       æ•°ï¼šRed_v     çº¢ç¯çš„PWMå€¼
+ *        Green_v   ç»¿ç¯çš„PWMå€¼
+ *        Blue_v    è“ç¯çš„PWMå€¼
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_rgb_set_func(unsigned short Red_v,unsigned short Green_v,unsigned short Blue_v)
 {
 	led_red_target=Red_v;
 	led_green_target=Green_v;
 	led_blue_target=Blue_v;
-	led_rgb_state_change_flag=1;//×´Ì¬¸üĞÂ±êÖ¾
+	led_rgb_state_change_flag=1;//çŠ¶æ€æ›´æ–°æ ‡å¿—
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÖ±½ÓÉèÖÃRGBµÆµÄPWMÖµ
- * ²Î       Êı£ºRed_v     ºìµÆµÄPWMÖµ
- *        Green_v   ÂÌµÆµÄPWMÖµ
- *        Blue_v    À¶µÆµÄPWMÖµ
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šç›´æ¥è®¾ç½®RGBç¯çš„PWMå€¼
+ * å‚       æ•°ï¼šRed_v     çº¢ç¯çš„PWMå€¼
+ *        Green_v   ç»¿ç¯çš„PWMå€¼
+ *        Blue_v    è“ç¯çš„PWMå€¼
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_set_rgb_power_func(unsigned short Red_v,unsigned short Green_v,unsigned short Blue_v)
 {

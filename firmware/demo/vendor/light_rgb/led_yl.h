@@ -1,11 +1,35 @@
+/********************************************************************************************************
+ * @file	led_yl.h
+ *
+ * @brief	This is the header file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 #pragma once
 
-#define MAX_VALUE_RGB        1000      //RGB×î´ó¼¶Êı
-#define MAX_LUMINANCE        1000      //ÁÁ¶ÈµÄ¼¶Êı
-#define MAX_LUMINANCE_INDEX  13        //ÁÁ¶ÈµÄ¼¶Êı
-#define MAX_CHROME           100       //ÁÁ¶ÈÖµ
+#define MAX_VALUE_RGB        1000      //RGBæœ€å¤§çº§æ•°
+#define MAX_LUMINANCE        1000      //äº®åº¦çš„çº§æ•°
+#define MAX_LUMINANCE_INDEX  13        //äº®åº¦çš„çº§æ•°
+#define MAX_CHROME           100       //äº®åº¦å€¼
 #define MAX_CHROME_INDEX     10
-#define LOW_LIGHT_LUMINACE   20        //Ğ¡Ò¹µÆµÄÖµ
+#define LOW_LIGHT_LUMINACE   20        //å°å¤œç¯çš„å€¼
 
 
 unsigned short led_lumina_cur;

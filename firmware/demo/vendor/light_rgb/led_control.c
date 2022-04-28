@@ -1,3 +1,27 @@
+/********************************************************************************************************
+ * @file	led_control.c
+ *
+ * @brief	This is the source file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 //#include "../../common.h"
 #include "driver.h"
 #include "led_control.h"
@@ -9,10 +33,10 @@
 #include "sys_status.h"
 #include "app_config.h"
 
-unsigned int led_yl_updata_tick;     //É«ÎÂµÆ¸üĞÂÊ±¼äµã
-unsigned int led_rgb_updata_tick;    //RGBµÆ¸üĞÂÊ±¼äµã
-unsigned char led_rgb_breath_state;  //ºôÎüÄ£Ê½Ëù´¦µÄ×´Ì¬
-const unsigned short breath_value[14][3]={   //ºôÎüÄ£Ê½¸÷¸öµÆµÄÁÁ¶ÈÖµ·Ö±ğÎªºì¡¢ÂÌ¡¢À¶
+unsigned int led_yl_updata_tick;     //è‰²æ¸©ç¯æ›´æ–°æ—¶é—´ç‚¹
+unsigned int led_rgb_updata_tick;    //RGBç¯æ›´æ–°æ—¶é—´ç‚¹
+unsigned char led_rgb_breath_state;  //å‘¼å¸æ¨¡å¼æ‰€å¤„çš„çŠ¶æ€
+const unsigned short breath_value[14][3]={   //å‘¼å¸æ¨¡å¼å„ä¸ªç¯çš„äº®åº¦å€¼åˆ†åˆ«ä¸ºçº¢ã€ç»¿ã€è“
 		{0,0,0},
 		{1000,0,0},
 		{0,0,0},
@@ -37,9 +61,9 @@ void led_pwm_init_func(void)
 }
 
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºLED²ÎÊı³õÊ¼»¯
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šLEDå‚æ•°åˆå§‹åŒ–
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_para_init_func(void)
 {
@@ -52,22 +76,22 @@ void led_para_init_func(void)
 
 	if(ret == F_NO_ERROR){
 
-		if(led_control.paire_index >= MAX_PAIRED_REMOTER)//Èô³¬¹ı×î´óÖµ£¬ÔòÄ¬ÈÏÎª0
+		if(led_control.paire_index >= MAX_PAIRED_REMOTER)//è‹¥è¶…è¿‡æœ€å¤§å€¼ï¼Œåˆ™é»˜è®¤ä¸º0
 			led_control.paire_index = 0;
 
-		if(led_control.paire_num >= MAX_PAIRED_REMOTER)//Èô³¬¹ı×î´óÖµ£¬ÔòÄ¬ÈÏÎª0
+		if(led_control.paire_num >= MAX_PAIRED_REMOTER)//è‹¥è¶…è¿‡æœ€å¤§å€¼ï¼Œåˆ™é»˜è®¤ä¸º0
 			led_control.paire_num = 0;
 			
-		if(led_control.luminance_index > MAX_LUMINANCE_INDEX)//³¬¹ı×î´óÁÁ¶ÈÖµ£¬Ä¬ÈÏÎª×î´óÖµ
+		if(led_control.luminance_index > MAX_LUMINANCE_INDEX)//è¶…è¿‡æœ€å¤§äº®åº¦å€¼ï¼Œé»˜è®¤ä¸ºæœ€å¤§å€¼
 			led_control.luminance_index = MAX_LUMINANCE_INDEX;
 
-		if(led_control.chroma_index > MAX_CHROME_INDEX)//³¬¹ı×î´óÉ«ÎÂÖµ£¬Ä¬ÈÏÎª×î´óÖµ
+		if(led_control.chroma_index > MAX_CHROME_INDEX)//è¶…è¿‡æœ€å¤§è‰²æ¸©å€¼ï¼Œé»˜è®¤ä¸ºæœ€å¤§å€¼
 			led_control.chroma_index = MAX_CHROME_INDEX;
 
-		if(led_control.led_state>=LED_LAST_STATE)//Ä¬ÈÏÎªÉ«ÎÂµÆ¿ª
+		if(led_control.led_state>=LED_LAST_STATE)//é»˜è®¤ä¸ºè‰²æ¸©ç¯å¼€
 			led_control.led_state=LED_YL_ON_STATE;
 		
-		for(i=0;i<3;i++){//ÉèÖÃRGBÄ¬ÈÏµÄ×î´ó
+		for(i=0;i<3;i++){//è®¾ç½®RGBé»˜è®¤çš„æœ€å¤§
 			if(led_control.rgb_value[i]>MAX_VALUE_RGB)
 				led_control.rgb_value[i]=MAX_VALUE_RGB;
 		}
@@ -80,7 +104,7 @@ void led_para_init_func(void)
 		led_control.chroma_index = MAX_CHROME_INDEX;
 		led_control.led_state=LED_YL_ON_STATE;
 
-		for(i=0;i<3;i++){//ÉèÖÃRGBÄ¬ÈÏµÄ×î´ó
+		for(i=0;i<3;i++){//è®¾ç½®RGBé»˜è®¤çš„æœ€å¤§
 			led_control.rgb_value[i]=MAX_VALUE_RGB;
 		}
 	}
@@ -90,71 +114,71 @@ void led_para_init_func(void)
 
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºLED³õÊ¼»¯
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šLEDåˆå§‹åŒ–
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_init_func(void)
 {
 	led_para_init_func();
-	if((led_control.led_state==LED_YL_ON_STATE)||(led_control.led_state==LED_OFF_STATE)){//µÆ×´Ì¬ÎªÉ«ÎÂµÆ¿ª£¬Îª¹ØÊ±Ä¬ÈÏÎªÉ«ÎÂµÆ¿ªÄ£Ê½
+	if((led_control.led_state==LED_YL_ON_STATE)||(led_control.led_state==LED_OFF_STATE)){//ç¯çŠ¶æ€ä¸ºè‰²æ¸©ç¯å¼€ï¼Œä¸ºå…³æ—¶é»˜è®¤ä¸ºè‰²æ¸©ç¯å¼€æ¨¡å¼
 		led_on_func();
-	}else if(led_control.led_state==LED_RGB_ON_STATE){//RGB×´Ì¬£¬ÈôÎªºôÎüµÆÄ£Ê½£¬Ôò»á×Ô¶¯´¥·¢
+	}else if(led_control.led_state==LED_RGB_ON_STATE){//RGBçŠ¶æ€ï¼Œè‹¥ä¸ºå‘¼å¸ç¯æ¨¡å¼ï¼Œåˆ™ä¼šè‡ªåŠ¨è§¦å‘
 		led_on_rgb_func();
 	}
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºLEDÉÁË¸Ä£Ê½
- * ²Î       Êı£ºCnt  ÉÁË¸µÄ´ÎÊı
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šLEDé—ªçƒæ¨¡å¼
+ * å‚       æ•°ï¼šCnt  é—ªçƒçš„æ¬¡æ•°
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_flash_updata_func(unsigned char Cnt)
 {
 	led_flash_cnt=Cnt;
 }
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºµÆµÄ´¦Àí³ÌĞò
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šç¯çš„å¤„ç†ç¨‹åº
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void led_task_process_func(void)
 {
-	if(led_flash_cnt){//ÊÇ·ñÓĞÉÁË¸
-		if(clock_time_exceed(led_flash_tick,500000)){//ÊÇ·ñµ½´ïÉÁË¸Ê±¼ä
+	if(led_flash_cnt){//æ˜¯å¦æœ‰é—ªçƒ
+		if(clock_time_exceed(led_flash_tick,500000)){//æ˜¯å¦åˆ°è¾¾é—ªçƒæ—¶é—´
 			led_flash_tick=clock_time();
-			if(led_control.led_state==LED_YL_ON_STATE){//¿ªµÆ×´Ì¬½áÊø£¬¹ØµÆ
+			if(led_control.led_state==LED_YL_ON_STATE){//å¼€ç¯çŠ¶æ€ç»“æŸï¼Œå…³ç¯
 				led_control.led_state=LED_OFF_STATE;
 				led_off_func();
-			}else if(led_control.led_state==LED_OFF_STATE){//¹ØµÆ×´Ì¬½áÊø£¬¿ªµÆ
+			}else if(led_control.led_state==LED_OFF_STATE){//å…³ç¯çŠ¶æ€ç»“æŸï¼Œå¼€ç¯
 				led_control.led_state=LED_YL_ON_STATE;
 				led_on_func();
-				if(led_flash_cnt!=0xff)//ÈôÉÁË¸´ÎÊıÉèÎª0xff£¬Ôò±íÊ¾ÎŞÏŞ´Î
+				if(led_flash_cnt!=0xff)//è‹¥é—ªçƒæ¬¡æ•°è®¾ä¸º0xffï¼Œåˆ™è¡¨ç¤ºæ— é™æ¬¡
 					led_flash_cnt--;
 			}
 		}
 	}
 
-	if(led_state_change_flag){//É«ÎÂµÆÓĞ×´Ì¬¸üĞÂ
-		if(clock_time_exceed(led_yl_updata_tick,3000)){//Ã¿3ms¸üĞÂÒ»´Î
+	if(led_state_change_flag){//è‰²æ¸©ç¯æœ‰çŠ¶æ€æ›´æ–°
+		if(clock_time_exceed(led_yl_updata_tick,3000)){//æ¯3msæ›´æ–°ä¸€æ¬¡
 			led_yl_updata_tick=clock_time();
-			if(led_lumina_cur!=led_lumina_target){//ÁÁ¶ÈÓĞ±ä»¯
+			if(led_lumina_cur!=led_lumina_target){//äº®åº¦æœ‰å˜åŒ–
 				led_lumina_cur=lumina_one_step_updata(led_lumina_target,led_lumina_cur);
 			}
 
-			if(led_chroma_cur!=led_chroma_target){//É«ÎÂÓĞ±ä»¯
+			if(led_chroma_cur!=led_chroma_target){//è‰²æ¸©æœ‰å˜åŒ–
 				led_chroma_cur=chroma_one_step_updata(led_chroma_target,led_chroma_cur);
 			}
 
-			led_pwm_control_func(led_lumina_cur,led_chroma_cur);//ÉèÖÃLED
-			if( (led_chroma_cur==led_chroma_target) && (led_lumina_cur==led_lumina_target) ){//±ä»¯Íê³É
+			led_pwm_control_func(led_lumina_cur,led_chroma_cur);//è®¾ç½®LED
+			if( (led_chroma_cur==led_chroma_target) && (led_lumina_cur==led_lumina_target) ){//å˜åŒ–å®Œæˆ
 				led_state_change_flag=0;
-				save_led_state_info_func();//±£´æ×´Ì¬
+				save_led_state_info_func();//ä¿å­˜çŠ¶æ€
 			}
 		}
 	}
 
-	if(led_rgb_state_change_flag){//RGB×´Ì¬¸üĞÂ
-		if(clock_time_exceed(led_rgb_updata_tick,3000)){//Ã¿3ms¸üĞÂÒ»´Î
+	if(led_rgb_state_change_flag){//RGBçŠ¶æ€æ›´æ–°
+		if(clock_time_exceed(led_rgb_updata_tick,3000)){//æ¯3msæ›´æ–°ä¸€æ¬¡
 			led_rgb_updata_tick=clock_time();
 			if(led_red_cur!=led_red_target){
 				led_red_cur=lumina_one_step_updata(led_red_target,led_red_cur);
@@ -168,22 +192,22 @@ void led_task_process_func(void)
 				led_blue_cur=lumina_one_step_updata(led_blue_target,led_blue_cur);
 			}
 
-			led_set_rgb_power_func(led_red_cur,led_green_cur,led_blue_cur);//ÉèÖÃPWMÖµ
-			if(led_red_cur==led_red_target&&led_green_cur==led_green_target&&led_blue_cur==led_blue_target){//¸üĞÂÍê³É
+			led_set_rgb_power_func(led_red_cur,led_green_cur,led_blue_cur);//è®¾ç½®PWMå€¼
+			if(led_red_cur==led_red_target&&led_green_cur==led_green_target&&led_blue_cur==led_blue_target){//æ›´æ–°å®Œæˆ
 				led_rgb_state_change_flag=0;
 			}
 		}
 	}
 
-	if(led_control.led_state==LED_RGB_BREATH_STATE){//ºôÎüÄ£Ê½
-		if(led_rgb_state_change_flag==0){//×´Ì¬¸üĞÂÊÇ·ñ½áÊø
-			led_rgb_breath_state++;//½áÊøºó½øÈëÏÂÒ»×´Ì¬
+	if(led_control.led_state==LED_RGB_BREATH_STATE){//å‘¼å¸æ¨¡å¼
+		if(led_rgb_state_change_flag==0){//çŠ¶æ€æ›´æ–°æ˜¯å¦ç»“æŸ
+			led_rgb_breath_state++;//ç»“æŸåè¿›å…¥ä¸‹ä¸€çŠ¶æ€
 			if(led_rgb_breath_state>13)
 				led_rgb_breath_state=0;
 			led_red_target=breath_value[led_rgb_breath_state][0];
 			led_green_target=breath_value[led_rgb_breath_state][1];
 			led_blue_target=breath_value[led_rgb_breath_state][2];
-			led_rgb_state_change_flag=1;//×´Ì¬¸üĞÂ±êÖ¾
+			led_rgb_state_change_flag=1;//çŠ¶æ€æ›´æ–°æ ‡å¿—
 		}
 	}
 }

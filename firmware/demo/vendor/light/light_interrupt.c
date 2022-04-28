@@ -1,3 +1,27 @@
+/********************************************************************************************************
+ * @file	light_interrupt.c
+ *
+ * @brief	This is the source file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 #include "light_interrupt.h"
 #include "driver.h"
 #include "frame.h"
@@ -42,7 +66,7 @@ int					blt_rx_wptr = 0;
 _attribute_ram_code_sec_ void light_irq_handler(void)
 {
 	unsigned char index;
-	if(rf_irq_src_get() & FLD_RF_IRQ_RX){               //接收中断，每接到数据该标志都置1，不管数据正确与否
+	if(rf_irq_src_get() & FLD_RF_IRQ_RX){               //鎺ユ敹涓柇锛屾瘡鎺ュ埌鏁版嵁璇ユ爣蹇楅兘缃1锛屼笉绠℃暟鎹纭笌鍚
 		irq_rx++;
 		
 		unsigned char * raw_pkt = (unsigned char *) (g_rx_packet + blt_rx_wptr * RX_PACKGET_SIZE);
@@ -54,13 +78,13 @@ _attribute_ram_code_sec_ void light_irq_handler(void)
 		
 		//LOG_PRINTF("irq_handler rf_rx\n");
 
-		unsigned char *p=raw_pkt;            //���ջ����ָ���ַ
+		unsigned char *p=raw_pkt;            //接收缓存的指针地址
 		//LOG_HEXDUMP(p,RX_PACKGET_SIZE);
 
-		if(RF_NRF_SB_PACKET_CRC_OK(p)){                         //校验接收包
+		if(RF_NRF_SB_PACKET_CRC_OK(p)){                         //鏍￠獙鎺ユ敹鍖
 			//LOG_PRINTF("rf check success\n");
 			rf_packet_led_remote_t *pkt=(rf_packet_led_remote_t *)(p);
-			if(pkt->vid==REMOTE_VID){//匹配产品ID
+			if(pkt->vid==REMOTE_VID){//鍖归厤浜у搧ID
 				if(check_pkt_info(pkt)){
 					unsigned char *ptr=(unsigned char *)&g_relay_pkt.pid;
 					for(index=0;index<14;index++)

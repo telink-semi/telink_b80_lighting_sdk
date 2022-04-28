@@ -1,3 +1,27 @@
+/********************************************************************************************************
+ * @file	sys_status.c
+ *
+ * @brief	This is the source file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 #include "sys_status.h"
 
 #include "driver.h"
@@ -40,56 +64,56 @@ void sys_status_init(void)
 
 
 /***********************************************************
- * º¯Êı¹¦ÄÜ£ºÊÕµ½RFÊı¾İºó´¦Àíº¯Êı
- * ²Î       Êı£º
- * ·µ »Ø  Öµ£º
+ * å‡½æ•°åŠŸèƒ½ï¼šæ”¶åˆ°RFæ•°æ®åå¤„ç†å‡½æ•°
+ * å‚       æ•°ï¼š
+ * è¿” å›  å€¼ï¼š
  **********************************************************/
 void sys_status_process(void)
 {
-	if(g_packget_new){//ÓĞĞÂµÄrfÊı¾İ°ü
+	if(g_packget_new){//æœ‰æ–°çš„rfæ•°æ®åŒ…
 		g_packget_new=0;
-		if(g_state==PAIRRING_STATE){//ÊÇ·ñÎª¶ÔÂë×´Ì¬
-			if(g_packget_cmd==CMD_ON){//°´¼üÖµÊÇ·ñÎª¿ªµÆ½¡
+		if(g_state==PAIRRING_STATE){//æ˜¯å¦ä¸ºå¯¹ç çŠ¶æ€
+			if(g_packget_cmd==CMD_ON){//æŒ‰é”®å€¼æ˜¯å¦ä¸ºå¼€ç¯å¥
 				if((UNUSED_PID != g_packget_pid)&&(GROUP_ALL != g_packget_grp)){
 					sys_run_tick=clock_time();
-					remote_save_grp=g_packget_grp;//±£´æ×é±ğ
-					remote_save_pid=g_packget_pid;//±£´æÒ£¿ØÆ÷ID
-					g_state=CLEARCODE_STATE;//½øÈëÏÂÒ»¸ö×´Ì¬
+					remote_save_grp=g_packget_grp;//ä¿å­˜ç»„åˆ«
+					remote_save_pid=g_packget_pid;//ä¿å­˜é¥æ§å™¨ID
+					g_state=CLEARCODE_STATE;//è¿›å…¥ä¸‹ä¸€ä¸ªçŠ¶æ€
 					led_on_cnt=1;
 					LOG_PRINTF("PAIRRING_STATE to CLEARCODE_STATE:led_on_cnt=%d\n",led_on_cnt);
 				}
-			}else if(g_packget_cmd!=CMD_NONE){//²»Îª¿ªµÆ¼ü
-				if(paired_ID_match(g_packget_pid,g_packget_grp)){//Ò£¿ØÆ÷µÄID¼°×é±ğÊÇ·ñÆ¥Åä£¬ÈôÆ¥Åä£¬ÔòÍË³ö¶ÔÂë£¬½øÈëÕı³£×´Ì¬
+			}else if(g_packget_cmd!=CMD_NONE){//ä¸ä¸ºå¼€ç¯é”®
+				if(paired_ID_match(g_packget_pid,g_packget_grp)){//é¥æ§å™¨çš„IDåŠç»„åˆ«æ˜¯å¦åŒ¹é…ï¼Œè‹¥åŒ¹é…ï¼Œåˆ™é€€å‡ºå¯¹ç ï¼Œè¿›å…¥æ­£å¸¸çŠ¶æ€
 					g_state=NORMAL_STATE;
 					LOG_PRINTF("1exit pair to NORMAL_STATE\n");
 				}
 			}
 		}else if(g_state==CLEARCODE_STATE){
-			if(remote_save_pid==g_packget_pid){//Ò£¿ØÆ÷IDÊÇ·ñÒ»ÖÂ
-				if(g_packget_cmd==CMD_ON){//ÊÇ·ñÎª¿ªµÆ¼ü
-					sys_run_tick=clock_time();//¸üĞÂ½ÓÊÕÃüÁîµÄÊ±¼äµã
+			if(remote_save_pid==g_packget_pid){//é¥æ§å™¨IDæ˜¯å¦ä¸€è‡´
+				if(g_packget_cmd==CMD_ON){//æ˜¯å¦ä¸ºå¼€ç¯é”®
+					sys_run_tick=clock_time();//æ›´æ–°æ¥æ”¶å‘½ä»¤çš„æ—¶é—´ç‚¹
 					led_on_cnt++;
 					LOG_PRINTF("CLEARCODE_STATE:led_on_cnt=%d\n",led_on_cnt);
-					if(led_on_cnt>4){//³¬¹ı4´ÎÔòÇåÂë
+					if(led_on_cnt>4){//è¶…è¿‡4æ¬¡åˆ™æ¸…ç 
 						clear_pared_code_func();
 						led_flash_updata(5);
 						g_state=NORMAL_STATE;
 						LOG_PRINTF("clear pair to NORMAL_STATE\n");
 					}
-				}else if(g_packget_cmd!=CMD_NONE){//·Ç¿ªµÆ¼°¿Õ¼üÖµ
-					if(paired_ID_match(g_packget_pid,g_packget_grp)){//Ò£¿ØÆ÷µÄID¼°×é±ğÊÇ·ñÆ¥Åä£¬ÈôÆ¥Åä£¬ÔòÍË³ö¶ÔÂë£¬½øÈëÕı³£×´Ì¬
+				}else if(g_packget_cmd!=CMD_NONE){//éå¼€ç¯åŠç©ºé”®å€¼
+					if(paired_ID_match(g_packget_pid,g_packget_grp)){//é¥æ§å™¨çš„IDåŠç»„åˆ«æ˜¯å¦åŒ¹é…ï¼Œè‹¥åŒ¹é…ï¼Œåˆ™é€€å‡ºå¯¹ç ï¼Œè¿›å…¥æ­£å¸¸çŠ¶æ€
 						g_state=NORMAL_STATE;
 						LOG_PRINTF("3exit pair to NORMAL_STATE\n");
 					}
 				}
 			}
-		}else if(g_state==NORMAL_STATE){//Õı³£×´Ì¬
+		}else if(g_state==NORMAL_STATE){//æ­£å¸¸çŠ¶æ€
 			rfc_send_relay_pkt();
-			if(paired_ID_match(g_packget_pid,g_packget_grp)){//Ò£¿ØÆ÷µÄID¼°×é±ğÊÇ·ñÆ¥Åä£¬ÈôÆ¥Åä£¬ÔòÖ´ĞĞÃüÁî
+			if(paired_ID_match(g_packget_pid,g_packget_grp)){//é¥æ§å™¨çš„IDåŠç»„åˆ«æ˜¯å¦åŒ¹é…ï¼Œè‹¥åŒ¹é…ï¼Œåˆ™æ‰§è¡Œå‘½ä»¤
 				if(g_packget_cmd!=CMD_SET_LUMI_CHROMA){
-					led_event_proc_func(g_packget_cmd);//Ö´ĞĞÃüÁî
+					led_event_proc_func(g_packget_cmd);//æ‰§è¡Œå‘½ä»¤
 				}else{
-					led_set_lumi_chrome_func(g_packget_lumi,g_packget_chrome);//ÉèÖÃÉ«ÎÂÖµ
+					led_set_lumi_chrome_func(g_packget_lumi,g_packget_chrome);//è®¾ç½®è‰²æ¸©å€¼
 				}
 			}
 		}
@@ -97,9 +121,9 @@ void sys_status_process(void)
 }
 
 /***********************************************************
- * å‡½æ•°åŠŸèƒ½ï¼šç³»ç»ŸçŠ¶æ€æ£€æµ‹
- * å‚       æ•°ï¼š
- * è¿” å›  å€¼ï¼š
+ * é‘èŠ¥æšŸé”ç†»å…˜é”›æ°±éƒ´ç¼ç†ºå§¸é¬ä½¹î—…å¨´
+ * é™       éå¸®ç´°
+ * æ© é¥  éŠç¡·ç´°
  **********************************************************/
 void sys_status_check_func(void)
 {
@@ -109,8 +133,8 @@ void sys_status_check_func(void)
 			LOG_PRINTF("PAIRRING_STATE 6s timeout to NORMAL_STATE\n");
 		}
 	}else if(g_state==CLEARCODE_STATE){//??????????
-		if(clock_time_exceed(sys_run_tick,1000000)){//????????????????1s??????????¦Ï????
-			if(led_on_cnt==1){//????1?¦Ï????????????????
+		if(clock_time_exceed(sys_run_tick,1000000)){//????????????????1s??????????Î¿????
+			if(led_on_cnt==1){//????1?Î¿????????????????
 				led_flash_updata(3);//???3??
 				pair_id_save_func();//???????
 

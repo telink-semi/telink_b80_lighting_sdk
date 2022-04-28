@@ -1,3 +1,27 @@
+/********************************************************************************************************
+ * @file	light_interrupt.c
+ *
+ * @brief	This is the source file for b80
+ *
+ * @author	sw part II and group III
+ * @date	2021
+ *
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ *          All rights reserved.
+ *
+ *          Licensed under the Apache License, Version 2.0 (the "License");
+ *          you may not use this file except in compliance with the License.
+ *          You may obtain a copy of the License at
+ *
+ *              http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *          Unless required by applicable law or agreed to in writing, software
+ *          distributed under the License is distributed on an "AS IS" BASIS,
+ *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *          See the License for the specific language governing permissions and
+ *          limitations under the License.
+ *
+ *******************************************************************************************************/
 //#include "../../common.h"
 #include"driver.h"
 #include "frame.h"
@@ -10,7 +34,7 @@ int					blt_rx_wptr = 0;
 _attribute_ram_code_sec_ void light_irq_handler(void)
 {
 
-	if(rf_irq_src_get() & FLD_RF_IRQ_RX){               //æŽ¥æ”¶ä¸­æ–­ï¼Œæ¯æŽ¥åˆ°æ•°æ®è¯¥æ ‡å¿—éƒ½ç½®1ï¼Œä¸ç®¡æ•°æ®æ­£ç¡®ä¸Žå¦
+	if(rf_irq_src_get() & FLD_RF_IRQ_RX){               //éŽºãƒ¦æ•¹æ¶“î…ŸæŸ‡é”›å±¾ç˜¡éŽºãƒ¥åŸŒéç‰ˆåµç’‡ãƒ¦çˆ£è¹‡æ¥…å…˜ç¼ƒ1é”›å±¼ç¬‰ç» â„ƒæšŸéŽ¹î†½î„œçº­î†»ç¬Œéš
 		unsigned char * raw_pkt = (unsigned char *) (g_rx_packet + blt_rx_wptr * RX_PACKGET_SIZE);
 		blt_rx_wptr = (blt_rx_wptr + 1) & 3;
 		unsigned short next_pkt_addr;
@@ -20,21 +44,21 @@ _attribute_ram_code_sec_ void light_irq_handler(void)
 		
 		//LOG_PRINTF("irq_handler rf_rx\n");
 		
-		unsigned char *p=raw_pkt;			 //½ÓÊÕ»º´æµÄÖ¸ÕëµØÖ·
+		unsigned char *p=raw_pkt;			 //æŽ¥æ”¶ç¼“å­˜çš„æŒ‡é’ˆåœ°å€
 
-		if(RF_NRF_SB_PACKET_CRC_OK(p)){ 						 //Ð£Ñé½ÓÊÕ°ü
+		if(RF_NRF_SB_PACKET_CRC_OK(p)){ 						 //æ ¡éªŒæŽ¥æ”¶åŒ…
 			//LOG_PRINTF("rf check success\n");
 			rf_packet_led_remote_t *pkt=(rf_packet_led_remote_t *)(p);
-			if(pkt->vid==REMOTE_VID){//Æ¥Åä²úÆ·ID
+			if(pkt->vid==REMOTE_VID){//åŒ¹é…äº§å“ID
 				g_package_new=1;
-				g_package_cmd=pkt->control_key>>4;		  //°üµÄÃüÁîÖµ
-				g_package_pid=pkt->pid; 				  //Ò£¿ØÆ÷ID
-				g_package_seq=pkt->rf_seq_no;				//°üµÄÐòÁÐºÅ
-				if(g_package_cmd==CMD_SET_RGB_CMD){ 	  //Èç¹ûÊÇÉèÖÃRGBÁÁ¶ÈÃüÁî£¬Ôòvalue[3]·Ö±ðÊÇRGBµÄÁÁ¶ÈÖµ
+				g_package_cmd=pkt->control_key>>4;		  //åŒ…çš„å‘½ä»¤å€¼
+				g_package_pid=pkt->pid; 				  //é¥æŽ§å™¨ID
+				g_package_seq=pkt->rf_seq_no;				//åŒ…çš„åºåˆ—å·
+				if(g_package_cmd==CMD_SET_RGB_CMD){ 	  //å¦‚æžœæ˜¯è®¾ç½®RGBäº®åº¦å‘½ä»¤ï¼Œåˆ™value[3]åˆ†åˆ«æ˜¯RGBçš„äº®åº¦å€¼
 					g_package_red=pkt->value[0];
 					g_package_green=pkt->value[1];
 					g_package_blue=pkt->value[2];
-				}else{									  //Èç¹ûÊÇÉèÖÃÉ«ÎÂµÆµÄÁÁ¶È¼°É«ÎÂÖµ£¬Ôòvalue[0]¡¢value[1]·Ö±ð±íÊ¾ÁÁ¶È¡¢É«ÎÂÖµ£¬ÆäËüÃüÁîÖµºöÂÔÕâ¸öÊý×é
+				}else{									  //å¦‚æžœæ˜¯è®¾ç½®è‰²æ¸©ç¯çš„äº®åº¦åŠè‰²æ¸©å€¼ï¼Œåˆ™value[0]ã€value[1]åˆ†åˆ«è¡¨ç¤ºäº®åº¦ã€è‰²æ¸©å€¼ï¼Œå…¶å®ƒå‘½ä»¤å€¼å¿½ç•¥è¿™ä¸ªæ•°ç»„
 					g_package_lumi=pkt->value[0];
 					g_package_chroma=pkt->value[1];
 				}
@@ -52,27 +76,27 @@ _attribute_ram_code_sec_ void light_irq_handler(void)
 	
 //	unsigned short src=rf_irq_src_get();
 //	unsigned char index;
-//	if(src&FLD_RF_IRQ_RX&reg_rf_irq_mask){                //½ÓÊÕÖÐ¶Ï£¬Ã¿½Óµ½Êý¾Ý¸Ã±êÖ¾¶¼ÖÃ1£¬²»¹ÜÊý¾ÝÕýÈ·Óë·ñ
+//	if(src&FLD_RF_IRQ_RX&reg_rf_irq_mask){                //æŽ¥æ”¶ä¸­æ–­ï¼Œæ¯æŽ¥åˆ°æ•°æ®è¯¥æ ‡å¿—éƒ½ç½®1ï¼Œä¸ç®¡æ•°æ®æ­£ç¡®ä¸Žå¦
 //		irq_rx++;
 //		//LOG_PRINTF("irq_handler rf_rx\n");
 //		rf_irq_clr_src(FLD_RF_IRQ_RX);
-//		index=rf_rx_buffer_get()&1;                       //¶ÁÈ¡»º´æµÄÎ»ÖÃ
-//		unsigned char *p=g_rx_packet+index*RX_PACKGET_SIZE;            //½ÓÊÕ»º´æµÄÖ¸ÕëµØÖ·
+//		index=rf_rx_buffer_get()&1;                       //è¯»å–ç¼“å­˜çš„ä½ç½®
+//		unsigned char *p=g_rx_packet+index*RX_PACKGET_SIZE;            //æŽ¥æ”¶ç¼“å­˜çš„æŒ‡é’ˆåœ°å€
 //		//LOG_HEXDUMP(p,RX_PACKAGE_SIZE);
 
-//		if(RF_NRF_SB_PACKET_CRC_OK(p)){                          //Ð£Ñé½ÓÊÕ°ü
+//		if(RF_NRF_SB_PACKET_CRC_OK(p)){                          //æ ¡éªŒæŽ¥æ”¶åŒ…
 //			//LOG_PRINTF("rf check success\n");
 //			rf_packet_led_remote_t *pkt=(rf_packet_led_remote_t *)(p);
-//			if(pkt->vid==REMOTE_VID){//Æ¥Åä²úÆ·ID
+//			if(pkt->vid==REMOTE_VID){//åŒ¹é…äº§å“ID
 //				g_package_new=1;
-//				g_package_cmd=pkt->control_key>>4;        //°üµÄÃüÁîÖµ
-//				g_package_pid=pkt->pid;                   //Ò£¿ØÆ÷ID
-//				g_package_seq=pkt->rf_seq_no;               //°üµÄÐòÁÐºÅ
-//				if(g_package_cmd==CMD_SET_RGB_CMD){       //Èç¹ûÊÇÉèÖÃRGBÁÁ¶ÈÃüÁî£¬Ôòvalue[3]·Ö±ðÊÇRGBµÄÁÁ¶ÈÖµ
+//				g_package_cmd=pkt->control_key>>4;        //åŒ…çš„å‘½ä»¤å€¼
+//				g_package_pid=pkt->pid;                   //é¥æŽ§å™¨ID
+//				g_package_seq=pkt->rf_seq_no;               //åŒ…çš„åºåˆ—å·
+//				if(g_package_cmd==CMD_SET_RGB_CMD){       //å¦‚æžœæ˜¯è®¾ç½®RGBäº®åº¦å‘½ä»¤ï¼Œåˆ™value[3]åˆ†åˆ«æ˜¯RGBçš„äº®åº¦å€¼
 //					g_package_red=pkt->value[0];
 //					g_package_green=pkt->value[1];
 //					g_package_blue=pkt->value[2];
-//				}else{                                    //Èç¹ûÊÇÉèÖÃÉ«ÎÂµÆµÄÁÁ¶È¼°É«ÎÂÖµ£¬Ôòvalue[0]¡¢value[1]·Ö±ð±íÊ¾ÁÁ¶È¡¢É«ÎÂÖµ£¬ÆäËüÃüÁîÖµºöÂÔÕâ¸öÊý×é
+//				}else{                                    //å¦‚æžœæ˜¯è®¾ç½®è‰²æ¸©ç¯çš„äº®åº¦åŠè‰²æ¸©å€¼ï¼Œåˆ™value[0]ã€value[1]åˆ†åˆ«è¡¨ç¤ºäº®åº¦ã€è‰²æ¸©å€¼ï¼Œå…¶å®ƒå‘½ä»¤å€¼å¿½ç•¥è¿™ä¸ªæ•°ç»„
 //					g_package_lumi=pkt->value[0];
 //					g_package_chroma=pkt->value[1];
 //				}
