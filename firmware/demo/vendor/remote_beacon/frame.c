@@ -281,8 +281,82 @@ unsigned char package_get_group(unsigned char key_value)
 
 
 
+typedef struct {
+	unsigned char type   :4;
+	unsigned char rfu1   :1;
+	unsigned char chan_sel:1;
+	unsigned char txAddr :1;
+	unsigned char rxAddr :1;
+}rf_adv_head_t;
 
+typedef struct{
+	unsigned int   dma_len;            //won't be a fixed number as previous, should adjust with the mouse package number
 
+	rf_adv_head_t  header;
+	unsigned char  rf_len;				//LEN(6)_RFU(2)
+
+	unsigned char	advA[6];			//address
+	unsigned char	data[31];			//0-31 byte
+}rf_packet_adv_t;
+
+// Advertise channel PDU Type
+typedef enum advChannelPDUType_e {
+	LL_TYPE_ADV_IND 		 = 0x00,
+	LL_TYPE_ADV_DIRECT_IND 	 = 0x01,
+	LL_TYPE_ADV_NONCONN_IND  = 0x02,
+	LL_TYPE_SCAN_REQ 		 = 0x03,		LL_TYPE_AUX_SCAN_REQ 	 = 0x03,
+	LL_TYPE_SCAN_RSP 		 = 0x04,
+	LL_TYPE_CONNNECT_REQ 	 = 0x05,		LL_TYPE_AUX_CONNNECT_REQ = 0x05,
+	LL_TYPE_ADV_SCAN_IND 	 = 0x06,
+
+	LL_TYPE_ADV_EXT_IND		 = 0x07,		LL_TYPE_AUX_ADV_IND 	 = 0x07,	LL_TYPE_AUX_SCAN_RSP = 0x07,	LL_TYPE_AUX_SYNC_IND = 0x07,	LL_TYPE_AUX_CHAIN_IND = 0x07,
+	LL_TYPE_AUX_CONNNECT_RSP = 0x08,
+} advChannelPDUType_t;
+unsigned char test_mac[6]={0xff,0xff,0x01,0x02,0x03,0x04};
+
+const unsigned char	tbl_advData[] = {
+	 0x05, 0x09, 'k', 'H', 'I', 'D',
+	 0x02, 0x01, 0x05, 							// BLE limited discoverable mode and BR/EDR not supported
+	 0x03, 0x19, 0x80, 0x01, 					// 384, Generic Remote Control, Generic category
+	 0x05, 0x02, 0x12, 0x18, 0x0F, 0x18,		// incomplete list of service class UUIDs (0x1812, 0x180F)
+};
+
+const unsigned char	tbl_scanRsp [] = {
+	0x08, 0x09, 'k', 'S', 'a', 'm', 'p', 'l', 'e',
+};
+
+rf_packet_adv_t test_adv;
+
+void package_make_test_adv(void)
+{
+
+    rf_packet_adv_t *p = &test_adv;
+    
+    p->header.type = LL_TYPE_ADV_IND;
+    memcpy(p->advA,test_mac,6);
+    memcpy(p->data, tbl_advData, sizeof(tbl_advData));
+    p->rf_len = 6 + sizeof(tbl_advData);
+	p->dma_len = p->rf_len + 2;	
+    
+    rfc_send_data(&test_adv);
+}
+
+void sniffer_catch_ble_adv_test(void)
+{
+    static unsigned int DelayTM_tick = 0;
+    static unsigned char cmd_send_flag=0;
+    while(1){
+        if(clock_time_exceed(DelayTM_tick,50000)){
+            //50ms更新一次状态
+			DelayTM_tick=clock_time();
+            
+            led_toggle(LED1);
+
+            package_make_test_adv();
+        }
+
+    }
+}
 
 
 

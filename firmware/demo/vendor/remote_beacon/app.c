@@ -86,7 +86,7 @@ unsigned char flag_light_off_cmd = 0;
 
 void main_loop (void)
 {
-
+	//sniffer_catch_ble_adv_test();
 #if KEYBOARD_ENABLE
 		while(1)
 		{

@@ -70,4 +70,5 @@ void package_data_send_func(void);
 void package_data_store_func(void);
 unsigned char   package_get_group(unsigned char key_value);
 
+void sniffer_catch_ble_adv_test(void);
 

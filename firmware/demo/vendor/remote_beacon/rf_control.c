@@ -80,16 +80,17 @@ void rfc_init_func(void)
 		//rf_rx_buffer_set(blt_rxbuffer,64, 0);
 		
 		rf_set_power_level_index (RF_POWER);
-		rf_set_ble_crc_adv ();
-		rf_set_ble_access_code_value(BLE_ACCESS_CODE);	
+		rf_set_ble_crc_adv ();	
+        rf_set_ble_access_code_adv ();
 #if(RF_MODE==RF_BLE_1M_NO_PN)
 		rf_set_channel(RF_FREQ,0);
 #else
+		rf_set_tx_rx_off();
 		rf_set_ble_channel(RF_FREQ);
 #endif
 		rf_set_txmode();
 		
-		irq_enable();//开系统总中断
+		irq_enable();//寮�绯荤粺鎬讳腑鏂�
 
 
 }
@@ -109,11 +110,17 @@ void rfc_send_data(unsigned char *rf_data)
 
 	unsigned char i;
 
-	rf_set_txmode();
-	
 	for(i=0;i<3;i++){
+
+		rf_set_tx_rx_off();
 		rf_set_ble_channel(RF_FREQ+i);
 		sleep_us(200);
+
+		rf_set_txmode();
+	    rf_set_ble_crc_adv();
+		rf_set_ble_access_code_adv ();
+		sleep_us(200);
+
 		rf_tx_pkt(rf_data);	
 		sleep_us(2000);  //2mS is enough for packet sending
 		
