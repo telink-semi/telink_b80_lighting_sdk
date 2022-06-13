@@ -106,11 +106,12 @@ void rfc_init_func(void)
  **********************************************************/
 void rfc_change_channel_func(void)
 {
-	static unsigned char Channel_index;
-	rf_set_tx_rx_off();
+	static unsigned char Channel_index;	
 	Channel_index++;
 	if(Channel_index > 2)
 		Channel_index = 0;
+    
+    rf_set_tx_rx_off();
 	rf_set_ble_channel(RF_FREQ + Channel_index);
 	sleep_us(200);
 	rf_set_rxmode ();
@@ -130,13 +131,20 @@ void rfc_send_relay_pkt(void)
 
 		unsigned char i;
 		for(i=0;i<3;i++){	
-			rf_set_tx_rx_off();
-			rf_set_ble_channel(RF_FREQ+i);
-			rf_set_txmode();
-			sleep_ms(1);
-			rf_tx_pkt((void *)&g_relay_pkt);	
-			while(!rf_tx_finish());
-			rf_tx_finish_clear_flag();
+            rf_set_tx_rx_off();
+    		rf_set_ble_channel(RF_FREQ+i);
+    		sleep_us(200);
+
+    		rf_set_txmode();
+    	    rf_set_ble_crc_adv();
+    		rf_set_ble_access_code_adv ();
+    		sleep_us(200);
+
+    		rf_tx_pkt((void *)&g_relay_pkt);	
+    		sleep_us(200);  //2mS is enough for packet sending
+    		
+    		while(!rf_tx_finish());
+    		rf_tx_finish_clear_flag();
 		}
 		rfc_change_channel_func();
 
