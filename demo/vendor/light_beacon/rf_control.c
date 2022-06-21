@@ -115,6 +115,7 @@ void rfc_change_channel_func(void)
 	rf_set_ble_channel(RF_FREQ + Channel_index);
 	sleep_us(200);
 	rf_set_rxmode ();
+    sleep_us(200);
 
 }
 /***********************************************************

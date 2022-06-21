@@ -68,9 +68,9 @@ void rfc_reg_init(void)
 
 }
 
-
 void rfc_init_func(void)
 {
+	rfc_reg_init();
 
 	rf_set_power_level_index (RF_POWER);
 	rf_set_tx_rx_off();
@@ -115,9 +115,14 @@ void rfc_send_data(unsigned char *rf_data)
 {
 	unsigned char i;
 	for(i=0;i<4;i++){
-		rf_set_channel(rf_channel[i],0);
-		sleep_ms(1);
-		rf_tx_pkt(rf_data);	
+        rf_set_tx_rx_off();
+        rf_set_channel(rf_channel[i],0);
+        sleep_us(200);
+        
+        rf_set_txmode();
+        sleep_us(200);
+
+        rf_tx_pkt(rf_data);	
 		while(!rf_tx_finish());
 		rf_tx_finish_clear_flag();
 	}

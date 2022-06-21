@@ -122,7 +122,7 @@ void rfc_send_data(unsigned char *rf_data)
 		sleep_us(200);
 
 		rf_tx_pkt(rf_data);	
-		sleep_us(2000);  //2mS is enough for packet sending
+		sleep_us(200);  //2mS is enough for packet sending
 		
 		while(!rf_tx_finish());
 		rf_tx_finish_clear_flag();

@@ -70,10 +70,11 @@ void rfc_reg_init(void)
 
 }
 
-
-
-
-
+/***********************************************************
+ * 函数功能：RF初始化
+ * 参       数：
+ * 返 回  值：
+ **********************************************************/
 void rfc_init_func(void)
 {
 	rfc_reg_init();
@@ -118,7 +119,11 @@ void rfc_change_channel_func(void)
 	static unsigned char Channel_index;
 	Channel_index++;
 	Channel_index&=3;
+    rf_set_tx_rx_off();
 	rf_set_channel(rf_channel[Channel_index],0);
+    sleep_us(200);
+    
 	rf_set_rxmode ();
+    sleep_us(200);
 }
 

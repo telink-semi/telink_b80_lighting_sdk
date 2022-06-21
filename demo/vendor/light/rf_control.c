@@ -118,8 +118,12 @@ void rfc_change_channel_func(void)
 	static unsigned char Channel_index;
 	Channel_index++;
 	Channel_index&=3;
+    rf_set_tx_rx_off();
 	rf_set_channel(rf_channel[Channel_index],0);
+    sleep_us(200);
+    
 	rf_set_rxmode ();
+    sleep_us(200);
 }
 /***********************************************************
  * 函数功能：转发中继数据包
@@ -134,13 +138,17 @@ void rfc_send_relay_pkt(void)
 		g_relay_pkt.ttl -= 1;
 
 		unsigned char i;
-		for(i=0;i<4;i++){			
-			rf_set_channel(rf_channel[i],0);
-			rf_set_txmode();
-			sleep_ms(1);
-			rf_tx_pkt((void *)&g_relay_pkt);	
-			while(!rf_tx_finish());
-			rf_tx_finish_clear_flag();
+		for(i=0;i<4;i++){	
+            rf_set_tx_rx_off();
+            rf_set_channel(rf_channel[i],0);
+            sleep_us(200);
+            
+            rf_set_txmode();
+            sleep_us(200);
+
+            rf_tx_pkt((void *)&g_relay_pkt);	
+    		while(!rf_tx_finish());
+    		rf_tx_finish_clear_flag();
 		}
 		rfc_change_channel_func();
 
