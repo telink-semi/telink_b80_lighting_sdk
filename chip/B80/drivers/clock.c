@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	clock.c
  *
- * @brief	This is the source file for b89
+ * @brief	This is the source file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,10 @@
 #include "analog.h"
 #include "timer.h"
 #include "lib/include/pm.h"
-#include "otp.h"
+#include "lib/include/otp/otp.h"
+#include "compiler.h"
+
+
 
 extern _attribute_data_retention_ unsigned char tl_24mrc_cal;
 
@@ -232,35 +235,24 @@ void rc_32k_cal (void)
 	analog_write(0x30, 0x20);//manual on
 }
 
-/**
- * @brief     This function performs to select 32K as source of DMIC.
- * @param[in] source clock to provide DMIC.
- * @return    none.
- */
-void dmic_prob_32k(unsigned char src)
-{
-	analog_write(0x2d, (analog_read(0x2d) & 0x7f));	  		//32k clk select
-
-	write_reg8(0x75, read_reg8(0x75) | BIT(0));				//probe_clk_sel,
-											   	   	   	    //0:clk_7816,  1:clk32k,   2:clk_sys,      3:rc24m
-											   	   	   	   	//4:xtl24m,    5:clkpll,   6:clk_stimer,   7:clk_usbphy
-	write_reg8(0x506, (read_reg8(0x506) & ~(BIT(0))));  	//pa_io[0]=0
-	write_reg8(0x548, (read_reg8(0x548) & 0xc0) | 0x15);	//mux sel clk7816
-}
 
 /**
- * @brief     This function performs to select 24M/2 RC as source of DMIC.
- * @param[in] source clock to provide DMIC.
+ * @brief     This function performs to probe clock to IO.
+ * @param[in] src - the clock source which you want to probe.
+ * @param[in] pin - the pin to probe clock.exclude PA[1]/PA[2]/PA[3]/B[0]/B[1]/B[3]/PD[4]/PE[3:0]/PF[1:0]
  * @return    none.
  */
-void dmic_prob_24M_rc()
+void clock_prob(prob_clock_src_e src, GPIO_PinTypeDef pin)
 {
+	if(PROB_CLK_32K == src)
+	{
+		analog_write(0x2d, (analog_read(0x2d) & 0x7f) | (blt_miscParam.pad32k_en << 7));
+	}
 
-	write_reg8(0x75, read_reg8(0x75) | BIT_RNG(0,1));   //probe_clk_sel,
-												  	    //0:clk_7816,  1:clk32k,   2:clk_sys,      3:rc24m
+	write_reg8(0x75, ((read_reg8(0x75) & 0xf8) | src));	//0:clk_7816,  1:clk32k,   2:clk_sys,      3:rc24m
 												  	    //4:xtl24m,    5:clkpll,   6:clk_stimer,   7:clk_usbphy
-	write_reg8(0x506, (read_reg8(0x506) & ~(BIT(0))));  	//pa_io[0]=0
-	write_reg8(0x548, (read_reg8(0x548) & 0xc0) | 0x15);	//mux sel clk7816
+	BM_CLR(reg_gpio_func(pin), (pin&0xff));
+	reg_gpio_func_mux(pin) = ((reg_gpio_func_mux(pin) & 0xc0) | 0x15);
 
 }
 

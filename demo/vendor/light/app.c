@@ -1,10 +1,10 @@
 /********************************************************************************************************
  * @file	app.c
  *
- * @brief	This is the source file for b85m
+ * @brief	This is the source file for B85m
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2018
  *
  * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
@@ -50,8 +50,6 @@
 
 
 #elif(RF_AUTO_MODE == MANUAL)
-
-
 void user_init()
 {
 #if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)

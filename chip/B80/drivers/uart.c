@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	uart.c
  *
- * @brief	This is the source file for b80
+ * @brief	This is the source file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -571,6 +571,25 @@ void uart_set_cts(unsigned char Enable, unsigned char Select,GPIO_PinTypeDef pin
 }
 
 
+/**
+ * @brief      This function selects  pin for spi master or slave mode.
+ * @param[in]  pin  - the selected pin.
+ * @return     none
+ */
+void uart_set_pin_mux(GPIO_PinTypeDef pin,gpio_func_e function)
+{
+	if (pin != 0)
+	{
+		 //When the pad is configured with mux input and a pull-up resistor is required, gpio_input_en needs to be placed before gpio_function_dis,
+		 //otherwise first set gpio_input_disable and then call the mux function interface,the mux pad will may misread the short low-level timing.confirmed by minghai.20210709.
+		gpio_set_input_en(pin, 1);
+		//note: pullup setting must before uart gpio config, cause it will lead to ERR data to uart RX buffer(confirmed by sihui&sunpeng)
+		//PM_PIN_PULLUP_1M   PM_PIN_PULLUP_10K
+		gpio_setup_up_down_resistor(pin, PM_PIN_PULLUP_10K);  //must, for stability and prevent from current leakage
+		gpio_set_func( pin, function);
+	}
+}
+
 
 /**
 * @brief      This function serves to select pin for UART module.
@@ -580,17 +599,8 @@ void uart_set_cts(unsigned char Enable, unsigned char Select,GPIO_PinTypeDef pin
 */
 void uart_gpio_set(GPIO_PinTypeDef tx_pin,GPIO_PinTypeDef rx_pin)
 {
-	 //When the pad is configured with mux input and a pull-up resistor is required, gpio_input_en needs to be placed before gpio_function_dis,
-	 //otherwise first set gpio_input_disable and then call the mux function interface,the mux pad will may misread the short low-level timing.confirmed by minghai.20210709.
-	gpio_set_input_en(tx_pin, 1);
-	gpio_set_input_en(rx_pin, 1);
-	//note: pullup setting must before uart gpio config, cause it will lead to ERR data to uart RX buffer(confirmed by sihui&sunpeng)
-	//PM_PIN_PULLUP_1M   PM_PIN_PULLUP_10K
-	gpio_setup_up_down_resistor(tx_pin, PM_PIN_PULLUP_10K);  //must, for stability and prevent from current leakage
-	gpio_setup_up_down_resistor(rx_pin, PM_PIN_PULLUP_10K);  //must  for stability and prevent from current leakage
-	gpio_set_func(tx_pin,UART_TX);
-	gpio_set_func(rx_pin,UART_RX_I);
-
+	uart_set_pin_mux(tx_pin,(tx_pin != GPIO_PA2) ? UART_TX:1);
+	uart_set_pin_mux(rx_pin,(rx_pin != GPIO_PA1) ? UART_RX_I:1);
 }
 /**
  * @brief   This function enables the irq when UART module receives error data.

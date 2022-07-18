@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	printf.c
  *
- * @brief	This is the source file for b80
+ * @brief	This is the source file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -175,18 +175,29 @@ void tl_putnumber(char **out, unsigned int w,int len) {
  * @param[in]  w  -  a integer need to print
  * @return     none.
  */
-void tl_putint(char **out, unsigned int w)
+void tl_putint(char **out, int w)
 {
 	unsigned char buf[12],tmp,*p;
 	int u;
 	p = buf + 11;
 	*p = '\0';
-	u = w;
+	if(w < 0)
+	{
+		u = -w;
+	}
+	else
+	{
+		u = w;
+	}
 	do{ // at least one time..
         tmp = u % 10;
 		*--p = tmp + '0';
 		u /= 10;
 	}while(u);
+	if (w < 0)
+	{
+		*--p = '-';
+	}
 	while(*p){
         tl_putchar(out, *p);
         p++;

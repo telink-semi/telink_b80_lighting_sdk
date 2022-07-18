@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	bsp.h
  *
- * @brief	This is the header file for b89
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,17 +101,17 @@
 */
 #define REG_BASE_ADDR			0x800000
 
-#define REG_ADDR8(a)			(*(volatile unsigned char*) (REG_BASE_ADDR + (a)))
-#define REG_ADDR16(a)			(*(volatile unsigned short*)(REG_BASE_ADDR + (a)))
-#define REG_ADDR32(a)			(*(volatile unsigned long*) (REG_BASE_ADDR + (a)))
+#define REG_ADDR8(a)			(*(volatile unsigned char*) (REG_BASE_ADDR | (a)))
+#define REG_ADDR16(a)			(*(volatile unsigned short*)(REG_BASE_ADDR | (a)))
+#define REG_ADDR32(a)			(*(volatile unsigned long*) (REG_BASE_ADDR | (a)))
 
-#define write_reg8(addr,v)		(*(volatile unsigned char*)  (REG_BASE_ADDR + (addr)) = (unsigned char)(v))
-#define write_reg16(addr,v)		(*(volatile unsigned short*) (REG_BASE_ADDR + (addr)) = (unsigned short)(v))
-#define write_reg32(addr,v)		(*(volatile unsigned long*)  (REG_BASE_ADDR + (addr)) = (v))
+#define write_reg8(addr,v)		(*(volatile unsigned char*)  (REG_BASE_ADDR | (addr)) = (unsigned char)(v))
+#define write_reg16(addr,v)		(*(volatile unsigned short*) (REG_BASE_ADDR | (addr)) = (unsigned short)(v))
+#define write_reg32(addr,v)		(*(volatile unsigned long*)  (REG_BASE_ADDR | (addr)) = (v))
 
-#define read_reg8(addr)			(*(volatile unsigned char*) (REG_BASE_ADDR + (addr)))
-#define read_reg16(addr)		(*(volatile unsigned short*)(REG_BASE_ADDR + (addr)))
-#define read_reg32(addr)		(*(volatile unsigned long*) (REG_BASE_ADDR + (addr)))
+#define read_reg8(addr)			(*(volatile unsigned char*) (REG_BASE_ADDR | (addr)))
+#define read_reg16(addr)		(*(volatile unsigned short*)(REG_BASE_ADDR | (addr)))
+#define read_reg32(addr)		(*(volatile unsigned long*) (REG_BASE_ADDR | (addr)))
 
 #define WRITE_REG8				write_reg8
 #define WRITE_REG16				write_reg16

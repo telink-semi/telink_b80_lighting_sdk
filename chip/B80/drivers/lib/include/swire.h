@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	swire.h
  *
- * @brief	This is the header file for b80
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
  * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");

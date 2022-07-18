@@ -1,10 +1,10 @@
 /********************************************************************************************************
  * @file	types.h
  *
- * @brief	This is the header file for b85m
+ * @brief	This is the header file for B85m
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2018
  *
  * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
@@ -50,11 +50,6 @@ typedef unsigned short uint16_t;
 typedef signed int	int32_t;
 typedef unsigned int uint32_t;
 
-typedef struct
-{
-	unsigned int high;
-	unsigned int low;
-}double_uint32_t;
 #ifdef __GNUC__
 typedef	u16	wchar_t;
 #endif

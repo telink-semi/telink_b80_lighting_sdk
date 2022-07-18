@@ -1,10 +1,10 @@
 /********************************************************************************************************
  * @file	app_config.h
  *
- * @brief	This is the header file for b85m
+ * @brief	This is the header file for B85m
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2018
  *
  * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
@@ -44,11 +44,8 @@ extern "C" {
 #define LED_G     		        GPIO_PD6
 #define LED_B     		        GPIO_PD3
 #endif
-#define LED3     		        GPIO_PD2
-#define LED4     		        GPIO_PD3
-#define LED5     		        GPIO_PD4
-#define LED6     		        GPIO_PD5
-
+#define LED3     		        GPIO_PB5
+#define LED4     		        GPIO_PB6
 #define STORAGE_TYPE_NONE       0 //not store data
 #define STORAGE_TYPE_EEPROM     1 //store data in eeprom
 #define STORAGE_TYPE_FLASH      2 //store data in flash

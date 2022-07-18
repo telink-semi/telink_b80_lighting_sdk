@@ -26,7 +26,7 @@
 #include "driver.h"
 #include "frame.h"
 #include "pairing_op.h"
-#include "../common/B80/light_common/light_ctr_store.h"
+#include "light_ctr_store.h"
 
 /***********************************************************
  * 函数功能：ID及组别查询匹配

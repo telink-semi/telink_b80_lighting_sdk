@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	watchdog.c
  *
- * @brief	This is the source file for b89
+ * @brief	This is the source file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +25,12 @@
 #include "register.h"
 
 /**
- * @brief     This function set the seconds period.It is likely with WD_SetInterval.
- *            Just this function calculate the value to set the register automatically .
- * @param[in] period_s - The seconds to set. unit is second
+ * @brief     This function set the feed dog capture value (capture_tick), the clock source is the system clock.
+ * 			  When this capture value is reached, the chip will restart. The actual capture value is only high 14Bits will work,
+ * 			  so there will be some deviation from the set value, the deviation can be calculated by the following principle,
+ * 			  the actual capture value is: capture_tick = (period_ms*tick_per_ms) & 0xfff30000.
+ * @param[in] period_ms - feeding period time, the unit is ms
+ * @param[in] tick_per_ms - tick value required for 1ms under system clock timing
  * @return    none
  */
 void wd_set_interval_ms(unsigned int period_ms,unsigned long int tick_per_ms)

@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	timer.h
  *
- * @brief	This is the header file for b80
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -167,6 +167,26 @@ extern void timer_start(TIMER_TypeDef type);
  * @return    none
  */
 extern void timer_stop(TIMER_TypeDef type);
+
+/**
+ * @brief		This function servers to set timer irq mask.
+ * @param[in]	mask - variable of enum to select the timer interrupt status source.
+ * @return		none.
+ */
+static inline void timer_set_irq_mask(tmr_sta_e mask)
+{
+	reg_irq_mask |= mask;
+}
+
+/**
+ * @brief		This function servers to clear timer irq mask.
+ * @param[in]	mask - variable of enum to select the timer interrupt status source.
+ * @return		none.
+ */
+static inline void timer_clr_irq_mask(tmr_sta_e mask)
+{
+	reg_irq_mask &= (~mask);
+}
 
 /**
  * @brief     This fuction servers to clear the timer interrupt status.

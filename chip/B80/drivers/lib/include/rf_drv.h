@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	rf_drv.h
  *
- * @brief	This is the header file for b89
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,12 @@
 #include "compiler.h"
 #include "gpio.h"
 #define RF_CHN_TABLE 		0x8000
+/*
+ * @brief	Due to the limited otp space, this macro definition is used to process the registers
+ * 			of adjacent addresses with write_reg32 and write_reg16 to reduce the space occupation.
+ */
+#define		OTP_SPACE_OPTIMIZATION			1
+
 /*
  *The function set_rf_para be used to deal 24*N(Mhz) sensitivity degradation.
  *but it does not work as we want(it should calibration and reduce 7 code one
@@ -149,22 +155,42 @@ typedef enum {
 
 	 RF_POWER_N30dBm    = 0xff,           /**<-30.0 dbm */
 	 RF_POWER_N50dBm    = BIT(7) | 0,     /**<-50.0 dbm */
+
+ /*-----------------------------For Internal Test only-----------------------------*/
+   /*
+	* Customer attention:
+	*
+	* 	The following settings are for internal testing only, and customers
+	* 	are prohibited from using those settings.
+	*
+	* 	The following energy values are measured under 3.3V power supply
+	* 	voltage.The energy will decrease as the power supply voltage drops.
+	* 	Customers are prohibited from using the following energy settings
+	* 	in product development.
+	*/
+	 RF_VBAT_POWER_P2p45dBm  = 0x15, 		//   2.45 dbm
+	 RF_VBAT_POWER_P0p95dBm  = 0x11, 		//   0.95 dbm
+	 RF_VBAT_POWER_P0p0dBm   = 0x10, 		//   0.00 dbm
+	 RF_VBAT_POWER_N1p35dBm  = 0x0d, 		//   -1.35 dbm
+	 RF_VBAT_POWER_N2p75dBm  = 0x0b, 		//   -2.75 dbm
+	 RF_VBAT_POWER_P4p75dBm  = 0x09, 		//   -4.75 dbm
 } RF_PowerTypeDef;
 
 
 extern const RF_PowerTypeDef rf_power_Level_list[60];
 
 typedef enum {
-	RF_MI_P0p00 = 0,           /**< MI = 0 */
-	RF_MI_P0p32 = 32,		 	/**< MI = 0.32 */
-	RF_MI_P0p50 = 50,		  	/**< MI = 0.5 */
-	RF_MI_P0p60 = 60,		  	/**< MI = 0.6 */
-	RF_MI_P0p70 = 70,		  	/**< MI = 0.7 */
-	RF_MI_P0p80 = 80,		  	/**< MI = 0.8 */
-	RF_MI_P0p90 = 90,		  	/**< MI = 0.9 */
-	RF_MI_P1p20 = 120,		/**< MI = 1.2 */
-	RF_MI_P1p30 = 130,		/**< MI = 1.3 */
-	RF_MI_P1p40 = 140,		/**< MI = 1.4 */
+	RF_MI_P0p00 = 0,        /**< MI = 0 */
+	RF_MI_P0p076 = 76,	    /**< MI = 0.076 This gear is only available in private mode*/
+	RF_MI_P0p32 = 320,		/**< MI = 0.32 */
+	RF_MI_P0p50 = 500,		/**< MI = 0.5 */
+	RF_MI_P0p60 = 600,		/**< MI = 0.6 */
+	RF_MI_P0p70 = 700,		/**< MI = 0.7 */
+	RF_MI_P0p80 = 800,		/**< MI = 0.8 */
+	RF_MI_P0p90 = 900,		/**< MI = 0.9 */
+	RF_MI_P1p20 = 1200,		/**< MI = 1.2 */
+	RF_MI_P1p30 = 1300,		/**< MI = 1.3 */
+	RF_MI_P1p40 = 1400,		/**< MI = 1.4 */
 }RF_MIVauleTypeDef;
 #ifdef		RF_MODE_250K
 #define		RF_FAST_MODE_2M		0

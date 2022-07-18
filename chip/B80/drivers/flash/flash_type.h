@@ -1,7 +1,7 @@
 /********************************************************************************************************
  * @file	flash_type.h
  *
- * @brief	This is the header file for b85m
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
  * @date	2021
@@ -26,7 +26,8 @@
 #define __FLASH_TYPE_H__
 
 #include "flash.h"
-#include "flash_mid136085.h"	// P25D40L
+#include "flash_mid1160c8.h"	// GD25LD10C
+#include "flash_mid1360c8.h"	// GD25LD40C
 
 
 /**

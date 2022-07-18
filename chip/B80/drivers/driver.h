@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	driver.h
  *
- * @brief	This is the header file for b89
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,13 +24,14 @@
  *******************************************************************************************************/
 #pragma once
 
-
+#include "driver_func_cfg.h"
 
 #include "lib/include/emi.h"
 #include "lib/include/pm.h"
 #include "lib/include/random.h"
 #include "lib/include/rf_drv.h"
 #include "lib/include/swire.h"
+#include "lib/include/otp/otp.h"
 
 #include "bsp.h"
 #include "aes.h"
@@ -55,7 +56,6 @@
 #include "timer.h"
 #include "s7816.h"
 #include "printf.h"
-#include "otp.h"
 #include "usbhw.h"
 #include "ir_learn.h"
 #include "qdec.h"

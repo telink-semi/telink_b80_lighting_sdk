@@ -46,7 +46,5 @@
 	#include "../../../light_low_power/app_config.h"
 	#include "../../../light_low_power/frame.h"
 	#include "../../../light_low_power/rf_control.h"
-#else
-	#include "default_config.h"
 #endif
 

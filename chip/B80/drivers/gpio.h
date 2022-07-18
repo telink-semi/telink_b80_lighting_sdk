@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	gpio.h
  *
- * @brief	This is the header file for b80
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,54 +31,59 @@
 
 /*
     gpio lookup table
-    √-support  ×-not support DF- (support and default)
+    -support  -not support DF- (support and default)
  					 PA0 PA1 PA2 PA3 PA4 PA5 PA6 PA7 PB0 PB1 PB2 PB3 PB4 PB5 PB6 PB7 PC0 PC1 PC2 PC3 PC4 PC5 PC6 PC7 PD0 PD1 PD2 PD3 PD4 PD5 PD6 PD7 PE0 PE1 PE2 PE3 PF0 PF1
-    WIFI_DENY_I		  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √   √	  √	  √	  √	  √	  √	  ×	  √   √	  √	  ×   ×	  ×	  ×	  ×	  ×
-	BLE_STATUS		  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √   √	  √	  √	  √   √	  √	  ×	  √   √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	BLE_ACTIVITY      √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √   √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	SPI_CSN           √   ×	  ×	  ×   √   √	  √	  √   DF  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	SPI_CLK			  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  DF  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	SPI_MOSI_IO0	  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×   DF  ×
-	SPI_MISO_IO1	  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  DF
-	SWM				  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	TX_CYC2PA         √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	RX_CYC2LNA        √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	ANT_SEL2          √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	ANT_SEL1          √   ×	  ×	  ×   √	  √   √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	ANT_SEL0          √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	UART_RTX          √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	CLK_7816          √   ×	  ×	  ×   √   √   √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	I2C_SDA           √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	I2C_SCL           √   ×	  ×	  ×   √	  √   √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	UART_RX           √   √	  ×	  ×   √	  √	  √	  √	  ×	  ×   √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	UART_TX           √   ×	  √	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	UART_RTS          √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	UART_CTS          √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM5_N            √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM4_N            √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM3_N            √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM2_N            √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM1_N			  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM0_N			  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM5			  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM4			  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM3			  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM1			  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	PWM0			  √   ×	  ×	  ×   √	  √	  √	  √	  ×	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	DBG				  √   ×	  ×	  ×   √	  √	  √	  √	  √	  ×	  √	  ×	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  ×	  √	  √	  √	  ×	  ×	  ×	  ×	  ×	  ×
-	KEY_SCAN		  √   ×	  ×	  ×   √	  √	  √	  √	  √	  √	  √	  √	  √	  √   √   √   √	  √	  √   √   √   √	  √	  √	  √	  √	  √	  √	  √	  √	  √	  √	  ×	  ×	  ×	  ×	  √	  √
-	DM		  		  ×   DF  ×	  ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   ×   ×   ×	  ×	  ×   ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×
-	DP		  		  ×   ×	  DF  ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   ×   ×   ×	  ×	  ×   ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×
-	SWS		  		  ×   ×	  ×   DF  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   ×   ×   ×	  ×	  ×   ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×
-	SPI_WP_IO2	  	  ×   ×	  ×	  ×   ×	  ×   ×	  ×	  ×	  ×	  ×	  DF  ×   ×   ×   ×   ×	  ×	  ×   ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×
-	SPI_HOLD_IO3	  ×   ×	  ×	  ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   ×   ×   ×	  ×	  ×   ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×   DF  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×
-	MSPI_MOSI		  ×   ×	  ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   ×   ×   ×	  ×	  ×   ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   DF  ×	  ×	  ×	  ×	  ×
-	MSPI_MCLK		  ×   ×	  ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   ×   ×   ×	  ×	  ×   ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  DF  ×	  ×	  ×	  ×
-	MSPI_MSCN		  ×   ×	  ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   ×   ×   ×	  ×	  ×   ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  DF  ×	  ×	  ×
-	MSPI_MISO		  ×   ×	  ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   ×   ×   ×	  ×	  ×   ×   ×   ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×	  ×   DF  ×	  ×
+    WIFI_DENY_I		     	  	     	  	  	  	  	  	  	  	  	           	  	              	  	  	  	  	  	  	     	  	     	  	  	  	  
+	BLE_STATUS		     	  	     	  	  	  	  	  	  	  	  	           	  	              	  	  	     	  	  	     	  	  	  	  	  	  	  
+	BLE_ACTIVITY         	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	     	  	  	  	  	  	  	  
+	SPI_CSN              	  	        	  	     DF  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	SPI_CLK			     	  	     	  	  	  	  	  DF  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	SPI_MOSI_IO0	     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	     DF  
+	SPI_MISO_IO1	     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  DF
+	SWM				     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	TX_CYC2PA            	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	RX_CYC2LNA           	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	ANT_SEL2             	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	ANT_SEL1             	  	     	     	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	ANT_SEL0             	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	UART_RTX             	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	CLK_7816             	  	           	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	I2C_SDA              	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	I2C_SCL              	  	     	     	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	UART_RX              	  	     	  	  	  	  	     	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	UART_TX              	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	UART_RTS             	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	UART_CTS             	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM5_N               	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM4_N               	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM3_N               	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM2_N               	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM1_N			     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM0_N			     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM5			     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM4			     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM3			     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM1			     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	PWM0			     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	DBG				     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	KEY_SCAN		     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	DM		  		     DF  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	DP		  		     	  DF     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	SWS		  		     	     DF  	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	SPI_WP_IO2	  	     	  	     	     	  	  	  	  	  DF              	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  
+	SPI_HOLD_IO3	     	  	     	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	     DF  	  	  	  	  	  	  	  	  
+	MSPI_MOSI		     	        	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	     DF  	  	  	  	  
+	MSPI_MCLK		     	        	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  DF  	  	  	  
+	MSPI_MSCN		     	        	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	  DF  	  	  
+	MSPI_MISO		     	        	  	  	  	  	  	  	  	  	           	  	           	  	  	  	  	  	  	  	  	  	  	  	  	     DF  	  
 */
 /**
  *  @brief  Define GPIO types.
+ * 	@note	the following two point need to noticed when using PB0, PB1, PB3, PD4 and PF0 GPIO ports:
+ *  		1. These pins are not recommend to use as wake-up source;
+ *  		2. Since these pins are output functions by default, even if they are configured with pull-up/pull-down retention,
+ *  		when deep/deep Retention is invoked, they can't maintain high/low level and an abnormal level will occur.
+ *  		Therefore, these pins can't be used in applications where a certain level state needs to be maintained all the time.
  */
 typedef enum{
 		GPIO_GROUPA    = 0x000,
@@ -143,7 +148,16 @@ typedef enum{
 typedef enum{
 	    AS_GPIO 	   =	0xff,
 
-        AS_DEFAULT     =	0,
+		DM 			   = 	0,
+		DP 			   = 	0,
+		SWS 		   = 	0,
+		SPI_WP_IO2 	   = 	0,
+		SPI_HOLD_IO3   = 	0,
+		MSPI_MOSI	   = 	0,
+		MSPI_MCLK 	   = 	0,
+		MSPI_MSCN 	   = 	0,
+		MSPI_MISO	   = 	0,
+
         KSCAN          =	1,
 		DBG            =	2,
 
@@ -189,9 +203,7 @@ typedef enum{
 		BLE_ACTIVITY   =	33,
 		BLE_STATUS     =	34,
 		WIFI_DENY_I    =	35,
-
 }gpio_func_e;
-
 
 typedef enum{
 	Level_Low=0,
@@ -499,6 +511,11 @@ void gpio_set_data_strength(GPIO_PinTypeDef pin, unsigned int value);
  * @param[in] gpio - the pin needs to set its pull-up/down resistor, GPIOE group is not supported
  * @param[in] up_down - the type of the pull-up/down resistor
  * @return    none
+ * @note	* @note	the following two point need to noticed when using PB0, PB1, PB3, PD4 and PF0 GPIO ports:
+ *  		1. These pins are not recommend to use as wake-up source;
+ *  		2. Since these pins are output functions by default, even if they are configured with pull-up/pull-down retention,
+ *  		when deep/deep Retention is invoked, they can't maintain high/low level and an abnormal level will occur.
+ *  		Therefore, these pins can't be used in applications where a certain level state needs to be maintained all the time.
  */
 
 void gpio_setup_up_down_resistor(GPIO_PinTypeDef gpio, GPIO_PullTypeDef up_down);

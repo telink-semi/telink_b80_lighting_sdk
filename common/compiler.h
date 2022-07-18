@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	compiler.h
  *
- * @brief	This is the header file for b89
+ * @brief	This is the header file for B85m
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2022
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,8 @@
 #define	BLC_PM_EN							0
 #endif
 #ifndef	BLC_PM_DEEP_RETENTION_MODE_EN
-#define	BLC_PM_DEEP_RETENTION_MODE_EN		1
+#define	BLC_PM_DEEP_RETENTION_MODE_EN		1/**< 0:only Support sleep modes:suspend/deep */
+											 /**< 1:support all sleep modes:suspend/deep/deep retention */
 #endif
 
 #if (BLC_PM_DEEP_RETENTION_MODE_EN)

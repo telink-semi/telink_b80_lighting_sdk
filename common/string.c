@@ -1,10 +1,10 @@
 /********************************************************************************************************
  * @file	string.c
  *
- * @brief	This is the source file for b85m
+ * @brief	This is the source file for B85m
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2018
  *
  * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
@@ -106,10 +106,12 @@ void * memcpy(void * des_ptr, const void * src_ptr, unsigned int length) {
 void memcpy4(void * d, const void * s, unsigned int length){
 	int* dst = (int*)d;
 	int* src = (int*)s;
-	assert((((int)dst) >> 2) << 2 == ((int)dst));			// address must alighn to 4
-	assert((((int)src) >> 2) << 2 == ((int)src));			// address must alighn to 4
+/*
+	assert((((int)dst) >> 2) << 2 == ((int)dst));			// address must align to 4
+	assert((((int)src) >> 2) << 2 == ((int)src));			// address must align to 4
 	assert((length >> 2) << 2 == length);					// length % 4 == 0
 	assert(( ((char*)dst) + length <= (const char*)src) || (((const char*)src) + length <= (char*)dst));	//  no overlapped
+*/
 	unsigned int len = length >> 2;
 	while(len --){
 		*dst++ = *src++;

@@ -23,7 +23,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildArguments</key>
-					<value></value>
+					<value>-j4</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildCommand</key>
@@ -141,5 +141,21 @@
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/remote_rgb</locationURI>
 		</link>
+		<link>
+			<name>vendor/common/light_common</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/common/B80/light_common</locationURI>
+		</link>
+		<link>
+			<name>vendor/common/remote_common</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/demo/vendor/common/B80/remote_common</locationURI>
+		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>light</name>
+			<value>file:/D:/code/haiwen1/eaglet/eaglet_2.4g_prj/eaglet_demo_2/telink_b85m_driver_sdk_B80_S1/demo/vendor/light</value>
+		</variable>
+	</variableList>
 </projectDescription>

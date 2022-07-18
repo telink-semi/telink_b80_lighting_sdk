@@ -1,10 +1,10 @@
 /********************************************************************************************************
  * @file	string.h
  *
- * @brief	This is the header file for b85m
+ * @brief	This is the header file for B85m
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2018
  *
  * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.

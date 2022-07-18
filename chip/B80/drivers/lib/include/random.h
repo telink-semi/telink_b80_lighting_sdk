@@ -1,7 +1,7 @@
 /********************************************************************************************************
  * @file	random.h
  *
- * @brief	This is the header file for b80
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
  * @date	2021

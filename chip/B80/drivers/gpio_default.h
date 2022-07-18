@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	gpio_default.h
  *
- * @brief	This is the header file for b80
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,10 +33,10 @@
 #define PA0_INPUT_ENABLE	0
 #endif
 #ifndef PA1_INPUT_ENABLE
-#define PA1_INPUT_ENABLE	1   //USB
+#define PA1_INPUT_ENABLE	0   //USB
 #endif
 #ifndef PA2_INPUT_ENABLE
-#define PA2_INPUT_ENABLE	1  //USB
+#define PA2_INPUT_ENABLE	0  //USB
 #endif
 #ifndef PA3_INPUT_ENABLE
 #define PA3_INPUT_ENABLE	1   //SWS
@@ -129,13 +129,13 @@
 #define PA0_FUNC	AS_GPIO
 #endif
 #ifndef PA1_FUNC
-#define PA1_FUNC	AS_DEFAULT
+#define PA1_FUNC	DM
 #endif
 #ifndef PA2_FUNC
-#define PA2_FUNC	AS_DEFAULT
+#define PA2_FUNC	DP
 #endif
 #ifndef PA3_FUNC
-#define PA3_FUNC	AS_DEFAULT
+#define PA3_FUNC	SWS
 #endif
 #ifndef PA4_FUNC
 #define PA4_FUNC	AS_GPIO
@@ -281,7 +281,7 @@
 #define PB2_FUNC	AS_GPIO
 #endif
 #ifndef PB3_FUNC
-#define PB3_FUNC	AS_GPIO
+#define PB3_FUNC	SPI_WP_IO2
 #endif
 #ifndef PB4_FUNC
 #define PB4_FUNC	AS_GPIO
@@ -576,7 +576,7 @@
 #define PD3_FUNC	AS_GPIO
 #endif
 #ifndef PD4_FUNC
-#define PD4_FUNC	AS_GPIO
+#define PD4_FUNC	SPI_HOLD_IO3
 #endif
 #ifndef PD5_FUNC
 #define PD5_FUNC	AS_GPIO
@@ -665,18 +665,17 @@
 #endif
 
 #ifndef PE0_FUNC
-#define PE0_FUNC	AS_DEFAULT
+#define PE0_FUNC	MSPI_MOSI
 #endif
 #ifndef PE1_FUNC
-#define PE1_FUNC	AS_DEFAULT
+#define PE1_FUNC	MSPI_MCLK
 #endif
 #ifndef PE2_FUNC
-#define PE2_FUNC	AS_DEFAULT
+#define PE2_FUNC	MSPI_MSCN
 #endif
 #ifndef PE3_FUNC
-#define PE3_FUNC	AS_DEFAULT
+#define PE3_FUNC	MSPI_MISO
 #endif
-
 
 #ifndef PF0_OUTPUT_ENABLE
 #define PF0_OUTPUT_ENABLE	0

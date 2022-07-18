@@ -1,7 +1,7 @@
 /********************************************************************************************************
  * @file	cstartup_otp.S
  *
- * @brief	This is the boot file for b80
+ * @brief	This is the boot file for B80
  *
  * @author	Driver Group
  * @date	2021
@@ -23,16 +23,33 @@
  *
  *******************************************************************************************************/
 #ifdef MCU_STARTUP_OTP
+#include "compiler.h"
 
-#define SRAM_SIZE_16K_EN		    	    1/*defaut sram size=16k*/
-#define FLASH_CODE_EN						0/*default flash code, run otp code need cahnge to 0.*/
+/**
+ * @brief	If your usage is as follows, you need to set ALL_SRAM_CODE = 1:
+ * 			The program is burned in flash, you want to power up and move all code to sram for execution.
+ * 			Note: Configure the bin file compiled by ALL_SRAM_CODE=1. It is not recommended to use tools to directly download to sram for execution,
+ * 			this method of use may lead to abnormal current and abnormal flash function.
+ */
+#ifndef	ALL_SRAM_CODE
+#define	 ALL_SRAM_CODE					0
+#endif
+
+#if	ALL_SRAM_CODE
+
+#define  FLL_STK_EN           			0
+#define  ZERO_IC_TAG_EN		  			0
+#define  IC_TAG_CACHE_ADDR_EQU_EN    	1
+#define  COPY_DATA_EN					0
+
+#else
 
 #define  FLL_STK_EN           			1
 #define  ZERO_IC_TAG_EN		  			1
-#define  IC_TAG_CACEH_ADDR_EQU_EN    	0
-#define  FLASH_WAKEUP_EN                1
+#define  IC_TAG_CACHE_ADDR_EQU_EN    	0
 #define  COPY_DATA_EN					1
-#define  MULTI_ADDRESS_START			1
+
+#endif
 
 #ifndef __LOAD_RAM_SIZE__
 #define	__LOAD_RAM_SIZE__		0xc
@@ -51,9 +68,15 @@
 	.equ IRQ_MODE, 		0x12	@ Interrupt Request mode
 	.equ SVC_MODE, 		0x13	@ Supervisor mode 
 	.equ IRQ_STK_SIZE,	__IRQ_STK_SIZE__
+#if	ALL_SRAM_CODE
+	.equ __LOAD_FLASH, 	0
+	.equ __LOAD_DUT, 	0
+	.equ __LOAD_RAM, 	1
+#else
 	.equ __LOAD_FLASH, 	1
 	.equ __LOAD_DUT, 	0
 	.equ __LOAD_RAM, 	0
+#endif
 @********************************************************************************************************
 @                                            TC32 EXCEPTION VECTORS
 @********************************************************************************************************
@@ -84,11 +107,10 @@ __start:					@ MUST,  referenced by boot.link
 @	.word	(firmwareVersion)
 	.org 0x8
 	.word	(0x544c4e4b)
-#if FLASH_CODE_EN
-	.word	(0x00880000 + _ramcode_size_div_16_align_256_)
-#else
+	@Boot will write the value here to the digital register 0x602, mainly the difference of 0x602[4],
+	@write 1 to fetch instructions from otp, and write 0 to fetch instructions from flash;
+	@This part of the code will be used in boot and cannot be modified on the application side.
 	.word	(0x00980000 + _ramcode_size_div_16_align_256_)
-#endif
 
 	.org 0x10
 	tj		__irq
@@ -97,6 +119,88 @@ __start:					@ MUST,  referenced by boot.link
 	.extern  main
 
 	.org 0x20
+
+	.global	start_suspend
+	.thumb_func
+	.type	start_suspend, %function
+
+start_suspend:						@ instruction cache address + 0x58: 0x3c16 * 4 = 0xf058
+	tpush   {r2-r3}
+
+    tmovs	r2, #129				@0x81
+    tloadr	r3, __suspend_data      @0x80006f
+    tstorerb	r2, [r3, #0]		@*(volatile unsigned char *)0x80006f = 0x81
+
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+    tmov	r8, r8
+
+    tpop	{r2-r3}
+    tjex	lr
+	.align 4
+__suspend_data:
+	.word   (0x80006f)
 
 __reset:
 
@@ -110,19 +214,6 @@ __reset:
 	tstorerb	r0, [r1, #1]	@0x800583  PB output
 #endif
 
-#if FLASH_CODE_EN
-	@when running the flash program, let the otp enter the deep standby mode to reduce the power consumption of the chip.
-	tloadr		r3, OTP_CTRL	  @0x800010	otp ctrl
-	tloadrb		r1, [r3, #0]
-	tmovs		r0, #253		  @0b 11111101
-	tand		r1, r0
- 	tstorerb	r1, [r3, #0]	  @pce = 0
-
-	tloadrb		r1, [r3, #1]
-	tmovs		r0, #207		  @0b 11001111 mc icct1
-	tand		r1, r0
- 	tstorerb	r1, [r3, #1]	  @pdstb = 0  pldo = 0
-#else
 	/*
 	 * When running the otp program, after the retention sleep wakes up, the otp ack enablement will be lost, causing the program to freeze,
 	 * and you need to re-enable otp ack, add by junhui.hu, confirmed by jianzhi 20211021.
@@ -130,36 +221,7 @@ __reset:
 	tloadr		r1, MC_ICCT1
 	tmovs		r0, #1		  	  @0b 00000001
 	tstorerb	r0, [r1, #0]	  @otp ack = 1
-#endif
 
-#if FLASH_WAKEUP_EN
-
-FLASH_WAKEUP_BEGIN:
-	tloadr      r0,DATA_I+44
-	tmov		r1,#0
-	tstorerb    r1,[r0,#1]
-	tmov        r1,#171						@Flash deep cmd: 0xAB
-	tstorerb    r1,[r0,#0]
-	tmov		r2,#0
-	tmov        r3,#6
-TNOP:
-	tadd        r2,#1
-	tcmp        r2,r3
-	tjle        TNOP
-	tmov		r1,#1
-	tstorerb    r1,[r0,#1]
-FLASH_WAKEUP_END:
-
-#endif
-
-@ efuse load need delay about 18us
-	tmov 	r2,#0
-	tmov 	r3,#110
-EFUSE_DELAY:
-	tadd 	r2,#1
-	tcmp 	r2,r3
-	tjle 	EFUSE_DELAY
-EFUSE_DELAY_END:
 
 @********************************************************************************************************
 @                              		 FILL .DATA AND .BSS WITH 0xFF
@@ -240,6 +302,7 @@ SET_IC_END:
 @********************************************************************************************************
 @                                    DCDC INITIALIZATION FOR FLASH
 @********************************************************************************************************
+#if BLC_PM_DEEP_RETENTION_MODE_EN
 	/*system on*/
 	tloadr      r0,DATA_I+32                @0x00800060
 	tloadr      r1,DATA_I+36                @0xff000000
@@ -273,12 +336,11 @@ RANA_REG_END:
 	tshftr		r2,r2,#31
 	tcmp        r2,#0
 	/*if ana_reg_0x7e==0x00 retention data initiate after waking up from deep*/
-#if MULTI_ADDRESS_START
 	tjeq		MULTI_ADDRESS_END
 MULTI_ADDRESS_BEGIN:
 	tloadr      r0, MULTI_ADDRESS_DATA
 	tloadr		r1, MULTI_ADDRESS_DATA+4
-	tloadr      r2, [r1,#0]
+	tloadrh     r2, [r1,#0]
 	tstorerh    r2, [r0,#0]
 #if COPY_DATA_EN
 	tj			COPY_DATA                   @deep wakeup with retention
@@ -286,7 +348,6 @@ MULTI_ADDRESS_BEGIN:
 	tj          COPY_DATA_END
 #endif
 MULTI_ADDRESS_END:
-#endif
 
 
 @********************************************************************************************************
@@ -305,7 +366,7 @@ COPY_RET_DATA_BEGIN:
 	tadd		r2, #4						@ r2 = r2 + 4
 	tj			COPY_RET_DATA_BEGIN			@ jump to COPY_RET_DATA_BEGIN
 COPY_RET_DATA_END:
-
+#endif
 
 @********************************************************************************************************
 @                                    DATA INITIALIZATION
@@ -344,11 +405,9 @@ DAT0:
 	.word	0x12			    		@0		IRQ
 	.word	0x13			    		@4		SVC
 	.word	(irq_stk + IRQ_STK_SIZE)	@8
-#if  SRAM_SIZE_16K_EN
+
 	.word	(0x844000)		    		@12  	stack end
-#else
-	.word	(0x850000)		    		@12  	stack end
-#endif
+
 	.word	(_start_bss_)               @16
 	.word	(_end_bss_)                 @20
 	.word	(0x80060c)                  @24
@@ -385,11 +444,8 @@ MC_ICCT1:
 FLL_D:
 	.word	0xffffffff                	@0
 	.word	(_start_data_)    			@4
-#if  SRAM_SIZE_16K_EN
+
 	.word	(0x844000)		    		@12  	stack end
-#else
-	.word	(0x850000)		    		@12  	stack end
-#endif
 
 	.word   _ramcode_size_div_256_      @12
 

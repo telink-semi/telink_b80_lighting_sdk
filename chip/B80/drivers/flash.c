@@ -1,7 +1,7 @@
 /********************************************************************************************************
  * @file	flash.c
  *
- * @brief	This is the source file for b80
+ * @brief	This is the source file for B80
  *
  * @author	Driver Group
  * @date	2021
@@ -31,9 +31,10 @@
 /*
  *	If add flash type, need pay attention to the read uid command and the bit number of status register
 	Flash Type	uid CMD			MID		Company		Sector Erase Time(MAX)
-	P25D40L		0x4b		0x136085	PUYA		20ms
+	GD25LD10C	0x4b(AN)	0x1160C8	GD			500ms
+	GD25LD40C	0x4b		0x1360C8	GD			500ms
  */
-unsigned int flash_support_mid[] = {0x136085};
+unsigned int flash_support_mid[] = {0x1160c8,0x1360c8};
 const unsigned int FLASH_CNT = sizeof(flash_support_mid)/sizeof(*flash_support_mid);
 
 flash_hander_t flash_read_page = flash_read_data;

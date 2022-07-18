@@ -1,7 +1,7 @@
 /********************************************************************************************************
  * @file	adc.h
  *
- * @brief	This is the header file for b80
+ * @brief	This is the header file for B80
  *
  * @author	Driver Group
  * @date	2021
@@ -36,23 +36,16 @@
  *  3:Resolution:8/10/12/14.
  *  4:input mode,just has differential
  */
-
-//ADC reference voltage cfg
-typedef struct {
-	unsigned short adc_vref;     //default: 1175 mV
-	unsigned short adc_calib_en;
-}adc_vref_ctr_t;
-
-extern adc_vref_ctr_t adc_vref_cfg;
-
-extern GPIO_PinTypeDef ADC_GPIO_tab[10];
 extern unsigned char   adc_vbat_divider;
 /**
  *  ADC reference voltage
  */
 typedef enum{
+#if ADC_INTER_TEST
 	ADC_VREF_0P9V = 0x01,
+#else
 	ADC_VREF_1P2V = 0x02,
+#endif
 }ADC_RefVolTypeDef;
 
 /**
@@ -61,7 +54,9 @@ typedef enum{
 typedef enum{
 	ADC_VBAT_DIVIDER_OFF = 0,
 	ADC_VBAT_DIVIDER_1F4=1,
+#if ADC_INTER_TEST
 	ADC_VBAT_DIVIDER_1F3=2,
+#endif
 }ADC_VbatDivTypeDef;
 
 /**
@@ -78,7 +73,7 @@ typedef enum {
 	B6N,
 	B7N,
 	C4N,
-	C5N,
+	A3N,
 	PGA0N,
 	PGA1N,
 	TEMSENSORN,
@@ -100,7 +95,7 @@ typedef enum {
 	B6P,
 	B7P,
 	C4P,
-	C5P,
+	A3P,
 	PGA0P,
 	PGA1P,
 	TEMSENSORP,
@@ -112,10 +107,13 @@ typedef enum {
  *	ADC resolution
  */
 typedef enum{
-	RES8,
-	RES10,
-	RES12,
-	RES14
+#if ADC_INTER_TEST
+	RES8 = 0,
+	RES10 = 1,
+	RES12 = 2,
+#else
+	RES14 = 3
+#endif
 }ADC_ResTypeDef;
 
 /**
@@ -129,9 +127,9 @@ typedef enum{
  *  ADC Sampling cycles
  */
 typedef enum{
-	SAMPLING_CYCLES_3,
-	SAMPLING_CYCLES_6,
-	SAMPLING_CYCLES_9,
+#if ADC_INTER_TEST
+	SAMPLING_CYCLES_3 = 0,
+	SAMPLING_CYCLES_9 = 2,
 	SAMPLING_CYCLES_12,
 	SAMPLING_CYCLES_15,
 	SAMPLING_CYCLES_18,
@@ -145,6 +143,9 @@ typedef enum{
 	SAMPLING_CYCLES_42,
 	SAMPLING_CYCLES_45,
 	SAMPLING_CYCLES_48,
+#else
+	SAMPLING_CYCLES_6 = 1,
+#endif
 }ADC_SampCycTypeDef;
 
 /**
@@ -156,10 +157,13 @@ typedef enum{
 
 
 typedef enum{
-	ADC_PRESCALER_1   = 0x00,
+#if ADC_INTER_TEST
 	ADC_PRESCALER_1F2 = 0x01,
 	ADC_PRESCALER_1F4 = 0x02,
+#else
+	ADC_PRESCALER_1   = 0x00,
 	ADC_PRESCALER_1F8 = 0x03,
+#endif
 }ADC_PreScalingTypeDef;
 
 
@@ -170,17 +174,26 @@ typedef enum{
 	ADC_NORMAL_MODE      = 0,
 }ADC_ModeTypeDef;
 
-
-
 /**
- * @brief       This function enable adc reference voltage calibration
- * @param[in] en - 1 enable  0 disable
- * @return     none.
+ * @brief adc input pin type
+ * |           |              |
+ * | :-------- | :----------- |
+ * |   <15:12> |    <11:0>    |
+ * |adc channel|    gpio pin  |
  */
-static inline void	adc_calib_vref_enable(unsigned char en)
-{
-	adc_vref_cfg.adc_calib_en = en;
-}
+typedef enum{
+	ADC_GPIO_PB0 = GPIO_PB0 | (0x1<<12),
+	ADC_GPIO_PB1 = GPIO_PB1 | (0x2<<12),
+	ADC_GPIO_PB2 = GPIO_PB2 | (0x3<<12),
+	ADC_GPIO_PB3 = GPIO_PB3 | (0x4<<12),
+	ADC_GPIO_PB4 = GPIO_PB4 | (0x5<<12),
+	ADC_GPIO_PB5 = GPIO_PB5 | (0x6<<12),
+	ADC_GPIO_PB6 = GPIO_PB6 | (0x7<<12),
+	ADC_GPIO_PB7 = GPIO_PB7 | (0x8<<12),
+	ADC_GPIO_PC4 = GPIO_PC4 | (0x9<<12),
+	ADC_GPIO_PA3 = GPIO_PA3 | (0xa<<12),
+}adc_input_pin_def_e;
+
 
 
 /**
@@ -361,14 +374,7 @@ static inline void adc_set_ain_positive_chn_misc(ADC_InputPchTypeDef v_ain)
 	analog_write (areg_adc_ain_chn_misc	, (analog_read(areg_adc_ain_chn_misc	)&(~FLD_ADC_AIN_POSITIVE)) | (v_ain<<4) );
 }
 
-/**
- * @brief This function serves to set resolution.
- * @param[in]  ch_n - enum variable of ADC input channel.
- * @param[in]  v_res - enum variable of ADC resolution.
- * @return none
- */
-void adc_set_resolution(ADC_ResTypeDef v_res);
-
+#define adc_set_resolution(v_res) adc_set_resolution_chn_misc(v_res)
 
 
 #define anareg_adc_res_m					0xec
@@ -397,13 +403,7 @@ static inline void adc_set_input_mode_chn_misc(ADC_InputModeTypeDef m_input)
 	analog_write(anareg_adc_res_m, analog_read(anareg_adc_res_m) | FLD_ADC_EN_DIFF_CHN_M );
 }
 
-/**
- * @brief This function serves to set input_mode.
- * @param[in]  ch_n - enum variable of ADC input channel.
- * @param[in]  m_input - enum variable of ADC channel input mode.
- * @return none
- */
-void adc_set_input_mode(ADC_InputModeTypeDef m_input);
+#define adc_set_input_mode(m_input) adc_set_input_mode_chn_misc(m_input)
 
 
 #define areg_adc_tsmaple_m				0xee
@@ -422,13 +422,7 @@ static inline void adc_set_tsample_cycle_chn_misc(ADC_SampCycTypeDef adcST)
 	analog_write(areg_adc_tsmaple_m, adcST );  //optimize, <7:4> not cared
 }
 
-/**
- * @brief This function serves to set sample_cycle.
- * @param[in]  ch_n - enum variable of ADC input channel.
- * @param[in]  adcST - enum variable of ADC Sampling cycles.
- * @return none
- */
-void adc_set_tsample_cycle(ADC_SampCycTypeDef adcST);
+#define adc_set_tsample_cycle(adcST) adc_set_tsample_cycle_chn_misc(adcST)
 
 /**************************************************************************************
 afe_0xEF<7:0>  	r_max_mc[7:0]
@@ -612,17 +606,32 @@ void adc_init(void );
 
 /**
  * @brief This function is used for IO port configuration of ADC IO port voltage sampling.
- * @param[in]  pin - GPIO_PinTypeDef
+ *        This interface can be used to switch sampling IO without reinitializing the ADC.
+ * @param[in]  pin - adc_input_pin_def_e
  * @return none
  */
-void adc_base_pin_init(GPIO_PinTypeDef pin);
+void adc_base_pin_init(adc_input_pin_def_e pin);
+/**
+ * @brief This function is used to calib ADC 1.2V vref for GPIO.
+ * @param[in] vref - GPIO sampling calibration value.
+ * @param[in] offset - GPIO sampling two-point calibration value offset.
+ * @return none
+ */
+void adc_set_gpio_calib_vref(unsigned short vref,signed char offset);
+/**
+ * @brief This function is used to calib ADC 1.2V vref for Vbat.
+ * @param[in] vref - Vbat channel sampling calibration value.
+ * @param[in] offset - Vbat channel sampling two-point calibration value offset.
+ * @return none
+ */
+void adc_set_vbat_calib_vref(unsigned short vref,signed char offset);
 
 /**
  * @brief This function is used for ADC configuration of ADC IO voltage sampling.
  * @param[in]   pin - GPIO_PinTypeDef
  * @return none
  */
-void adc_base_init(GPIO_PinTypeDef pin);
+void adc_base_init(adc_input_pin_def_e pin);
 
 
 /**

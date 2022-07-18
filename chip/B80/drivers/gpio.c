@@ -1,12 +1,12 @@
 /********************************************************************************************************
  * @file	gpio.c
  *
- * @brief	This is the source file for b80
+ * @brief	This is the source file for B80
  *
  * @author	Driver Group
- * @date	2020
+ * @date	2021
  *
- * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
@@ -277,6 +277,11 @@ void gpio_set_data_strength(GPIO_PinTypeDef pin, unsigned int value)
  * @param[in] gpio - the pin needs to set its pull-up/down resistor, GPIOE group is not supported
  * @param[in] up_down - the type of the pull-up/down resistor
  * @return    none
+ * @note	the following two point need to noticed when using PB0, PB1, PB3, PD4 and PF0 GPIO ports:
+ *  		1. These pins are not recommend to use as wake-up source;
+ *  		2. Since these pins are output functions by default, even if they are configured with pull-up/pull-down retention,
+ *  		when deep/deep Retention is invoked, they can't maintain high/low level and an abnormal level will occur.
+ *  		Therefore, these pins can't be used in applications where a certain level state needs to be maintained all the time.
  */
 void gpio_setup_up_down_resistor(GPIO_PinTypeDef gpio, GPIO_PullTypeDef up_down)
 {
@@ -324,37 +329,50 @@ void gpio_shutdown(GPIO_PinTypeDef pin)
 		switch(group)
 		{
 			case GPIO_GROUPA:
+				reg_gpio_pa_out &= (~bit);
 				reg_gpio_pa_oen |= bit;
 				reg_gpio_pa_gpio |= (bit&0xf7);
-				reg_gpio_pa_ie &= (!bit);
+				reg_gpio_pa_ie &= ((~bit)|0x08);
 				break;
 			case GPIO_GROUPB:
+				reg_gpio_pb_out &= (~bit);
 				reg_gpio_pb_oen |= bit;
 				reg_gpio_pb_gpio |= bit;
-				reg_gpio_pb_ie &= (!bit);
+				reg_gpio_pb_ie &= (~bit);
 				break;
 			case GPIO_GROUPC:
+				reg_gpio_pc_out &= (~bit);
 				reg_gpio_pc_oen |= bit;
 				reg_gpio_pc_gpio |= bit;
-				analog_write(areg_gpio_pc_ie, analog_read(areg_gpio_pc_ie) & (!bit));
+				analog_write(areg_gpio_pc_ie, analog_read(areg_gpio_pc_ie) & (~bit));
 				break;
 			case GPIO_GROUPD:
+				reg_gpio_pd_out &= (~bit);
 				reg_gpio_pd_oen |= bit;
 				reg_gpio_pd_gpio |= bit;
-				reg_gpio_pd_ie &= (!bit);
+				reg_gpio_pd_ie &= (~bit);
 				break;
 			case GPIO_GROUPE:
+				reg_gpio_pe_out &= (~bit);
 				reg_gpio_pe_oen |= bit;
 				reg_gpio_pe_gpio |= bit;
-				reg_gpio_pe_ie &= (!bit);
+				reg_gpio_pe_ie &= (~bit);
 				break;
 			case GPIO_GROUPF:
+				reg_gpio_pf_out &= (~bit);
 				reg_gpio_pf_oen |= bit;
 				reg_gpio_pf_gpio |= bit;
-				reg_gpio_pf_ie &= (!bit);
+				reg_gpio_pf_ie &= (~bit);
 				break;
 			case GPIO_ALL:
 			{
+				//set low level
+				reg_gpio_pa_out = 0x00;
+				reg_gpio_pb_out = 0x00;
+				reg_gpio_pc_out = 0x00;
+				reg_gpio_pd_out = 0x00;
+				reg_gpio_pf_out = 0x00;
+
 				//output disable
 				reg_gpio_pa_oen = 0xff;
 				reg_gpio_pb_oen = 0xff;

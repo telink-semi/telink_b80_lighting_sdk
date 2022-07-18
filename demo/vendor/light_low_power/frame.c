@@ -23,6 +23,7 @@
  *
  *******************************************************************************************************/
 #include "driver.h"
+#include "frame.h"
 
 _attribute_data_retention_ LED_control_info_t led_control;
 _attribute_data_retention_ rf_packet_led_remote_t g_relay_pkt __attribute__((aligned(4)));

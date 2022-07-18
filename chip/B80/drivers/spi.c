@@ -1,7 +1,7 @@
 /********************************************************************************************************
  * @file	spi.c
  *
- * @brief	This is the source file for b80
+ * @brief	This is the source file for B80
  *
  * @author	Driver Group
  * @date	2021
@@ -363,6 +363,7 @@ void spi_read_word( unsigned int *data)
  */
 void spi_master_write( unsigned char *data, unsigned int len)
 {
+	spi_tx_dma_dis();
 	spi_tx_fifo_clr();
 	spi_tx_cnt(len);
 	spi_set_transmode( SPI_MODE_WRITE_ONLY);
@@ -382,6 +383,8 @@ void spi_master_write( unsigned char *data, unsigned int len)
  */
 void spi_master_write_read( unsigned char *wr_data, unsigned int wr_len, unsigned char *rd_data, unsigned int rd_len)
 {
+	spi_tx_dma_dis();
+	spi_rx_dma_dis();
 	spi_tx_fifo_clr();
 	spi_rx_fifo_clr();
 	spi_tx_cnt(wr_len);
@@ -404,6 +407,7 @@ void spi_master_write_read( unsigned char *wr_data, unsigned int wr_len, unsigne
  */
 void spi_master_write_plus( unsigned char cmd, unsigned int addr, unsigned char *data, unsigned int data_len, spi_wr_tans_mode_e wr_mode)
 {
+	spi_tx_dma_dis();
 	spi_tx_fifo_clr();
 	if(addr)
 	{
@@ -430,6 +434,7 @@ void spi_master_write_plus( unsigned char cmd, unsigned int addr, unsigned char 
  */
 void spi_master_write_plus_fetch_flash( unsigned char cmd,unsigned int addr,unsigned char *data, unsigned int data_len, spi_wr_tans_mode_e wr_mode)
 {
+	spi_tx_dma_dis();
 	spi_tx_fifo_clr();
 	spi_set_fetch_flash_address((unsigned int)data);//set the address for fetching data from flash.
 	reg_spi_panel_ctrl|=FLD_SPI_FETCH_FLASH;
@@ -456,6 +461,7 @@ void spi_master_write_plus_fetch_flash( unsigned char cmd,unsigned int addr,unsi
  */
 void spi_master_read_plus( unsigned char cmd, unsigned int addr, unsigned char *data, unsigned int data_len, spi_rd_tans_mode_e rd_mode)
 {
+	spi_rx_dma_dis();
 	spi_rx_fifo_clr();
 	if(addr)
 	{
