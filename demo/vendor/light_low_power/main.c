@@ -99,6 +99,10 @@ int main (void) {
 	cpu_wakeup_init(EXTERNAL_XTAL_24M);
 #endif
 
+#if(MCU_CORE_B80)
+	wd_32k_stop();
+#endif
+
 	int deepRetWakeUp = pm_is_MCU_deepRetentionWakeup();  //MCU deep retention wakeUp
 
 	gpio_init( !deepRetWakeUp );  //analog resistance will keep available in deepSleep mode, so no need initialize again
