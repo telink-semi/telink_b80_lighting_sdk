@@ -107,12 +107,12 @@ void pair_id_save_func(void)
 	}
 
 	for(i=0;i<MAX_PAIRED_REMOTER;i++){
-		if(UNUSED_PID == led_control.pared_remote[i].pid){//ID匹配
-			write_position_detect(i);//保存
+		if(UNUSED_PID == led_control.pared_remote[i].pid){//ID匹配			
 			led_control.paire_num++;
 			if(led_control.paire_num > MAX_PAIRED_REMOTER){
 				led_control.paire_num = MAX_PAIRED_REMOTER;
 			}
+            write_position_detect(i);//保存
 			return;
 		}
 	}
