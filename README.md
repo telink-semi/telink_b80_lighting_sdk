@@ -1,5 +1,4 @@
-
-###V1.3.0
+V1.3.0
 
 ### Dependency Updates
 *  telink_b85m_driver_sdk v1.5.0
