@@ -11,7 +11,7 @@ V1.3.0
 *  support PUYA flash
 *  support that including version information on the bin file
 *  support b80 A1 
-*  support portection code for S1
+*  support protection code 
 
 ### Performance Improvements
 *  N/A
@@ -57,7 +57,7 @@ V1.3.0
 *  支持PUYA flash。
 *  编译的bin文件携带版本信息。
 *  支持芯片类型 b80 A1
-*  支持portection code  S1
+*  支持protection code
 
 ### Performance Improvements
 *  N/A
@@ -65,7 +65,7 @@ V1.3.0
 ### BREAKING CHANGES
 *  N/A
 
-Notes
+### Notes
 *  N/A
 
 ### CodeSize
