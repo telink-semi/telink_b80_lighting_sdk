@@ -10,6 +10,9 @@ stages:
 
 scc:
   stage: scc 
+  tags:
+    - LINUX
+
   script:
     - echo "Enter scc stage"
     - scc | tee scc.txt
@@ -25,6 +28,9 @@ genLicense:
     CODE_COMPILE_ARCH: 'EAGLE_ANDES'
     COV_PF_CATALOG: 'BLE'
   stage: genLicense
+  tags:
+    - LINUX
+
   before_script:
   script:
     - date
@@ -42,6 +48,9 @@ checkLicense:
     CODE_COMPILE_ARCH: 'EAGLE_ANDES'
     COV_PF_CATALOG: 'BLE'
   stage: checkLicense
+  tags:
+    - LINUX
+
   allow_failure: yes
   before_script:
   script:
@@ -104,6 +113,9 @@ fossid:
   tags:
     - FOSSID
   stage: fossid
+  tags:
+    - LINUX
+
   script:
     - fossid_check.sh
   artifacts:
@@ -113,6 +125,9 @@ fossid:
 
 plainPW_check:
   stage: plainPW_check 
+  tags:
+    - LINUX
+
   script:
     - echo "Enter Plain Password checking stage"
     - check_plain_weak_password | tee result.txt
