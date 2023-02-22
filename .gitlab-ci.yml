@@ -76,10 +76,8 @@ build_tc32:
     - which tc32-elf-gcc
     - date
     
-    - $TC32_ECLIPSE_BUILD  -data ${CI_PIPELINE_ID}_WS1  -import project/tlsr_tc32/B80 -cleanBuild B80_Driver_Demo/UART_Demo
-    - $TC32_ECLIPSE_BUILD  -data ${CI_PIPELINE_ID}_WS1  -import project/tlsr_tc32/B85 -cleanBuild B85_Driver_Demo/UART_Demo
-    - $TC32_ECLIPSE_BUILD  -data ${CI_PIPELINE_ID}_WS1  -import project/tlsr_tc32/B87 -cleanBuild B87_Driver_Demo/UART_Demo
-    - $TC32_ECLIPSE_BUILD  -data ${CI_PIPELINE_ID}_WS1  -import project/tlsr_tc32/B89 -cleanBuild B89_Driver_Demo/UART_Demo
+    - $TC32_ECLIPSE_BUILD  -data ${CI_PIPELINE_ID}_WS1  -import project/tlsr_tc32/B80 -cleanBuild B80_Driver_Demo/LIGHT
+
     - date
 
   artifacts:
