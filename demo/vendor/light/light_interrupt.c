@@ -81,7 +81,7 @@ _attribute_ram_code_sec_ void light_irq_handler(void)
 		unsigned char *p=raw_pkt;            //接收缓存的指针地址
 		//LOG_HEXDUMP(p,RX_PACKGET_SIZE);
 
-		if(RF_NRF_SB_PACKET_CRC_OK(p)){                         //鏍￠獙鎺ユ敹鍖
+		if(RF_SB_PACKET_CRC_OK(p)){                         //鏍￠獙鎺ユ敹鍖
 			//LOG_PRINTF("rf check success\n");
 			rf_packet_led_remote_t *pkt=(rf_packet_led_remote_t *)(p);
 			if(pkt->vid==REMOTE_VID){//鍖归厤浜у搧ID

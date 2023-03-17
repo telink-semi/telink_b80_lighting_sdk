@@ -42,7 +42,7 @@
 #define MANUAL				2
 #define RF_AUTO_MODE 		MANUAL
 
-#define ESB_MODE  			1
+#define TPLL_MODE  			1
 #define SB_MODE   			2
 #define PRI_MODE			SB_MODE
 

@@ -91,7 +91,7 @@ void rfc_init_func(void)
 
 	rf_set_channel(rf_channel[0],0);
 
-#if(PRI_MODE == ESB_MODE)
+#if(PRI_MODE == TPLL_MODE)
 
 #elif(PRI_MODE == SB_MODE)
 	rf_fix_payload_len_set(RX_PAYLOAD_LEN);
