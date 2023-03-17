@@ -1,3 +1,89 @@
+## V1.3.1
+
+### Dependency Updates
+*  telink_b85m_driver_sdk v1.5.0
+
+
+### Bug Fixes
+*  correct word spelling.
+
+### Features
+*  N/A
+
+### Performance Improvements
+*  N/A
+
+### BREAKING CHANGES
+*  N/A
+
+### Notes
+*  N/A
+
+
+### CodeSize
+* LIGHT
+  * Code size:10k
+  * Ram size:7.2k
+* LIGHT_BEACON
+  * Code size:10k
+  * Ram size:7.4k
+* LIGHT_LOW_POWER
+  * Code size:11k
+  * Ram size:8.3k
+* LIGHT_RGB
+  * Code size:11k
+  * Ram size:6.9k
+* REMOTE
+  * Code size:9k
+  * Ram size:7.0k
+* REMOTE_BEACON
+  * Code size:9k
+  * Ram size:7.1k
+* REMOTE_RGB
+  * Code size:9k
+  * Ram size:7.0k
+
+### Dependency Updates
+*  telink_b85m_driver_sdk v1.5.0
+
+### Bug Fixes
+*  单词拼写修正。
+
+### Features
+*  N/A
+
+### Performance Improvements
+*  N/A
+
+### BREAKING CHANGES
+*  N/A
+
+### Notes
+*  N/A
+
+### CodeSize
+* LIGHT
+  * Code size:10k
+  * Ram size:7.2k
+* LIGHT_BEACON
+  * Code size:10k
+  * Ram size:7.4k
+* LIGHT_LOW_POWER
+  * Code size:11k
+  * Ram size:8.3k
+* LIGHT_RGB
+  * Code size:11k
+  * Ram size:6.9k
+* REMOTE
+  * Code size:9k
+  * Ram size:7.0k
+* REMOTE_BEACON
+  * Code size:9k
+  * Ram size:7.1k
+* REMOTE_RGB
+  * Code size:9k
+  * Ram size:7.0k
+
 ## V1.3.0
 
 ### Dependency Updates
