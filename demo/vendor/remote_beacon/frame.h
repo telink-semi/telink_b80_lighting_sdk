@@ -32,17 +32,17 @@ typedef struct{
 	unsigned char  type;
 	unsigned char  rf_len;
 	unsigned char  mac[6];
+	unsigned char  datetype1[3];
 	unsigned char  data_len;
 	unsigned char  data_type;
-	unsigned short vid;					// 5~6 vendor ID
-	unsigned int   pid;					// 7~10 product ID
+	unsigned short vid;					// vendor ID
+	unsigned short pid;					// product ID
+	unsigned char  grp_id;              // group ID
+	unsigned char  relay;
 
-	unsigned char  control_key;			// 11 function control key
-	unsigned char  rf_seq_no; 			// 12 rf sequence total number, save this value in 3.3v analog register.
+	unsigned char  rf_seq_no; 			// rf sequence total number, save this value in 3.3v analog register.
+	unsigned char  User_def[8];			// Commond&commond para
 
-	unsigned short button_keep_counter;	// 13~14 sequence number in one certain channel.
-	unsigned short control_key_value[3];	// 15, 16, 17, 18
-	unsigned char  ttl;
 }rf_packet_led_remote_t;		//rf data packet from remoter end.
 #else
 typedef struct{

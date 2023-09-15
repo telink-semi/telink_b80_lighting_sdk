@@ -41,17 +41,26 @@ void package_data_init_func(void)
 {
 	unsigned char i;
 	led_remote.dma_len = sizeof(rf_packet_led_remote_t)-sizeof(led_remote.dma_len);//ÉèÖÃ°üµÄdma³¤¶È
-	led_remote.rf_len = led_remote.dma_len-2;
+
 	led_remote.type = 0x42;
-	led_remote.data_type = 0xff;
-	led_remote.data_len = led_remote.rf_len - 7;
+	led_remote.rf_len = led_remote.dma_len-2;
 	for(i=0;i<6;i++)
 		led_remote.mac[i]=0x12+i;
+
+	led_remote.datetype1[0]=0x02;
+	led_remote.datetype1[1]=0x01;
+	led_remote.datetype1[2]=0x02;
+
+	led_remote.data_len = led_remote.rf_len - 6 -3 -1;
+	led_remote.data_type = 0xff;
 //	led_remote.rf_len1 = led_remote.dma_len-2;
 	led_remote.vid = REMOTE_VID;//设置VID值，目前灯设置为0x5453，客户可自定义
-	otp_read(PID_ADDR,1,&led_remote.pid);
-	if(led_remote.pid = 0xffffffff){		
-		led_remote.pid = 0x12345678;//设置遥控器ID，一般采用滚码方式
+	unsigned int   otp_pid = 0xffffffff;
+	otp_read(PID_ADDR,1,&otp_pid);
+	if((otp_pid == 0xffffffff)||(otp_pid==0)){		
+		led_remote.pid = 0x1234;//设置遥控器ID，一般采用滚码方式
+	}else{
+		led_remote.pid = (otp_pid&0xffff);
 	}
 
 	ana_dataTypeDef ana_data;
@@ -61,6 +70,7 @@ void package_data_init_func(void)
 
 	LOG_PRINTF("package_data_init_func\n");
 	LOG_PRINTF("current_active_group=0x%x\n",current_active_group);
+	LOG_PRINTF("led_remote.vid=0x%x\n",led_remote.vid);
 	LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 }
 
@@ -75,7 +85,8 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 {
 	switch(key_value){
 		case KEY_NONE:
-			led_remote.control_key = (CMD_NONE<<4);
+
+			led_remote.User_def[0] = CMD_BYTE0_NONE;
 	
 			LOG_PRINTF("KEY_NONE\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -83,14 +94,18 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LIGHT_ON_ALL:
 		
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_ON<<4)|GROUP_ALL;
+			led_remote.grp_id = GROUP_ALL;
+			led_remote.User_def[0] = CMD_BYTE0_ON;
+
 			LOG_PRINTF("KEY_LIGHT_ON_ALL\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_LIGHT_OFF_ALL:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_OFF<<4)|GROUP_ALL;
+
+			led_remote.grp_id = GROUP_ALL;
+			led_remote.User_def[0] = CMD_BYTE0_OFF;
 		
 			LOG_PRINTF("KEY_LIGHT_OFF_ALL\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -98,8 +113,9 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LIGHT_ON_GROUP1:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_ON<<4)|GROUP_1;
 			current_active_group   = GROUP_1;
+			led_remote.grp_id = GROUP_1;
+			led_remote.User_def[0] = CMD_BYTE0_ON;
 			
 			LOG_PRINTF("KEY_LIGHT_ON_GROUP1\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -107,8 +123,9 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LIGHT_OFF_GROUP1:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_OFF<<4)|GROUP_1;
 			current_active_group   = GROUP_1;
+			led_remote.grp_id = GROUP_1;
+			led_remote.User_def[0] = CMD_BYTE0_OFF;
 		
 			LOG_PRINTF("KEY_LIGHT_OFF_GROUP1\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -116,8 +133,9 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LIGHT_ON_GROUP2:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_ON<<4)|GROUP_2;
 			current_active_group   = GROUP_2;
+			led_remote.grp_id = GROUP_2;
+			led_remote.User_def[0] = CMD_BYTE0_ON;
 			
 			LOG_PRINTF("KEY_LIGHT_ON_GROUP2\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -125,8 +143,9 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LIGHT_OFF_GROUP2:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_OFF<<4)|GROUP_2;
 			current_active_group   = GROUP_2;
+			led_remote.grp_id = GROUP_2;
+			led_remote.User_def[0] = CMD_BYTE0_OFF;
 		
 			LOG_PRINTF("KEY_LIGHT_OFF_GROUP2\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -134,8 +153,9 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LIGHT_ON_GROUP3:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_ON<<4)|GROUP_3;
 			current_active_group   = GROUP_3;
+			led_remote.grp_id = GROUP_3;
+			led_remote.User_def[0] = CMD_BYTE0_ON;
 			
 			LOG_PRINTF("KEY_LIGHT_ON_GROUP3\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -143,8 +163,9 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LIGHT_OFF_GROUP3:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_OFF<<4)|GROUP_3;
 			current_active_group   = GROUP_3;
+			led_remote.grp_id = GROUP_3;
+			led_remote.User_def[0] = CMD_BYTE0_OFF;
 		
 			LOG_PRINTF("KEY_LIGHT_OFF_GROUP3\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -152,8 +173,9 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LIGHT_ON_GROUP4:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_ON<<4)|GROUP_4;
 			current_active_group   = GROUP_4;
+			led_remote.grp_id = GROUP_4;
+			led_remote.User_def[0] = CMD_BYTE0_ON;
 			
 			LOG_PRINTF("KEY_LIGHT_ON_GROUP4\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -161,8 +183,9 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LIGHT_OFF_GROUP4:
 				
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_OFF<<4)|GROUP_4;
 			current_active_group   = GROUP_4;
+			led_remote.grp_id = GROUP_4;
+			led_remote.User_def[0] = CMD_BYTE0_OFF;
 		
 			LOG_PRINTF("KEY_LIGHT_OFF_GROUP4\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -170,7 +193,10 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LUMINANT_INCREASE:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_LUMINANT_INCREASE<<4)|(current_active_group&0x0f);
+			led_remote.grp_id = current_active_group;
+			led_remote.User_def[0] = CMD_BYTE0_ADJUST;
+			led_remote.User_def[1] = CMD_BYTE1_ADJUST_LUMI;
+			led_remote.User_def[2] = CMD_BYTE2_INCREASE;
 		
 			LOG_PRINTF("KEY_LUMINANT_INCREASE\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -178,15 +204,22 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_LUMINANT_DECREASE:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_LUMINANT_DECREASE<<4)|(current_active_group&0x0f);	
 		
+			led_remote.grp_id = current_active_group;
+			led_remote.User_def[0] = CMD_BYTE0_ADJUST;
+			led_remote.User_def[1] = CMD_BYTE1_ADJUST_LUMI;
+			led_remote.User_def[2] = CMD_BYTE2_DECREASE;
+
 			LOG_PRINTF("KEY_LUMINANT_DECREASE\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_CHROMA_INCREASE:
 
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_CHROMA_INCREASE<<4)|(current_active_group&0x0f);		
+			led_remote.grp_id = current_active_group;
+			led_remote.User_def[0] = CMD_BYTE0_ADJUST;
+			led_remote.User_def[1] = CMD_BYTE1_ADJUST_CHROMA;
+			led_remote.User_def[2] = CMD_BYTE2_INCREASE;
 		
 			LOG_PRINTF("KEY_CHROMA_INCREASE\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -194,17 +227,23 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_CHROMA_DECREASE:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_CHROMA_DECREASE<<4)|(current_active_group&0x0f);	
 		
+			led_remote.grp_id = current_active_group;
+			led_remote.User_def[0] = CMD_BYTE0_ADJUST;
+			led_remote.User_def[1] = CMD_BYTE1_ADJUST_CHROMA;
+			led_remote.User_def[2] = CMD_BYTE2_DECREASE;
+
 			LOG_PRINTF("KEY_CHROMA_DECREASE\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 		break;
 		case KEY_QUICK_LOW_LIGHT:
 					
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_QUICK_LOW_LIGHT<<4)|(para[0]&0x0f);	
+
 			if(para[0] != GROUP_ALL){
 				current_active_group   = para[0];
+				led_remote.grp_id = para[0];
+				led_remote.User_def[0] = CMD_BYTE0_QUICK_LOW_LIGHT;
 			}
 		
 			LOG_PRINTF("KEY_QUICK_LOW_LIGHT\n");
@@ -213,10 +252,16 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 		case KEY_SET_LUMI_CHROMA:
 		
 			led_remote.rf_seq_no++;
-			led_remote.control_key = (CMD_SET_LUMI_CHROMA<<4)|(current_active_group&0x0f);	
 
-			led_remote.control_key_value[0] = 500; //LUMI
-			led_remote.control_key_value[1] = 500; //CHROMA
+			led_remote.User_def[0] = CMD_BYTE0_SET_VALUE;
+
+			unsigned short temp_lumi   = 500;
+			unsigned short temp_chroma = 500;
+
+			led_remote.grp_id = current_active_group;
+			led_remote.User_def[1]= (temp_lumi>>4)&0xff;
+			led_remote.User_def[2]= (temp_chroma>>4)&0xff;
+			led_remote.User_def[3]=((temp_lumi&0x0f)<<4)|(temp_chroma&0x0f);
 
 			LOG_PRINTF("KEY_SET_LUMI_CHROMA\n");
 			LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
@@ -237,7 +282,7 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 
 void package_data_send_func(void)//发送数据
 {
-	led_remote.ttl = TTL_MAX;
+	led_remote.relay = TTL_MAX;
 	rfc_send_data((unsigned char*)&led_remote);
 	
 	LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));

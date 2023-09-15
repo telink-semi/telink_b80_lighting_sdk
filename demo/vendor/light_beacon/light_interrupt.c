@@ -33,20 +33,51 @@ unsigned int irq_rx;
 //unsigned char last_seq;
 unsigned int pkt_right_cnt;
 typedef struct{
-	unsigned int pid;
+	unsigned short pid;
 	unsigned char seq_no;
 	unsigned char cmd;
 }Last_control_info_t;
 Last_control_info_t control_info[16];
 unsigned char info_index;
+
+#include "cmd_def.h"
+unsigned char get_cmd(rf_packet_led_remote_t *pkt)
+{
+	unsigned char cmd = 0;
+
+	if(pkt->User_def[0] == 0){
+		cmd=CMD_OFF;
+	}else if(pkt->User_def[0] == 1){
+		cmd=CMD_ON;
+	}else if(pkt->User_def[0] == 2){
+		if(pkt->User_def[1] == 0){
+			if(pkt->User_def[2] == 0){
+				cmd=CMD_LUMINANT_DECREASE;
+			}else if(pkt->User_def[2] == 1){
+				cmd=CMD_LUMINANT_INCREASE;
+			}
+		}else if(pkt->User_def[1] == 1){
+			if(pkt->User_def[2] == 0){
+				cmd=CMD_CHROMA_DECREASE;
+			}else if(pkt->User_def[2] == 1){
+				cmd=CMD_CHROMA_INCREASE;
+			}
+		}
+	}else if(pkt->User_def[0] == 3){
+		cmd = CMD_SET_LUMI_CHROMA;
+	}
+
+	return cmd;
+}
 //unsigned char check_pkt_info(unsigned int pid,unsigned char seq,unsigned char cmd)
 _attribute_ram_code_sec_ unsigned char check_pkt_info(rf_packet_led_remote_t *pkt)
 {
 	unsigned char i;
+	unsigned char cmd = get_cmd(pkt);
 	for(i=0;i<16;i++){
 		if(control_info[i].pid==pkt->pid){
-			if(control_info[i].cmd!=pkt->control_key||pkt->rf_seq_no!=control_info[i].seq_no){
-				control_info[i].cmd = pkt->control_key;
+			if(control_info[i].cmd!=cmd||pkt->rf_seq_no!=control_info[i].seq_no){
+				control_info[i].cmd = cmd;
 				control_info[i].seq_no = pkt->rf_seq_no;
 				return 1;
 			}else{
@@ -56,7 +87,7 @@ _attribute_ram_code_sec_ unsigned char check_pkt_info(rf_packet_led_remote_t *pk
 	}
 	info_index++;
 	info_index&=0x0f;
-	control_info[info_index].cmd = pkt->control_key;
+	control_info[info_index].cmd = cmd;
 	control_info[info_index].seq_no = pkt->rf_seq_no;
 	control_info[info_index].pid = pkt->pid;
 	return 1;
@@ -91,13 +122,15 @@ _attribute_ram_code_sec_ void light_irq_handler(void)
 					for(index=0;index<26;index++)
 						ptr[index]=p[index+5];
 					g_packget_new=1;
+
+                    g_packget_cmd = get_cmd(pkt);
 					g_packget_pid=pkt->pid;
-//					last_seq=pkt->rf_seq_no;
-//					last_key_cmd=pkt->control_key;
-					g_packget_cmd=pkt->control_key>>4;
-					g_packget_grp=pkt->control_key&0x0f;
-					g_packget_lumi=pkt->control_key_value[0];
-					g_packget_chrome=pkt->control_key_value[1];
+					g_packget_grp=pkt->grp_id;
+					if(g_packget_cmd == CMD_SET_LUMI_CHROMA){
+						g_packget_lumi   = (pkt->User_def[1]<<4)|((pkt->User_def[3]>>4)&0x0f);
+						g_packget_chrome = (pkt->User_def[2]<<4)|((pkt->User_def[3]>>0)&0x0f);
+
+					}
 					pkt_right_cnt++;
 				}
 			}

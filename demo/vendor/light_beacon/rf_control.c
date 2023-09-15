@@ -126,9 +126,9 @@ void rfc_change_channel_func(void)
 void rfc_send_relay_pkt(void)
 {
 
-	if(g_relay_pkt.ttl > 0){
+	if(g_relay_pkt.relay > 0){
 		
-		g_relay_pkt.ttl -= 1;
+		g_relay_pkt.relay -= 1;
 
 		unsigned char i;
 		for(i=0;i<3;i++){	
