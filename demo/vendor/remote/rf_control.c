@@ -28,6 +28,42 @@
 
 const unsigned char rf_channel[4]={1,24,51,76};
 
+#if 0
+#define 	ACCESS_CODE_BASE_PIPE0    		(0x800408)
+#define 	ACCESS_CODE_BASE_PIPE2    		(0x800418)
+
+static void multi_byte_reg_write(unsigned int reg_start, unsigned char *buf, int len)
+{
+    int i = 0;
+    for (i = 0; i < len; i++,reg_start++) {
+        write_reg8(reg_start, buf[i]);
+    }
+}
+
+//Due to rf_acc_code_set API change the accoss code, it cannot communicate with 8366.
+//Using rf_acc_code_set_for_8366 API to replace with this interface.
+void rf_acc_code_set_for_8366(unsigned char pipe_id, const unsigned char *addr)
+{
+    unsigned char acc_len = read_reg8(0x405) & 0x07;
+    unsigned char i = 0;
+    switch (pipe_id) {
+        case 0:
+        case 1:
+            multi_byte_reg_write(ACCESS_CODE_BASE_PIPE0 + (pipe_id*8), addr, acc_len);
+            break;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            write_reg8((ACCESS_CODE_BASE_PIPE2 + (pipe_id-2)), addr[0]);
+            break;
+        default:
+            break;
+    }
+}
+#endif
+
+
 void rfc_reg_init(void)
 {
 #if (MCU_CORE_B80)
@@ -79,6 +115,7 @@ void rfc_init_func(void)
 
 	rf_acc_len_set(5);
 	rf_acc_code_set(0,access_code_usd);
+    //rf_acc_code_set_for_8366(0,access_code_usd);
 
 
 	LOG_PRINTF("access_code_usd\n");
