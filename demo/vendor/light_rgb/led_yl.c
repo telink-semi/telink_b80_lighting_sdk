@@ -1,13 +1,12 @@
 /********************************************************************************************************
- * @file	led_yl.c
+ * @file    led_yl.c
  *
- * @brief	This is the source file for b80
+ * @brief   This is the source file for b80
  *
- * @author	sw part II and group III
- * @date	2021
+ * @author  sw part II and group III
+ * @date    2021
  *
  * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
- *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.

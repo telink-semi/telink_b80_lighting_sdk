@@ -1,13 +1,12 @@
 /********************************************************************************************************
- * @file	user_config.h
+ * @file    user_config.h
  *
- * @brief	for TLSR chips
+ * @brief   for TLSR chips
  *
- * @author	public@telink-semi.com;
- * @date	Sep. 18, 2015
+ * @author  public@telink-semi.com;
+ * @date    Sep. 18, 2015
  *
  * @par     Copyright (c) 2018, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
- *          All rights reserved.
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
