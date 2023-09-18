@@ -126,7 +126,7 @@ enum{
 /**
  * BIT[0]  set cmd format 0: single mode  1: the format of the cmd phase is the same as the data phase(Dual/Quad).master only
  * BIT[1]  set spi quad I/O mode. master only
- * BIT[2]  set the spi commnd phase enable.master only
+ * BIT[2]  set the spi command phase enable.master only
  * BIT[4:7]   the minimum time that SPI CS should stay HIGH.the actual duration is (SPI_CLK period_out / 2)*(csht+1).default=2,master only
  */
 #define reg_spi_mode2			REG_ADDR8(SPI_BASE_ADDR+0x02)
@@ -1170,9 +1170,9 @@ enum{
 enum{
 	FLD_SYSTEM_32K_TIMER_BUSY 			=   BIT(6),
 	FLD_SYSTEM_32K_TIMER_UPDATE_RD 		=   BIT(5),			FLD_SYSTEM_32K_TIMER_CLEAR_RD		=   BIT(5),
-	FLD_SYSTEM_STATE_MACHINE_STATUS		=   BIT_RNG(3,4),  	FLD_SYSTEM_32K_TIMER_SYCN_TRIG		=   BIT(3),
+	FLD_SYSTEM_STATE_MACHINE_STATUS		=   BIT_RNG(3,4),  	FLD_SYSTEM_32K_TIMER_SYNC_TRIG		=   BIT(3),
 	FLD_SYSTEM_CMD_SET_TRIG 			=   BIT(2),
-	FLD_SYSTEM_CMD_SYCN_TRIG 			=   BIT(1),
+	FLD_SYSTEM_CMD_SYNC_TRIG 			=   BIT(1),
 	FLD_SYSTEM_TIMER_STATUS 			=   BIT(0),
 };
 

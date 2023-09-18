@@ -51,7 +51,7 @@ static unsigned char IsPrime(unsigned int n)
 }
 
 /**
- * @brief  		This funciton serves to calculate the best bwpc(bit width) .i.e reg0x96
+ * @brief  		This function serves to calculate the best bwpc(bit width) .i.e reg0x96
  * @param[in] 	baut_rate:The value of the baut rate to set.
  * @param[in] 	tmp_sysclk:The system clock
  *    			algorithm: BaudRate*(div+1)*(bwpc+1)=system clock
@@ -251,7 +251,7 @@ void uart_dma_enable(unsigned char rx_dma_en, unsigned char tx_dma_en)
 		reg_uart_ctrl0  |= FLD_UART_TX_DMA_EN;
 
 	}else{
-		/*diable DMA function of tx */
+		/*disable DMA function of tx */
 		reg_uart_ctrl0	&= (~FLD_UART_TX_DMA_EN);
 	}
 
