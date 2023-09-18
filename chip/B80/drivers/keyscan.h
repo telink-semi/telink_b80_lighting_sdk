@@ -164,7 +164,7 @@ unsigned char keyscan_get_ks_value(void);
  * 										  The value setting range is 1-32.
  * 										  The idle state will stop scanning and reduce power consumption.
  * 										  Press again to exit the idle state.
- * @param[in] 	scan_times 				- 1 is to set tripple scan times,0 is to set double scan times.
+ * @param[in] 	scan_times 				- 1 is to set triple scan times,0 is to set double scan times.
  * @return 		none
  */
 void keyscan_init(ks_debounce_period_e debounce_period,unsigned char enter_idle_period_num, ks_scan_times_e scan_times);
