@@ -180,7 +180,6 @@ SYMBOL TABLE:
 00002288 g     O .rodata	00000006 gpio_row
 00000e78 g     F .ram_code	00000020 rf_set_tx_rx_off
 0000045c g     F .ram_code	00000014 otp_auto_pce_enable
-00000000         *UND*	00000000 io_putchar
 000002b4 g     F .ram_code	00000038 clock_init
 00001008 g     F .text	00000004 __umodsi3
 00000600 g     F .ram_code	00000044 crystal_manual_settle
