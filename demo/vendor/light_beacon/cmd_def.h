@@ -44,5 +44,16 @@ typedef enum{
 
 }LED_Control_CMD_e;
 
+#define CMD_BYTE0_OFF    0
+#define CMD_BYTE0_ON     1
+#define CMD_BYTE0_ADJUST    2
+	#define CMD_BYTE1_ADJUST_LUMI    0
+	#define CMD_BYTE1_ADJUST_CHROMA    1
+		#define CMD_BYTE2_INCREASE    0
+		#define CMD_BYTE2_DECREASE    1
+#define CMD_BYTE0_SET_VALUE    3
+#define CMD_BYTE0_QUICK_LOW_LIGHT    4
+#define CMD_BYTE0_NONE         5
+
 
 

@@ -44,25 +44,25 @@ unsigned char get_cmd(rf_packet_led_remote_t *pkt)
 {
 	unsigned char cmd = 0;
 
-	if(pkt->User_def[0] == 0){
+	if(pkt->User_def[0] == CMD_BYTE0_OFF){
 		cmd=CMD_OFF;
-	}else if(pkt->User_def[0] == 1){
+	}else if(pkt->User_def[0] == CMD_BYTE0_ON){
 		cmd=CMD_ON;
-	}else if(pkt->User_def[0] == 2){
-		if(pkt->User_def[1] == 0){
-			if(pkt->User_def[2] == 0){
+	}else if(pkt->User_def[0] == CMD_BYTE0_ADJUST){
+		if(pkt->User_def[1] == CMD_BYTE1_ADJUST_LUMI){
+			if(pkt->User_def[2] == CMD_BYTE2_DECREASE){
 				cmd=CMD_LUMINANT_DECREASE;
-			}else if(pkt->User_def[2] == 1){
+			}else if(pkt->User_def[2] == CMD_BYTE2_INCREASE){
 				cmd=CMD_LUMINANT_INCREASE;
 			}
-		}else if(pkt->User_def[1] == 1){
-			if(pkt->User_def[2] == 0){
+		}else if(pkt->User_def[1] == CMD_BYTE1_ADJUST_CHROMA){
+			if(pkt->User_def[2] == CMD_BYTE2_DECREASE){
 				cmd=CMD_CHROMA_DECREASE;
-			}else if(pkt->User_def[2] == 1){
+			}else if(pkt->User_def[2] == CMD_BYTE2_INCREASE){
 				cmd=CMD_CHROMA_INCREASE;
 			}
 		}
-	}else if(pkt->User_def[0] == 3){
+	}else if(pkt->User_def[0] == CMD_BYTE0_SET_VALUE){
 		cmd = CMD_SET_LUMI_CHROMA;
 	}
 
