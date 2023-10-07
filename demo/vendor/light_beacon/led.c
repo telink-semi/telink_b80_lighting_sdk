@@ -393,6 +393,10 @@ void led_event_proc_func(unsigned char Cmd)
 void led_set_lumi_chrome_func(unsigned short Lumi,unsigned short Chroma)
 {
 	unsigned char i;
+
+    if(led_control.led_on==0)  //关灯状态不进行色温亮度调节
+		return;
+            
 	if(Lumi>led_luminance_value[MAX_LUMINANCE_INDEX])//超过最大值，默认为最大
 		Lumi=led_luminance_value[MAX_LUMINANCE_INDEX];
 	if(Chroma>led_chroma_value[MAX_CHROME_INDEX])//超过最大值，默认为最大
