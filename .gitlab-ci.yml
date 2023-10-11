@@ -148,3 +148,47 @@ misspellChecking:
   artifacts:
     paths:
     - misspell_result.txt
+    
+    
+stages:
+  - release_customize_sdk
+
+.release_sdk_template: &release_sdk_template
+  variables:
+    PACK_NAME: "release_sdk_template"
+  stage: release_customize_sdk	
+  tags:
+    - LINUX
+  script:
+    - sdk_release_customize.sh ./release_sdk_config
+  artifacts:
+    name: "$PACK_NAME"
+    expire_in: '3 yrs'
+    paths:
+    - chip/
+    - common/
+    - demo/
+    - doc/
+    - project/
+    - README.md
+  when: manual
+
+copy_lib_S0:
+  <<: *release_sdk_template
+  variables:
+    PACK_NAME: "telink_b80_lighting_sdk_S0_V1.3.2"
+    
+copy_lib_S1:
+  <<: *release_sdk_template
+  variables:
+    PACK_NAME: "telink_b80_lighting_sdk_S1_V1.3.2"
+
+copy_lib_S2:
+  <<: *release_sdk_template
+  variables:
+    PACK_NAME: "telink_b80_lighting_sdk_S2_V1.3.2" 
+    
+copy_lib_S3:
+  <<: *release_sdk_template
+  variables:
+    PACK_NAME: "telink_b80_lighting_sdk_S3_V1.3.2"
