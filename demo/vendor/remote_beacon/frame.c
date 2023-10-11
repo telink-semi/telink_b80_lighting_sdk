@@ -80,7 +80,7 @@ void package_data_init_func(void)
 /**
  * @brief       makeup a new package
  * @param[in]   key_value	- 
- * @param[ioooo]para		- 
+ * @param[in]   para		- 
  * @return      none
  * @note        
  */

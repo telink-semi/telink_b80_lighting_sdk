@@ -41,7 +41,7 @@ unsigned char info_index;
 //unsigned char check_pkt_info(unsigned int pid,unsigned char seq,unsigned char cmd)
 /**
  * @brief       check if it is new packet by sn and cmd
- * @param[ioooo]pkt	- 
+ * @param[in]   pkt	- 
  * @return      
  * @note        
  */

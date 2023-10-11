@@ -99,7 +99,7 @@ void keyboard_set_row(const GPIO_PinTypeDef* ks_row,unsigned char row_cnt, GPIO_
 
 /**
  * @brief       init all col gpio for keyboard
- * @param[ioooo]ks_col	- 
+ * @param[in]   ks_col	- 
  * @param[in]   col_cnt	- 
  * @param[in]   col_pull- 
  * @return      none

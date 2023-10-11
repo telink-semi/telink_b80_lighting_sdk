@@ -35,7 +35,7 @@
 
 /**
  * @brief       write data to analog register and it will hold the data after deepsleep
- * @param[ioooo]ana_data- 
+ * @param[in]   ana_data- 
  * @return      
  * @note        
  */
@@ -54,7 +54,7 @@ unsigned char remote_ana_write(ana_dataTypeDef* ana_data)
 
 /**
  * @brief       read data from analog register
- * @param[ioooo]ana_data- 
+ * @param[in]   ana_data- 
  * @return      
  * @note        
  */

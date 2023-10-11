@@ -43,7 +43,7 @@ unsigned char info_index;
 
 /**
  * @brief       Parsing control commands form the Received packet
- * @param[ioooo]pkt	- 
+ * @param[in]   pkt	- 
  * @return      
  * @note        
  */
@@ -79,7 +79,7 @@ unsigned char get_cmd(rf_packet_led_remote_t *pkt)
 
 /**
  * @brief       check if it is new packet by sn and cmd
- * @param[ioooo]pkt	- 
+ * @param[in]   pkt	- 
  * @return      
  * @note        
  */

@@ -159,7 +159,7 @@ void rfc_suspend_exit(void)
 
 /**
  * @brief       send package by rf
- * @param[in]rf_data	- 
+ * @param[in]   rf_data	- 
  * @return      none
  * @note        
  */

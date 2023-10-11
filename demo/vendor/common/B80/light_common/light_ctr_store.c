@@ -165,7 +165,7 @@ unsigned char find_last_node_adr(unsigned long* addr)
 
 /**
  * @brief       write led light parameter
- * @param[ioooo]data- 
+ * @param[in]   data- 
  * @return      
  * @note        
  */
@@ -199,7 +199,7 @@ unsigned char lightctr_store_write(LED_control_info_t* data)
 
 /**
  * @brief       read led light parameter
- * @param[ioooo]data- 
+ * @param[in]   data- 
  * @return      
  * @note        
  */
