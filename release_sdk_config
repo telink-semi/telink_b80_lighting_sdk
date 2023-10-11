@@ -1,0 +1,89 @@
+[copy_lib_S0]
+
+CI_FUNC             V1.1
+
+PACKAGE_NAME        telink_b80_lighting_sdk_S0_V1.3.2
+TAG_NAME            V1.3.2
+
+------------------------------------------------------------------------------------------------
+(config1)
+TARGET_REPO_ID      495
+TARGET_TAG_NAME     V1.5.0
+TARGET_SDK_NAME     telink_b85m_driver_sdk_B80_S0
+
+#                   sources                                 target
+COPY               ./telink_b85m_driver_sdk_B80_S0/chip/B80/drivers/lib/libdriver.a             ./telink_b80_lighting_sdk/chip/B80/drivers/lib/libdriver.a
+
+(config1_end)
+------------------------------------------------------------------------------------------------
+
+[copy_lib_S0_end]
+
+
+
+[copy_lib_S1]
+
+CI_FUNC             V1.1
+
+PACKAGE_NAME        telink_b80_lighting_sdk_S1_V1.3.2
+TAG_NAME            V1.3.2
+
+------------------------------------------------------------------------------------------------
+(config1)
+TARGET_REPO_ID      495
+TARGET_TAG_NAME     V1.5.0
+TARGET_SDK_NAME     telink_b85m_driver_sdk_B80_S1
+
+#                   sources                                 target
+COPY               ./telink_b85m_driver_sdk_B80_S1/chip/B80/drivers/lib/libdriver.a             ./telink_b80_lighting_sdk/chip/B80/drivers/lib/libdriver.a
+
+(config1_end)
+------------------------------------------------------------------------------------------------
+
+[copy_lib_S1_end]
+
+
+
+[copy_lib_S2]
+
+CI_FUNC             V1.1
+
+PACKAGE_NAME        telink_b80_lighting_sdk_S2_V1.3.2
+TAG_NAME            V1.3.2
+
+------------------------------------------------------------------------------------------------
+(config1)
+TARGET_REPO_ID      495
+TARGET_TAG_NAME     V1.5.0
+TARGET_SDK_NAME     telink_b85m_driver_sdk_B80_S2
+
+#                   sources                                 target
+COPY               ./telink_b85m_driver_sdk_B80_S2/chip/B80/drivers/lib/libdriver.a             ./telink_b80_lighting_sdk/chip/B80/drivers/lib/libdriver.a
+
+(config1_end)
+------------------------------------------------------------------------------------------------
+
+[copy_lib_S2_end]
+
+
+
+[copy_lib_S3]
+
+CI_FUNC             V1.1
+
+PACKAGE_NAME        telink_b80_lighting_sdk_S2_V1.3.2
+TAG_NAME            V1.3.2
+
+------------------------------------------------------------------------------------------------
+(config1)
+TARGET_REPO_ID      495
+TARGET_TAG_NAME     V1.5.0
+TARGET_SDK_NAME     telink_b85m_driver_sdk_B80_S3
+
+#                   sources                                 target
+COPY               ./telink_b85m_driver_sdk_B80_S3/chip/B80/drivers/lib/libdriver.a             ./telink_b80_lighting_sdk/chip/B80/drivers/lib/libdriver.a
+
+(config1_end)
+------------------------------------------------------------------------------------------------
+
+[copy_lib_S3_end]
