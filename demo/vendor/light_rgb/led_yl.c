@@ -56,23 +56,27 @@ void led_yl_pwm_init_func(void)
 	
 }
 
-/***********************************************************
- * 函数功能：色温亮度值状态更新
- * 参       数：
- * 返 回  值：
- **********************************************************/
+/**
+ * @brief       update the lumina and chroma
+ * @param[in]   Lumi	- 
+ * @param[in]   Chroma	- 
+ * @return      none
+ * @note        
+ */
 void led_updata_lumi_chrome_func(unsigned short Lumi,unsigned char Chroma)
 {
 	led_lumina_target=Lumi;
 	led_chroma_target=Chroma;
 	led_state_change_flag=1;
 }
-/***********************************************************
- * 函数功能：设置LED的PWM
- * 参       数：Lumina   亮度值
- *        Chroma   色温值
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       set pwm to control led by Lumina and chroma
+ * @param[in]   Lumina	- 
+ * @param[in]   Chroma	- 
+ * @return      none
+ * @note        
+ */
 void led_pwm_control_func(int Lumina, int Chroma)
 {
 	int Whrite_pwm_val, Yellow_pwm_val;
@@ -92,12 +96,14 @@ void led_pwm_control_func(int Lumina, int Chroma)
 //	LOG_PRINTF("led_pwm_control_func->PWM5:PB7:1000  %d\n",Yellow_pwm_val);
 	//LOG_PRINTF("led_pwm_control_func->PWM4:PB6:1000  %d\n",Yellow_pwm_val);
 }
-/***********************************************************
- * 函数功能：计算当前亮度值
- * 参       数：target   亮度目标值
- *        cur      当前亮度值
- * 返 回  值：计算后的亮度值
- **********************************************************/
+
+/**
+ * @brief       control the luminance of led light by one step
+ * @param[in]   target	- 
+ * @param[in]   cur		- 
+ * @return      
+ * @note        
+ */
 unsigned short lumina_one_step_updata(unsigned short target,unsigned short cur)
 {
 	unsigned short temp=cur>>6;//亮度值越大，变化就越大
@@ -121,12 +127,14 @@ unsigned short lumina_one_step_updata(unsigned short target,unsigned short cur)
 
 	return cur;
 }
-/***********************************************************
- * 函数功能：计算色温值
- * 参       数：target   亮度目标值
- *        cur      当前亮度值
- * 返 回  值：计算后的色温值
- **********************************************************/
+
+/**
+ * @brief       control the chroma of led light by one step
+ * @param[in]   target	- 
+ * @param[in]   cur		- 
+ * @return      
+ * @note        
+ */
 unsigned short chroma_one_step_updata(unsigned short target,unsigned short cur)
 {
 	if(target>cur)
@@ -135,11 +143,13 @@ unsigned short chroma_one_step_updata(unsigned short target,unsigned short cur)
 		cur--;
 	return cur;
 }
-/***********************************************************
- * 函数功能：开灯
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       turn on led light
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_on_func(void)
 {
 	if(led_control.led_state!=LED_YL_ON_STATE){//若当前状态为关灯
@@ -151,11 +161,13 @@ void led_on_func(void)
 	led_lumina_target=led_luminance_value[led_control.luminance_index];//设置亮度目标值
 	led_chroma_cur=led_chroma_target=led_chroma_value[led_control.chroma_index];//设置色温目标值
 }
-/***********************************************************
- * 函数功能：LED关灯
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       turn off led light
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_off_func(void)
 {
 	led_state_change_flag=1;
@@ -164,6 +176,13 @@ void led_off_func(void)
 	led_control.led_state=LED_OFF_STATE;
 }
 
+/**
+ * @brief       set led light in night light mode
+ * @param[in]   Lumi	- 
+ * @param[in]   Chroma	- 
+ * @return      none
+ * @note        
+ */
 void led_night_light_func(unsigned short Lumi,unsigned char Chroma)
 {
 	if(led_control.led_state!=LED_YL_ON_STATE){//若当前状态为关灯
@@ -176,11 +195,14 @@ void led_night_light_func(unsigned short Lumi,unsigned char Chroma)
 }
 
 
-/***********************************************************
- * 函数功能：更新亮度
- * 参       数：Type   更新类型 1为加  0为减
- * 返 回  值：
- **********************************************************/
+/**
+ * @brief       adjust led light' luminance
+ * @param[in]   Type- 
+ *              0:decrease the luminance
+ *              1:increase the luminance
+ * @return      none
+ * @note        
+ */
 void led_updata_luminance_func(unsigned char Type)
 {
 	unsigned short ChromaValue;
@@ -197,11 +219,15 @@ void led_updata_luminance_func(unsigned char Type)
 	LuminaceValue=led_luminance_value[led_control.luminance_index];
 	led_updata_lumi_chrome_func(LuminaceValue,ChromaValue);
 }
-/***********************************************************
- * 函数功能：更新色温
- * 参       数：Type   更新类型 1为加  0为减
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       adjust led light' chroma
+ * @param[in]   Type- 
+ *              0:decrease the chroma
+ *              1:increase the chroma
+ * @return      none
+ * @note        
+ */
 void led_updata_chroma_func(unsigned char Type)
 {
 	unsigned short ChromaValue;
@@ -218,11 +244,14 @@ void led_updata_chroma_func(unsigned char Type)
 	LuminaceValue=led_luminance_value[led_control.luminance_index];
 	led_updata_lumi_chrome_func(LuminaceValue,ChromaValue);//更新状态
 }
-/***********************************************************
- * 函数功能：设置色温亮度值
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       set the luminance or chrome
+ * @param[in]   Lumi	- 
+ * @param[in]   Chroma	- 
+ * @return      none
+ * @note        
+ */
 void led_set_lumi_chrome_func(unsigned short Lumi,unsigned short Chroma)
 {
 	unsigned char i;
@@ -237,11 +266,13 @@ void led_set_lumi_chrome_func(unsigned short Lumi,unsigned short Chroma)
 	led_control.luminance_index=i;
 	led_updata_lumi_chrome_func(Lumi,Chroma);
 }
-/***********************************************************
- * 函数功能：遥控器命令执行
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       execute Command
+ * @param[in]   Cmd	- 
+ * @return      none
+ * @note        
+ */
 void led_event_proc_func(unsigned char Cmd)
 {
 	if(Cmd==CMD_LUMINANT_INCREASE||Cmd==CMD_LUMINANT_DECREASE||Cmd==CMD_CHROMA_INCREASE||Cmd==CMD_CHROMA_DECREASE)

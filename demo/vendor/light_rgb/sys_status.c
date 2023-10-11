@@ -66,11 +66,12 @@ void sys_status_init(void)
 
 
 unsigned int debug,debug1;
-/***********************************************************
- * 函数功能：收到RF数据后处理函数
- * 参       数：
- * 返 回  值：
- **********************************************************/
+/**
+ * @brief       process the commands in different states
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void sys_status_process(void)
 {
 	if(g_state==PAIRING_STATE){//处于对码状态

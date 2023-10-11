@@ -55,11 +55,12 @@ void led_rgb_pwm_init_func(void)
 	
 }
 
-/***********************************************************
- * 函数功能：RGB灯开
- * 参       数：
- * 返 回  值：
- **********************************************************/
+/**
+ * @brief       turn on RGB light
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_on_rgb_func(void)
 {
 	led_red_target=led_control.rgb_value[0];
@@ -70,11 +71,13 @@ void led_on_rgb_func(void)
 	led_blue_cur=0;
 	led_rgb_state_change_flag=1;
 }
-/***********************************************************
- * 函数功能：RGB灯关
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       turn off RGB light
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_rgb_off_func(void)
 {
 	led_red_target=0;
@@ -82,13 +85,15 @@ void led_rgb_off_func(void)
 	led_blue_target=0;
 	led_rgb_state_change_flag=1;
 }
-/***********************************************************
- * 函数功能：设置RGB灯的目标亮度，渐变
- * 参       数：Red_v     红灯的PWM值
- *        Green_v   绿灯的PWM值
- *        Blue_v    蓝灯的PWM值
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       Set RGB parameters and the lights gradually change to the target value
+ * @param[in]   Red_v	- 
+ * @param[in]   Green_v	- 
+ * @param[in]   Blue_v	- 
+ * @return      none
+ * @note        
+ */
 void led_rgb_set_func(unsigned short Red_v,unsigned short Green_v,unsigned short Blue_v)
 {
 	led_red_target=Red_v;
@@ -96,13 +101,15 @@ void led_rgb_set_func(unsigned short Red_v,unsigned short Green_v,unsigned short
 	led_blue_target=Blue_v;
 	led_rgb_state_change_flag=1;//状态更新标志
 }
-/***********************************************************
- * 函数功能：直接设置RGB灯的PWM值
- * 参       数：Red_v     红灯的PWM值
- *        Green_v   绿灯的PWM值
- *        Blue_v    蓝灯的PWM值
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       Set RGB parameters and the lights immediately change to the target value
+ * @param[in]   Red_v	- 
+ * @param[in]   Green_v	- 
+ * @param[in]   Blue_v	- 
+ * @return      none
+ * @note        
+ */
 void led_set_rgb_power_func(unsigned short Red_v,unsigned short Green_v,unsigned short Blue_v)
 {
 //	PWM_DutyValueSet(PWM2, Red_v);

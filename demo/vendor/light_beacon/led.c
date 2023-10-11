@@ -69,11 +69,12 @@ void led_pwm_init_func(void)
 }
 
 
-/***********************************************************
- * 函数功能：LED参数初始化
- * 参       数：
- * 返 回  值：
- **********************************************************/
+/**
+ * @brief       get led parameter form flash and init the led light
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_para_init_func(void)
 {
 
@@ -111,11 +112,13 @@ void led_para_init_func(void)
 	LOG_HEXDUMP((u8*)&led_control,sizeof(led_control));
 
 }
-/***********************************************************
- * 函数功能：保存参数
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       slave the led light parameter
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_para_save_func(void)
 {
 //	unsigned char *Pr=(void *)&led_control;
@@ -129,22 +132,28 @@ void led_para_save_func(void)
 	LOG_HEXDUMP((char*)&led_control,sizeof(led_control));
 
 }
-/***********************************************************
- * 函数功能：色温亮度值状态更新
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       update the led light by lumi or chrome
+ * @param[in]   Lumi	- 
+ * @param[in]   Chroma	- 
+ * @return      none
+ * @note        
+ */
 void led_updata_lumi_chrome_func(unsigned short Lumi,unsigned char Chroma)
 {
 	led_lumina_target=Lumi;
 	led_chroma_target=Chroma;
 	led_state_change_flag=1;
 }
-/***********************************************************
- * 函数功能：开灯
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+
+/**
+ * @brief       turn on led light
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_on_func(void)
 {
 	led_state_change_flag=1;
@@ -156,11 +165,13 @@ void led_on_func(void)
 		led_control.led_on=1;//led状态为开灯状态
 	}
 }
-/***********************************************************
- * 函数功能：LED关灯
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       turn off led light
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_off_func(void)
 {
 	led_state_change_flag=1;
@@ -169,6 +180,13 @@ void led_off_func(void)
 	led_control.led_on=0;
 }
 
+/**
+ * @brief       set led light in night light mode
+ * @param[in]   Lumi	- 
+ * @param[in]   Chroma	- 
+ * @return      none
+ * @note        
+ */
 void led_night_light_func(unsigned short Lumi,unsigned char Chroma)
 {
 	led_state_change_flag=1;
@@ -182,11 +200,15 @@ void led_night_light_func(unsigned short Lumi,unsigned char Chroma)
 	}
 
 }
-/***********************************************************
- * 函数功能：更新亮度
- * 参       数：Type   更新类型 1为加  0为减
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       adjust led light' luminance
+ * @param[in]   Type- 
+ *              0:decrease the luminance
+ *              1:increase the luminance
+ * @return      none
+ * @note        
+ */
 void led_updata_luminance_func(unsigned char Type)
 {
 	unsigned short ChromaValue;
@@ -203,11 +225,15 @@ void led_updata_luminance_func(unsigned char Type)
 	LuminaceValue=led_luminance_value[led_control.luminance_index];
 	led_updata_lumi_chrome_func(LuminaceValue,ChromaValue);
 }
-/***********************************************************
- * 函数功能：更新色温
- * 参       数：Type   更新类型 1为加  0为减
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       adjust led light' chroma
+ * @param[in]   Type- 
+ *              0:decrease the chroma
+ *              1:increase the chroma
+ * @return      none
+ * @note        
+ */
 void led_updata_chroma_func(unsigned char Type)
 {
 	unsigned short ChromaValue;
@@ -224,13 +250,15 @@ void led_updata_chroma_func(unsigned char Type)
 	LuminaceValue=led_luminance_value[led_control.luminance_index];
 	led_updata_lumi_chrome_func(LuminaceValue,ChromaValue);//更新状态
 }
-/***********************************************************
- * 函数功能：LED初始化
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
 
 static u32 tick_local_lightmode = 0;
+/**
+ * @brief       init led
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_init_func(void)
 {
 	g_relay_pkt.dma_len=sizeof(rf_packet_led_remote_t)-sizeof(g_relay_pkt.dma_len);
@@ -254,12 +282,14 @@ void led_init_func(void)
 	
 	led_para_save_func();//保存状态
 }
-/***********************************************************
- * 函数功能：设置LED的PWM
- * 参       数：Lumina   亮度值
- *        Chroma   色温值
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       set pwm to control led 
+ * @param[in]   Lumina	- 
+ * @param[in]   Chroma	- 
+ * @return      none
+ * @note        
+ */
 void led_pwm_control_func(int Lumina, int Chroma)
 {
 	int Whrite_pwm_val, Yellow_pwm_val;
@@ -276,12 +306,14 @@ void led_pwm_control_func(int Lumina, int Chroma)
 //	LOG_PRINTF("led_pwm_control_func->PWM4:PB4:1000  %d\n",Whrite_pwm_val);
 //	LOG_PRINTF("led_pwm_control_func->PWM0:PB2:1000  %d\n",Yellow_pwm_val);
 }
-/***********************************************************
- * 函数功能：设置LED
- * 参       数：Lumina  亮度值
- *        Chroma  色温值
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       adjust led light
+ * @param[in]   Lumina	- 
+ * @param[in]   Chroma	- 
+ * @return      none
+ * @note        
+ */
 void led_power_control_func(int Lumina, int Chroma)
 {
 	LOG_PRINTF("led_power_control_func\n");
@@ -297,11 +329,13 @@ void led_power_control_func(int Lumina, int Chroma)
 	led_pwm_control_func(Lumina, Chroma);
 
 }
-/***********************************************************
- * 函数功能：设置led的4种状态
- * 参       数：seg_index ：对应的状态
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       set led light mode
+ * @param[in]   seg_index	- 
+ * @return      none
+ * @note        
+ */
 void led_luminace_segment_set_func(unsigned char seg_index)
 {
 
@@ -324,11 +358,13 @@ void led_luminace_segment_set_func(unsigned char seg_index)
 			break;
 	}
 }
-/***********************************************************
- * 函数功能：遥控器命令执行
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       execute Command
+ * @param[in]   Cmd	- 
+ * @return      none
+ * @note        
+ */
 void led_event_proc_func(unsigned char Cmd)
 {
 	if(led_flash_cnt)return;
@@ -385,11 +421,14 @@ void led_event_proc_func(unsigned char Cmd)
 			break;
 	}
 }
-/***********************************************************
- * 函数功能：设置色温亮度值
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       set the luminance or chrome
+ * @param[in]   Lumi	- 
+ * @param[in]   Chroma	- 
+ * @return      none
+ * @note        
+ */
 void led_set_lumi_chrome_func(unsigned short Lumi,unsigned short Chroma)
 {
 	unsigned char i;
@@ -408,12 +447,14 @@ void led_set_lumi_chrome_func(unsigned short Lumi,unsigned short Chroma)
 	led_control.luminance_index=i;
 	led_updata_lumi_chrome_func(Lumi,Chroma);
 }
-/***********************************************************
- * 函数功能：计算当前亮度值
- * 参       数：target   亮度目标值
- *        cur      当前亮度值
- * 返 回  值：计算后的亮度值
- **********************************************************/
+
+/**
+ * @brief       control the luminance of led light by one step
+ * @param[in]   target	- 
+ * @param[in]   cur		- 
+ * @return      
+ * @note        
+ */
 unsigned short lumina_one_step_updata(unsigned short target,unsigned short cur)
 {
 	unsigned short temp=cur>>6;//亮度值越大，变化就越大
@@ -436,12 +477,14 @@ unsigned short lumina_one_step_updata(unsigned short target,unsigned short cur)
 	}
 	return cur;
 }
-/***********************************************************
- * 函数功能：计算色温值
- * 参       数：target   亮度目标值
- *        cur      当前亮度值
- * 返 回  值：计算后的色温值
- **********************************************************/
+
+/**
+ * @brief       control the chroma of led light by one step
+ * @param[in]   target	- 
+ * @param[in]   cur		- 
+ * @return      
+ * @note        
+ */
 unsigned short chroma_one_step_updata(unsigned short target,unsigned short cur)
 {
 	if(target>cur)
@@ -450,20 +493,24 @@ unsigned short chroma_one_step_updata(unsigned short target,unsigned short cur)
 		cur--;
 	return cur;
 }
-/***********************************************************
- * 函数功能：闪烁次数更新
- * 参       数：Flash_cnt  闪烁的次数
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       update blink count 
+ * @param[in]   Flash_cnt	- 
+ * @return      none
+ * @note        
+ */
 void led_flash_updata(unsigned char Flash_cnt)
 {
 	led_flash_cnt=Flash_cnt;
 }
-/***********************************************************
- * 函数功能：LED任务处理
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       led process
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_task_process_func(void)
 {
 	if(led_flash_cnt){//led是否有闪烁

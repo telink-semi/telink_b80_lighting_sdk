@@ -61,12 +61,12 @@ void sys_status_init(void)
 	sys_run_tick=clock_time();
 }
 
-
-/***********************************************************
- * 函数功能：收到RF数据后处理函数
- * 参       数：
- * 返 回  值：
- **********************************************************/
+/**
+ * @brief       process the commands in different states
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void sys_status_process(void)
 {
 	if(g_packget_new){//有新的rf数据包
@@ -119,11 +119,12 @@ void sys_status_process(void)
 	}
 }
 
-/***********************************************************
- * 鍑芥暟鍔熻兘锛氱郴缁熺姸鎬佹娴
- * 鍙       鏁帮細
- * 杩 鍥  鍊硷細
- **********************************************************/
+/**
+ * @brief       Monitor the pairing status or factory reset status in 6s when poweron
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void sys_status_check_func(void)
 {
 	if(g_state==PAIRRING_STATE){

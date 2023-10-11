@@ -39,6 +39,12 @@ typedef struct{
 Last_control_info_t control_info[16];
 unsigned char info_index;
 //unsigned char check_pkt_info(unsigned int pid,unsigned char seq,unsigned char cmd)
+/**
+ * @brief       check if it is new packet by sn and cmd
+ * @param[ioooo]pkt	- 
+ * @return      
+ * @note        
+ */
 _attribute_ram_code_sec_ unsigned char check_pkt_info(rf_packet_led_remote_t *pkt)
 {
 	unsigned char i;

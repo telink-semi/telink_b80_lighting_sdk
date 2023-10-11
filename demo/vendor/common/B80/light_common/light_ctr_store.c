@@ -163,6 +163,12 @@ unsigned char find_last_node_adr(unsigned long* addr)
 
 }
 
+/**
+ * @brief       write led light parameter
+ * @param[ioooo]data- 
+ * @return      
+ * @note        
+ */
 unsigned char lightctr_store_write(LED_control_info_t* data)
 {
 
@@ -191,6 +197,12 @@ unsigned char lightctr_store_write(LED_control_info_t* data)
 #endif
 }
 
+/**
+ * @brief       read led light parameter
+ * @param[ioooo]data- 
+ * @return      
+ * @note        
+ */
 unsigned char lightctr_store_read(LED_control_info_t* data)
 {
 #if(STORAGE_TYPE == STORAGE_TYPE_EEPROM)||(STORAGE_TYPE == STORAGE_TYPE_FLASH)

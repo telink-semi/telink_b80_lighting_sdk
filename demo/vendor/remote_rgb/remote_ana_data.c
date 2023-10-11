@@ -33,6 +33,12 @@
 //Analog registers 0x3c default value:0x0f
 
 
+/**
+ * @brief       write data to analog register and it will hold the data after deepsleep
+ * @param[ioooo]ana_data- 
+ * @return      
+ * @note        
+ */
 unsigned char remote_ana_write(ana_dataTypeDef* ana_data)
 {
 	if(NULL == ana_data) 
@@ -45,6 +51,12 @@ unsigned char remote_ana_write(ana_dataTypeDef* ana_data)
 
 
 
+/**
+ * @brief       read data from analog register
+ * @param[ioooo]ana_data- 
+ * @return      
+ * @note        
+ */
 unsigned char remote_ana_read(ana_dataTypeDef* ana_data)
 {
 	if(NULL == ana_data) 

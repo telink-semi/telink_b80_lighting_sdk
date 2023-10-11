@@ -52,11 +52,15 @@
 //	fm24c02_write_func(Addr,Data);
 //}
 
- /***********************************************************
- * 函数功能：查询ID是否跟已保存的id匹配
- * 参       数：
- * 返 回  值：匹配成功返回1  不成功返回0
- **********************************************************/
+/**
+ * @brief       Check if it matches id
+ * @param[in]   pid	- 
+ * @param[in]   grp	- 
+ * @return   
+ *      0:failed
+ *      1:success
+ * @note        
+ */
 unsigned char paired_ID_match(unsigned int Id)
 {
 	unsigned char i;
@@ -71,11 +75,13 @@ unsigned char paired_ID_match(unsigned int Id)
 	return 0;
 }
 
-/***********************************************************
- * 函数功能：清除保存的遥控器ID值
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       clear all remote ID
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void clear_remote_ID_func(void)
 {
 	unsigned char i;
@@ -90,11 +96,15 @@ void clear_remote_ID_func(void)
 	
 	//write_data_direct_func(PAIRE_INDEX_ADDR,led_control.paire_index);
 }
-/***********************************************************
- * 函数功能：保存遥控器ID
- * 参       数：Id    保存的Id值
- * 返 回  值：成功返回1  不成功返回0
- **********************************************************/
+
+/**
+ * @brief       Save remote ID
+ * @param[in]   Id	- 
+ * @return    
+ *              0:failed
+ *              1:success
+ * @note        
+ */
 unsigned char save_remote_ID_func(unsigned int Id)
 {
 	unsigned char i;
@@ -117,11 +127,13 @@ unsigned char save_remote_ID_func(unsigned int Id)
 
 	return 1;
 }
-/***********************************************************
- * 函数功能：保存灯的控制信息
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       save led parameter
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void save_led_control_info_func(void)
 {
 //	unsigned char *Ptr=(void *)&led_control;
@@ -131,11 +143,13 @@ void save_led_control_info_func(void)
 //	}
 	lightctr_store_write(&led_control);
 }
-/***********************************************************
- * 函数功能：保存灯的状态信息
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       save led status information
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void save_led_state_info_func(void)
 {
 //	unsigned char *Ptr=(void *)&led_control.luminance_index;

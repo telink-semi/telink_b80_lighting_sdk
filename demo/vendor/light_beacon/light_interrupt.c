@@ -40,6 +40,13 @@ Last_control_info_t control_info[16];
 unsigned char info_index;
 
 #include "cmd_def.h"
+
+/**
+ * @brief       Parsing control commands form the Received packet
+ * @param[ioooo]pkt	- 
+ * @return      
+ * @note        
+ */
 unsigned char get_cmd(rf_packet_led_remote_t *pkt)
 {
 	unsigned char cmd = 0;
@@ -68,7 +75,14 @@ unsigned char get_cmd(rf_packet_led_remote_t *pkt)
 
 	return cmd;
 }
-//unsigned char check_pkt_info(unsigned int pid,unsigned char seq,unsigned char cmd)
+
+
+/**
+ * @brief       check if it is new packet by sn and cmd
+ * @param[ioooo]pkt	- 
+ * @return      
+ * @note        
+ */
 _attribute_ram_code_sec_ unsigned char check_pkt_info(rf_packet_led_remote_t *pkt)
 {
 	unsigned char i;

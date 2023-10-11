@@ -102,6 +102,12 @@ void rfc_reg_init(void)
 
 }
 
+/**
+ * @brief       rf init
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void rfc_init_func(void)
 {
 	rfc_reg_init();
@@ -138,6 +144,12 @@ void rfc_init_func(void)
 
 
 
+/**
+ * @brief       init rf register after wakeup form suspend mode
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void rfc_suspend_exit(void)
 {
 	rx_dly_dis();
@@ -146,16 +158,21 @@ void rfc_suspend_exit(void)
 	rfc_init_func();
 }
 
+/**
+ * @brief       send package by rf
+ * @param[ioooo]rf_data	- 
+ * @return      none
+ * @note        
+ */
 void rfc_send_data(unsigned char *rf_data)
 {
 	unsigned char i;
 	for(i=0;i<4;i++){
         rf_set_tx_rx_off();
         rf_set_channel(rf_channel[i],0);
-        sleep_us(200);
         
         rf_set_txmode();
-        sleep_us(200);
+        sleep_us(150);
 
         rf_tx_pkt(rf_data);	
 		while(!rf_tx_finish());

@@ -31,11 +31,13 @@
 
 unsigned char current_active_group;//色温亮度调试时的组别
 
-/*******************************************************************
- * 函数功能：发送数据包的数据初始化
- * 参       数：
- * 返 回 值：
- ******************************************************************/
+
+/**
+ * @brief       init package data
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void package_data_init_func(void)
 {
 	unsigned char i;
@@ -74,12 +76,14 @@ void package_data_init_func(void)
 }
 
 
-/*******************************************************************
- * 函数功能：设置发送数据的内容
- * 参       数：
- * 返 回 值：
- ******************************************************************/
 
+/**
+ * @brief       makeup a new package
+ * @param[in]   key_value	- 
+ * @param[ioooo]para		- 
+ * @return      none
+ * @note        
+ */
 void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 {
 	switch(key_value){
@@ -273,12 +277,12 @@ void package_data_set_newcmd(unsigned char key_value,unsigned char* para)
 	}
 }
 
-/*******************************************************************
- * 函数功能：把内容通过RF发送出去
- * 参       数：
- * 返 回 值：
- ******************************************************************/
-
+/**
+ * @brief       send the package
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void package_data_send_func(void)//发送数据
 {
 	led_remote.relay = TTL_MAX;
@@ -287,11 +291,13 @@ void package_data_send_func(void)//发送数据
 	LOG_HEXDUMP((char*)&led_remote,sizeof(led_remote));
 }
 
-/*******************************************************************
- * 函数功能：保存seq&group到模拟寄存器，防止深睡丢失
- * 参       数：
- * 返 回 值：
- ******************************************************************/
+
+/**
+ * @brief      save seq&group to analog register,the will hold these data after deepsleep.
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void package_data_store_func(void)
 {
 	ana_dataTypeDef ana_data;
@@ -301,6 +307,12 @@ void package_data_store_func(void)
 }
 
 
+/**
+ * @brief       get the group information
+ * @param[in]   key_value	- 
+ * @return      
+ * @note        
+ */
 unsigned char package_get_group(unsigned char key_value)
 {
 	unsigned char group = 0;
@@ -371,6 +383,12 @@ const unsigned char	tbl_scanRsp [] = {
 
 rf_packet_adv_t test_adv;
 
+/**
+ * @brief       makeup a ble adv for testing
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void package_make_test_adv(void)
 {
 

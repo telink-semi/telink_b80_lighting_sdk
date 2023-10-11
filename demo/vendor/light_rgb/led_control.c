@@ -59,11 +59,12 @@ void led_pwm_init_func(void)
 	led_yl_pwm_init_func();
 }
 
-/***********************************************************
- * 函数功能：LED参数初始化
- * 参       数：
- * 返 回  值：
- **********************************************************/
+/**
+ * @brief       get led parameter form flash and init the led light
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_para_init_func(void)
 {
 
@@ -112,11 +113,13 @@ void led_para_init_func(void)
 	LOG_HEXDUMP((u8*)&led_control,sizeof(led_control));
 
 }
-/***********************************************************
- * 函数功能：LED初始化
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       init led
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_init_func(void)
 {
 	led_para_init_func();
@@ -126,20 +129,24 @@ void led_init_func(void)
 		led_on_rgb_func();
 	}
 }
-/***********************************************************
- * 函数功能：LED闪烁模式
- * 参       数：Cnt  闪烁的次数
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       update blink count 
+ * @param[in]   Flash_cnt	- 
+ * @return      none
+ * @note        
+ */
 void led_flash_updata_func(unsigned char Cnt)
 {
 	led_flash_cnt=Cnt;
 }
-/***********************************************************
- * 函数功能：灯的处理程序
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       led process
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void led_task_process_func(void)
 {
 	if(led_flash_cnt){//是否有闪烁

@@ -46,6 +46,13 @@ const unsigned char key_table[KB_ROW_NUM][KB_COL_NUM] = {//按键表格
 //};
 
 
+/**
+ * @brief       init row gpio for keyboard
+ * @param[in]   row_pin		- 
+ * @param[in]   gpio_pull	- 
+ * @return      none
+ * @note        
+ */
 void keyboard_row_gpio_init(GPIO_PinTypeDef row_pin,GPIO_PullTypeDef gpio_pull)
 {
 	gpio_set_func(row_pin,AS_GPIO); 	//IO设为普通IO
@@ -55,6 +62,13 @@ void keyboard_row_gpio_init(GPIO_PinTypeDef row_pin,GPIO_PullTypeDef gpio_pull)
 	gpio_setup_up_down_resistor(row_pin,gpio_pull);		  //IO设为悬浮状态
 }
 
+/**
+ * @brief       init col gpio for keyboard
+ * @param[in]   col_pin	- 
+ * @param[in]   col_pull- 
+ * @return      none
+ * @note        
+ */
 void keyboard_col_gpio_init(GPIO_PinTypeDef col_pin,GPIO_PullTypeDef col_pull)
 {
 	gpio_set_func(col_pin,AS_GPIO);		  //IO设为普通IO
@@ -66,6 +80,14 @@ void keyboard_col_gpio_init(GPIO_PinTypeDef col_pin,GPIO_PullTypeDef col_pull)
 }
 
 
+/**
+ * @brief       init all row gpio for keyboard
+ * @param[ioooo]ks_row		- 
+ * @param[in]   row_cnt		- 
+ * @param[in]   gpio_pull	- 
+ * @return      none
+ * @note        
+ */
 void keyboard_set_row(const GPIO_PinTypeDef* ks_row,unsigned char row_cnt, GPIO_PullTypeDef gpio_pull)
 {
 	unsigned char i_cnt = 0;
@@ -75,6 +97,14 @@ void keyboard_set_row(const GPIO_PinTypeDef* ks_row,unsigned char row_cnt, GPIO_
 	}
 }
 
+/**
+ * @brief       init all col gpio for keyboard
+ * @param[ioooo]ks_col	- 
+ * @param[in]   col_cnt	- 
+ * @param[in]   col_pull- 
+ * @return      none
+ * @note        
+ */
 void keyboard_set_col(const GPIO_PinTypeDef* ks_col,unsigned char col_cnt, GPIO_PullTypeDef col_pull)
 {
 	unsigned char i_cnt = 0;
@@ -84,12 +114,24 @@ void keyboard_set_col(const GPIO_PinTypeDef* ks_col,unsigned char col_cnt, GPIO_
 	}
 }
 
+/**
+ * @brief       init keyboard gpio
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void keyscan_gpio_init(void)
 {
 	keyboard_set_row(gpio_row,KB_ROW_NUM,PM_PIN_PULLUP_1M);
 	keyboard_set_col(gpio_column,KB_COL_NUM,PM_PIN_PULLUP_1M);
 }
 
+/**
+ * @brief       scan the keyboard and get the key value
+ * @param[in]   void- 
+ * @return      
+ * @note        
+ */
 unsigned char keyscan_scan_func(void)
 {
 	unsigned char row_i,col_j;
@@ -112,6 +154,12 @@ unsigned char keyscan_scan_func(void)
 }
 
 
+/**
+ * @brief       pulldowm the row gpio form keyboard
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void keyscan_row_gpio_pulldowm(void)
 {
 	unsigned char i;

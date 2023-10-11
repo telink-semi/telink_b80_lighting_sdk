@@ -69,11 +69,13 @@ void rfc_reg_init(void)
 
 }
 
-/***********************************************************
- * 函数功能：RF初始化
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       rf init
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void rfc_init_func(void)
 {
 	rfc_reg_init();
@@ -98,11 +100,13 @@ void rfc_init_func(void)
 	irq_enable();
 
 }
-/***********************************************************
- * 函数功能：跳频，4个频点循环切换
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       change rf channel
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void rfc_change_channel_func(void)
 {
 	static unsigned char Channel_index;	
@@ -117,11 +121,13 @@ void rfc_change_channel_func(void)
     sleep_us(200);
 
 }
-/***********************************************************
- * 函数功能：转发中继数据包
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       relay the Received packet
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void rfc_send_relay_pkt(void)
 {
 

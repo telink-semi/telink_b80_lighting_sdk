@@ -27,12 +27,15 @@
 #include "pairing_op.h"
 #include "light_ctr_store.h"
 
-/***********************************************************
- * 函数功能：ID及组别查询匹配
- * 参       数：pid   遥控器ID
- *        grp   组别
- * 返 回  值：匹配成功，返回1，不成功，返回0
- **********************************************************/
+/**
+ * @brief       Check if it matches pid and group
+ * @param[in]   pid	- 
+ * @param[in]   grp	- 
+ * @return   
+ *      0:failed
+ *      1:success
+ * @note        
+ */
 unsigned char paired_ID_match(unsigned int pid,unsigned char grp)
 {
 	unsigned char i;
@@ -46,11 +49,13 @@ unsigned char paired_ID_match(unsigned int pid,unsigned char grp)
 	}
 	return 0;
 }
-/***********************************************************
- * 函数功能：写ID及组别到eeprom
- * 参       数：position   相应位置的偏移量
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       Save pairing information to a position.
+ * @param[in]   position- 
+ * @return      none
+ * @note        
+ */
 void write_position_detect(unsigned int position)
 {
 	char *ptr;
@@ -65,11 +70,13 @@ void write_position_detect(unsigned int position)
 
 	lightctr_store_write(&led_control);
 }
-/***********************************************************
- * 函数功能：清码
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       Clear all pairing information
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void clear_pared_code_func(void)
 {
 	unsigned char i;
@@ -82,16 +89,17 @@ void clear_pared_code_func(void)
 	led_control.power_on_recover=0;
 	led_para_save_func();
 }
-/***********************************************************
- * 函数功能：保存id
- * 参       数：
- * 返 回  值：
- **********************************************************/
+
+/**
+ * @brief       Save pairing information
+ * @param[in]   void- 
+ * @return      none
+ * @note        
+ */
 void pair_id_save_func(void)
 {
 	unsigned char i;
 	unsigned char temp;
-	
 	if(UNUSED_PID == remote_save_pid)
 		return;
 	
