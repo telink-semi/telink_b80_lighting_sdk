@@ -32,7 +32,7 @@
  * the replace rules is: "$$$B85m_driver_sdk_"#sdk_version_num"$$$", The "#sdk_version_num"
  * will replace with this macro value.
  */
-#define B80_SDK_VERSION_NUM		B80_S1_V1.5.0
+#define B80_SDK_VERSION_NUM		V1.5.0
 
 #define SDK_VERSION_NUM					B80_SDK_VERSION_NUM
 #elif(MCU_CORE_B85)
@@ -64,5 +64,9 @@
 
 #define	SDK_VERSION1(sdk_version_num)	"$$$B85m_driver_sdk_"#sdk_version_num"$$$"
 #define	SDK_VERSION(sdk_version_num)	SDK_VERSION1(sdk_version_num)
+
+#define LIGHTING_VERSION_NUM		V1.3.2
+#define	LIGHTING_VERSION1(sdk_version_num)	"$$$lighting_sdk_"#sdk_version_num"$$$"
+#define	LIGHTING_VERSION(sdk_version_num)	LIGHTING_VERSION1(sdk_version_num)
 
 

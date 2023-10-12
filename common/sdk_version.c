@@ -24,6 +24,6 @@
 #include "sdk_version.h"
 
 volatile __attribute__((section(".sdk_version"))) unsigned char sdk_version[] = {SDK_VERSION(SDK_VERSION_NUM)};
-volatile __attribute__((section(".sdk_version"))) unsigned char sdk_version1[] = {"$$$lighting_sdk_V1.3.0$$$"};
+volatile __attribute__((section(".sdk_version"))) unsigned char sdk_version1[] = {LIGHTING_VERSION(LIGHTING_VERSION_NUM)};
 
 

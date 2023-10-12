@@ -11,7 +11,7 @@ Program Header:
     LOAD off    0x00011900 vaddr 0x00841900 paddr 0x00002124 align 2**15
          filesz 0x0000005c memsz 0x0000005c flags rw-
     LOAD off    0x00011b90 vaddr 0x00841b90 paddr 0x00002180 align 2**15
-         filesz 0x00000040 memsz 0x00000040 flags rw-
+         filesz 0x0000003c memsz 0x0000003c flags rw-
     LOAD off    0x00019960 vaddr 0x00841960 paddr 0x00841960 align 2**15
          filesz 0x00000000 memsz 0x00000230 flags rw-
 private flags = 0: [APCS-32] [FPA float format]
@@ -32,11 +32,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   6 .bss          00000230  00841960  00841960  00019960  2**4
                   ALLOC
-  7 .sdk_version  00000040  00841b90  00002180  00011b90  2**2
+  7 .sdk_version  0000003c  00841b90  00002180  00011b90  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  8 .comment      0000001a  00000000  00000000  00011bd0  2**0
+  8 .comment      0000001a  00000000  00000000  00011bcc  2**0
                   CONTENTS, READONLY
-  9 .TC32.attributes 00000010  00000000  00000000  00011bea  2**0
+  9 .TC32.attributes 00000010  00000000  00000000  00011be6  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 00000000 l    d  .vectors	00000000 .vectors
@@ -130,7 +130,7 @@ SYMBOL TABLE:
 00841938 g     O .retention_data	00000004 tick_32k_calib
 00841b84 g     O .bss	00000004 cpu_sleep_wakeup_and_longsleep
 00001e60 g     F .text	0000009c rf_set_channel
-000021c0 g       *ABS*	00000000 _bin_size_
+000021bc g       *ABS*	00000000 _bin_size_
 0000054c g     F .ram_code	00000014 start_reboot
 000020fc g     O .rodata	0000000f key_table
 00841920 g     O .retention_data	00000004 func_before_suspend
@@ -209,9 +209,9 @@ SYMBOL TABLE:
 00841910 g     O .retention_data	00000004 g_pm_suspend_delay_us
 000016c4 g     F .text	0000004c rfc_init_func
 00001cc0 g     F .text	00000074 cpu_set_gpio_wakeup
-00841bb4 g     O .sdk_version	0000001a sdk_version1
+00841bb0 g     O .sdk_version	0000001a sdk_version1
 00000dc8 g     F .ram_code	0000006c otp_set_active_mode
-00841b90 g     O .sdk_version	00000024 sdk_version
+00841b90 g     O .sdk_version	0000001d sdk_version
 00841ae7 g     O .bss	00000001 g_irq_en
 00001448 g     F .text	00000018 package_data_store_func
 00001638 g     F .text	00000050 main
@@ -288,7 +288,7 @@ Disassembly of section .vectors:
   10:	80f6      	tj.n	200 <__irq>
   12:	0000      	tands	r0, r0
   14:	00008278 	tandeq	r8, r0, r8, ror r2
-  18:	000021c0 	tandeq	r2, r0, r0, asr #3
+  18:	000021bc 	undefined instruction 0x000021bc
   1c:	00000000 	tandeq	r0, r0, r0
 
 00000020 <start_suspend>:
@@ -4476,25 +4476,24 @@ Disassembly of section .sdk_version:
   841b94:	5f6d3538 	tservpl	0x006d3538
   841b98:	76697264 	tstorerbtvc	r7, [r9], -r4, ror #4
   841b9c:	735f7265 	tcmpvc	pc, #1342177286	; 0x50000006
-  841ba0:	425f6b64 	tsubsmi	r6, pc, #102400	; 0x19000
-  841ba4:	535f3038 	tcmppl	pc, #56	; 0x38
-  841ba8:	31565f31 	tcmpcc	r6, r1, lsr pc
-  841bac:	302e352e 	txorcc	r3, lr, lr, lsr #10
-  841bb0:	00242424 	txoreq	r2, r4, r4, lsr #8
+  841ba0:	565f6b64 	tloadrbpl	r6, [pc], -r4, ror #22
+  841ba4:	2e352e31 	undefined instruction 0x2e352e31
+  841ba8:	24242430 	tstorertcs	r2, [r4], #-1072	; 0x430
+  841bac:	00000000 	tandeq	r0, r0, r0
 
-00841bb4 <sdk_version1>:
-  841bb4:	6c242424 	undefined instruction 0x6c242424
-  841bb8:	74686769 	tstorerbtvc	r6, [r8], #-1897	; 0x769
-  841bbc:	5f676e69 	tservpl	0x00676e69
-  841bc0:	5f6b6473 	tservpl	0x006b6473
-  841bc4:	332e3156 	teqcc	lr, #-2147483627	; 0x80000015
-  841bc8:	2424302e 	tstorertcs	r3, [r4], #-46	; 0x2e
-  841bcc:	00000024 	tandeq	r0, r0, r4, lsr #32
+00841bb0 <sdk_version1>:
+  841bb0:	6c242424 	undefined instruction 0x6c242424
+  841bb4:	74686769 	tstorerbtvc	r6, [r8], #-1897	; 0x769
+  841bb8:	5f676e69 	tservpl	0x00676e69
+  841bbc:	5f6b6473 	tservpl	0x006b6473
+  841bc0:	332e3156 	teqcc	lr, #-2147483627	; 0x80000015
+  841bc4:	2424322e 	tstorertcs	r3, [r4], #-558	; 0x22e
+  841bc8:	00000024 	tandeq	r0, r0, r4, lsr #32
 
 Disassembly of section .comment:
 
 00000000 <.comment>:
-   0:	3a434347 	tjcc	10d0d24 <sdk_version1+0x88f170>
+   0:	3a434347 	tjcc	10d0d24 <sdk_version1+0x88f174>
    4:	4e472820 	undefined instruction 0x4e472820
    8:	34202955 	tstorertcc	r2, [r0], #-2389	; 0x955
    c:	312e352e 	teqcc	lr, lr, lsr #10
