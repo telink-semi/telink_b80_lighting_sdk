@@ -168,7 +168,7 @@ stages:
     - chip/
     - common/
     - demo/
-    - doc/
+    - docs/
     - project/
     - README.md
   when: manual
