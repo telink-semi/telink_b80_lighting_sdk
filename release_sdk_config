@@ -22,7 +22,7 @@ TARGET_REPO_ID      778
 TARGET_TAG_NAME     V1.3.2
 TARGET_SDK_NAME     telink_b80_lighting_sdk
 #                   sources                                 target
-COPY               ./telink_b85m_driver_sdk_B80_S0/docs/test_bin                                ./test_bin/S0 
+COPY               ./telink_b80_lighting_sdk/test_bin/S0                                 ./docs/test_bin/
 
 (config1_end)
 ------------------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ TARGET_REPO_ID      778
 TARGET_TAG_NAME     V1.3.2
 TARGET_SDK_NAME     telink_b80_lighting_sdk
 #                   sources                                 target
-COPY               ./telink_b85m_driver_sdk_B80_S1/docs/test_bin                                ./test_bin/S1 
+COPY               ./telink_b80_lighting_sdk/test_bin/S1                                 ./docs/test_bin/
 
 (config1_end)
 ------------------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ TARGET_REPO_ID      778
 TARGET_TAG_NAME     V1.3.2
 TARGET_SDK_NAME     telink_b80_lighting_sdk
 #                   sources                                 target
-COPY               ./telink_b85m_driver_sdk_B80_S2/docs/test_bin                                ./test_bin/S2 
+COPY               ./telink_b80_lighting_sdk/test_bin/S2                                 ./docs/test_bin/
 
 (config1_end)
 ------------------------------------------------------------------------------------------------
