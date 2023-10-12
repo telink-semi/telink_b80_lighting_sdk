@@ -18,6 +18,12 @@ COPY               ./telink_b85m_driver_sdk_B80_S0/chip/B80/drivers/lib/libdrive
 MACRO ./common/sdk_version.h       B80_SDK_VERSION_NUM                  V1.5.0_S0          	false 		1
 MACRO ./common/sdk_version.h       LIGHTING_VERSION_NUM                 V1.3.2_S0          	false 		1
 
+TARGET_REPO_ID      778
+TARGET_TAG_NAME     V1.3.2
+TARGET_SDK_NAME     telink_b80_lighting_sdk
+#                   sources                                 target
+COPY               ./telink_b80_lighting_sdk/test_bin/S0                                 ./docs/test_bin/
+
 (config1_end)
 ------------------------------------------------------------------------------------------------
 
@@ -45,6 +51,12 @@ COPY               ./telink_b85m_driver_sdk_B80_S1/chip/B80/drivers/lib/libdrive
 MACRO ./common/sdk_version.h       B80_SDK_VERSION_NUM                  V1.5.0_S1          	false 		1
 MACRO ./common/sdk_version.h       LIGHTING_VERSION_NUM                 V1.3.2_S1          	false 		1
 
+TARGET_REPO_ID      778
+TARGET_TAG_NAME     V1.3.2
+TARGET_SDK_NAME     telink_b80_lighting_sdk
+#                   sources                                 target
+COPY               ./telink_b80_lighting_sdk/test_bin/S0                                 ./docs/test_bin/
+
 (config1_end)
 ------------------------------------------------------------------------------------------------
 
@@ -71,6 +83,12 @@ COPY               ./telink_b85m_driver_sdk_B80_S2/chip/B80/drivers/lib/libdrive
 #     path	                   macro		                val	       modify_in_sdk	index
 MACRO ./common/sdk_version.h       B80_SDK_VERSION_NUM                  V1.5.0_S2          	false 		1
 MACRO ./common/sdk_version.h       LIGHTING_VERSION_NUM                 V1.3.2_S2          	false 		1
+
+TARGET_REPO_ID      778
+TARGET_TAG_NAME     V1.3.2
+TARGET_SDK_NAME     telink_b80_lighting_sdk
+#                   sources                                 target
+COPY               ./telink_b80_lighting_sdk/test_bin/S0                                 ./docs/test_bin/
 
 (config1_end)
 ------------------------------------------------------------------------------------------------
