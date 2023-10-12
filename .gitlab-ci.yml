@@ -1,4 +1,5 @@
 stages:
+  - release_customize_sdk
   - scc
   - genLicense
   - checkLicense
@@ -150,8 +151,6 @@ misspellChecking:
     - misspell_result.txt
     
     
-stages:
-  - release_customize_sdk
 
 .release_sdk_template: &release_sdk_template
   variables:
